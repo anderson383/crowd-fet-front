@@ -1,4 +1,4 @@
-import useToggle from "@/hooks/useToggle";
+import useToggle from "../hooks/useToggle";
 import React from "react";
 import context from "./context";
 

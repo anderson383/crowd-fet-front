@@ -1,5 +1,5 @@
-import author from "@/images/author.jpg";
-import image from "@/images/blog-details-thumb.jpg";
+import author from "@/assets/images/author.jpg";
+import image from "@/assets/images/blog-details-thumb.jpg";
 import { socials } from "./headerData";
 
 export const newsArea = {

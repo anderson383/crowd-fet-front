@@ -1,4 +1,4 @@
-import bg from "@/images/cta-bg.jpg";
+import bg from "@/assets/images/cta-bg.jpg";
 
 export const ctaArea = {
   bg,

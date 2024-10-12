@@ -1,7 +1,7 @@
-import thumb3 from "@/images/about-introduction-thumb.jpg";
-import thumb1 from "@/images/about-thumb-1.jpg";
-import thumb2 from "@/images/about-thumb-2.jpg";
-import image from "@/images/about-thumb-3.jpg";
+import thumb3 from "@/assets/images/about-introduction-thumb.jpg";
+import thumb1 from "@/assets/images/about-thumb-1.jpg";
+import thumb2 from "@/assets/images/about-thumb-2.jpg";
+import image from "@/assets/images/about-thumb-3.jpg";
 
 export const aboutArea = {
   thumb1,

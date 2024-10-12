@@ -1,6 +1,6 @@
-import icon from "@/images/header-icon.png";
-import logo2 from "@/images/logo-2.png";
-import logo from "@/images/logo.png";
+import icon from "@/assets/images/header-icon.png";
+import logo2 from "@/assets/images/logo-2.png";
+import logo from "@/assets/images/logo.png";
 
 export const navItems = [
   {
@@ -59,10 +59,15 @@ export const navItems = [
       { id: 2, name: "Single News", href: "/single-news" },
     ],
   },
+  // {
+  //   id: 6,
+  //   name: "Contact",
+  //   href: "/contact",
+  // },
   {
     id: 6,
-    name: "Contact",
-    href: "/contact",
+    name: "Login",
+    href: "/login",
   },
 ];
 

@@ -1,4 +1,4 @@
-import bg from "@/images/guide-bg.jpg";
+import bg from "@/assets/images/guide-bg.jpg";
 
 export const guideArea = {
   bg,
