@@ -5,34 +5,17 @@ import logo from "@/assets/images/logo.png";
 export const navItems = [
   {
     id: 1,
-    name: "Home",
-    href: "",
-    subNavItems: [
-      {
-        id: 1,
-        name: "Home 1",
-        href: "/",
-      },
-      {
-        id: 2,
-        name: "Home 2",
-        href: "/index-2",
-      },
-      {
-        id: 3,
-        name: "Home 3",
-        href: "/index-3",
-      },
-    ],
+    name: "Inicio",
+    href: "/",
   },
   {
     id: 2,
-    name: "About",
+    name: "Sobre nosotros",
     href: "/about",
   },
   {
     id: 3,
-    name: "Explore",
+    name: "Explorar",
     href: "",
     subNavItems: [
       { id: 1, name: "Project 1", href: "/projects-1" },
@@ -50,15 +33,15 @@ export const navItems = [
       { id: 3, name: "Team Members", href: "/team-members" },
     ],
   },
-  {
-    id: 5,
-    name: "News",
-    href: "",
-    subNavItems: [
-      { id: 1, name: "News", href: "/news" },
-      { id: 2, name: "Single News", href: "/single-news" },
-    ],
-  },
+  // {
+  //   id: 5,
+  //   name: "News",
+  //   href: "",
+  //   subNavItems: [
+  //     { id: 1, name: "News", href: "/news" },
+  //     { id: 2, name: "Single News", href: "/single-news" },
+  //   ],
+  // },
   // {
   //   id: 6,
   //   name: "Contact",
@@ -66,8 +49,13 @@ export const navItems = [
   // },
   {
     id: 6,
-    name: "Login",
-    href: "/login",
+    name: "Iniciar sesión",
+    href: "/auth/login",
+  },
+  {
+    id: 7,
+    name: "Registrarse",
+    href: "/auth/register",
   },
 ];
 
@@ -99,7 +87,7 @@ const headerData = {
   logo2,
   icon,
   navItems,
-  email: "crowdFet@krowd.com",
+  email: "crowdFet@crowdfet.com",
   phone: "3203770252",
   address: "Rivera huila",
   socials,

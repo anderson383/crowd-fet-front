@@ -40,13 +40,13 @@ export const contactInfoArea = [
   {
     id: 1,
     icon: "flaticon-entrepreneur-1",
-    title: "About Krowd",
+    title: "About Crowdfet",
     text: "Morbi ut tellus ac leo molestie luctus nec \n vehicula sed justo onec tempor rhoncus \n volutpat ras lorem.",
   },
   {
     id: 2,
     icon: "flaticon-location",
-    title: "About Krowd",
+    title: "About Crowdfet",
     lists: [
       "66 Road Broklyn Street, 600 New York.",
       "United States of America",
@@ -56,7 +56,7 @@ export const contactInfoArea = [
   {
     id: 3,
     icon: "flaticon-contact",
-    title: "About Krowd",
-    lists: ["needhelp@krowd.com", "info@krowd.com", "666 888 0000"],
+    title: "About Crowdfet",
+    lists: ["needhelp@crowdfet.com", "info@crowdfet.com", "666 888 0000"],
   },
 ];

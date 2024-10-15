@@ -3,7 +3,7 @@ import bg from "@/assets/images/faq-bg.jpg";
 export const faqs = [
   {
     id: 1,
-    title: "Is my campaign allowed on krowd?",
+    title: "Is my campaign allowed on Crowdfet?",
     text: "There are many variations of passages the majority have suffered alteration in some fo injected humour, or randomised words believable.",
   },
   {

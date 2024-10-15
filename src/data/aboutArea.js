@@ -21,7 +21,7 @@ export const aboutArea = {
 };
 
 export const aboutAreaThree = {
-  tagline: "Learn More About the Krowd",
+  tagline: "Learn More About the Crowdfet",
   title: "Founded to Empower Innovation",
   image,
   videoId: "2TvWZEVf6go",

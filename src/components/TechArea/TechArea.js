@@ -35,7 +35,7 @@ const TechArea = () => {
                 ))}
               </Row>
               <div className="tech-logo">
-                <Image src={logo.src} alt="" />
+                <Image src={logo.src} alt="" width={128} />
               </div>
             </div>
           </Col>

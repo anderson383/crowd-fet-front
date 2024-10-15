@@ -85,7 +85,7 @@ const footerData = {
       href: "/about",
     },
   ],
-  author: "Krowd",
+  author: "Crowdfet",
   year: new Date().getFullYear(),
 };
 

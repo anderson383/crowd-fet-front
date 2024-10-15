@@ -98,13 +98,13 @@ const projects = [
 
 export const projectsArea = {
   tagline: "Businesses You Can Back",
-  title: "Explore Projects",
+  title: "Explorar proyectos",
   projects,
 };
 
 export const exploreProjects = {
   tagline: "Businesses You Can Back",
-  title: "Explore Projects",
+  title: "Explorar proyectos",
   projects: [
     {
       id: 1,
