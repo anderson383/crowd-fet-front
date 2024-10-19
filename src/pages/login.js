@@ -38,8 +38,9 @@ const Home = () => {
     if (res?.error) {
       setFieldError('password', 'Credenciales incorrectas');
     } else {
-      console.log('entre')
-      router.push('/admin'); // Redirige al dashboard u otra página después del login exitoso
+      console.log("entre");
+      // router.push("/admin"); // Redirige al dashboard u otra página después del login exitoso
+      router.push("/project"); // Redirige al dashboard u otra página después del login exitoso
     }
     setSubmitting(false);
   }
