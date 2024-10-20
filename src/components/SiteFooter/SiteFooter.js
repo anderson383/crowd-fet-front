@@ -21,7 +21,7 @@ const SiteFooter = () => {
           <Col lg={4} md={6} sm={8}>
             <div className="footer-about mt-30">
               <Link href="/">
-                <Image src={logo.src} alt="" />
+                <Image src={logo.src} alt=""  width={128}/>
               </Link>
               <p>{text}</p>
               <ul>

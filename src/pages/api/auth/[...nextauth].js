@@ -13,7 +13,7 @@ import jwt from 'jsonwebtoken';
 import axiosInstance from 'src/config/axios/axios';
 export const authOptions = {
   secret: process.env.AUTH_SECRET,
-  pages: {signIn: '/login'},
+  pages: {signIn: '/auth/login'},
   providers: [
     CredentialsProvider({
       name: 'Credentials',

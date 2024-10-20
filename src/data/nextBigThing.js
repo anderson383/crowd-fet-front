@@ -4,7 +4,7 @@ const text =
   "There are many variations of passages of available but the majority have in some form, by injected humou or words which don't look even slightly believable. There are many variations of but the majority have suffered.";
 
 export const nextBigThing = {
-  tagline: "Get to Know Krowd",
+  tagline: "Get to Know Crowdfet",
   title: "Fund the Next Big Thing",
   image,
   text,

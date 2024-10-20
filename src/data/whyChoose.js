@@ -6,7 +6,7 @@ export const whyChoose = {
   thumb,
   thumb2,
   tagline: "Businesses You Can Back",
-  title2: "Why Choose Krowd Platform",
+  title2: "Why Choose Crowdfet Platform",
   items: [
     {
       id: 1,
