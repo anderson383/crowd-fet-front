@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
 
 import { Formik } from "formik";
 import * as Yup from "yup";

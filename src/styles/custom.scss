@@ -1,0 +1,27 @@
+// custom.scss
+
+// Importa las variables de Bootstrap
+@import "node_modules/bootstrap/scss/functions";
+@import "node_modules/bootstrap/scss/variables";
+
+// Sobrescribe los colores
+$primary: #0C9F0F;
+$secondary: #2ecc71;
+$success: #28a745;
+$danger: #dc3545;
+$warning: #ffc107;
+$info: #17a2b8;
+$light: #f8f9fa;
+$dark: #343a40;
+
+.btn-primary {
+  background-color: $primary !important; 
+  border-color: $primary !important;
+}
+
+a {
+  color: $primary !important;
+  text-decoration: none !important;
+}
+// Importa el resto de Bootstrap
+@import "node_modules/bootstrap/scss/bootstrap";
