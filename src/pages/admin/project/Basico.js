@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -6,25 +6,25 @@ import { Form, Row, Col, Button, Alert } from "react-bootstrap";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import axiosInstance from "src/config/axios/axios";
 
 const Basico = () => {
 
   const [fileName, setFileName] = useState("");
   const [videoName, setVideoName] = useState("");
-
+  const [listCategory, setListCategory] = useState([]);
+  const [sublistCategory, setSubListCategory] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const initialValuesBasic = {
     title: "",
     subtitle: "",
-    mainCategory: "",
-    subCategory: "",
-    category: "",
-    subCategoryOption: "",
     location: "",
-    file: null,
     video: null,
+    categoryId: "",
+    subCategoryId: "",
+    file: null,
     day: "",
     month: "",
     year: "",
@@ -99,10 +99,25 @@ const Basico = () => {
     ),
   });
 
-  const handleSubmitBasic = (values) => {
-    console.log(values);
+  const getSubCategory = (id) => {
+    axiosInstance.get(`/common/list-item/?id=${id}`).then(({data: {data}}) => {
+      setSubListCategory(data)
+      // setListCategory(data[0].listItem)
+    })
   };
 
+  useEffect(() => {
+    axiosInstance.get('/common/list-types/?codes=category_projects').then(({data: {data}}) => {
+      setListCategory(data[0].listItem)
+    })
+  }, [])
+  const handleSubmitBasic = (values) => {
+    console.log(values);
+
+  };
+
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
 
   return (
     <>
@@ -141,7 +156,7 @@ const Basico = () => {
                 </p>
               </Col>
               <Col md={8}>
-                <div className="border rounded-3 p-3">
+                <div className="border rounded-3 p-3 bg-white">
                   <Form.Group className="mb-3" controlId="formBasicTitle">
                     <Form.Label>Título</Form.Label>
                     <Form.Control
@@ -205,62 +220,26 @@ const Basico = () => {
                 </p>
               </Col>
               <Col md={8}>
-                <div className="border rounded-3 p-3">
-                  {/* <Form noValidate onSubmit={handleSubmit}> */}
+                <div className="border rounded-3 p-3 bg-white">
                   <Row>
-                    <Col md={6}>
-                      <Form.Group controlId="formMainCategory">
-                        <Form.Label>Categoría principal</Form.Label>
-                        <Form.Select
-                          name="mainCategory"
-                          value={values.mainCategory}
-                          onChange={handleChange}
-                          isInvalid={
-                            !!errors.mainCategory && touched.mainCategory
-                          }
-                        >
-                          <option value="">Seleccionar</option>
-                          <option>Tecnología</option>
-                          <option>Arte</option>
-                          <option>Música</option>
-                        </Form.Select>
-                        <Form.Control.Feedback type="invalid">
-                          {errors.mainCategory}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                      <Form.Group controlId="formSubCategory">
-                        <Form.Label>Subcategoría principal</Form.Label>
-                        <Form.Select
-                          name="subCategory"
-                          value={values.subCategory}
-                          onChange={handleChange}
-                          isInvalid={
-                            !!errors.subCategory && touched.subCategory
-                          }
-                        >
-                          <option value="">Seleccionar</option>
-                          <option>Software</option>
-                          <option>Hardware</option>
-                        </Form.Select>
-                        <Form.Control.Feedback type="invalid">
-                          {errors.subCategory}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                    </Col>
                     <Col md={6} className="mt-3">
                       <Form.Group controlId="formCategory">
                         <Form.Label>Categoría</Form.Label>
                         <Form.Select
                           name="category"
                           value={values.category}
-                          onChange={handleChange}
+                          onChange={(e) => {
+                            handleChange(e)
+                            getSubCategory(e.target.value)
+                          }}
                           isInvalid={!!errors.category && touched.category}
                         >
                           <option value="">Seleccionar</option>
-                          <option>Opción 1</option>
-                          <option>Opción 2</option>
+                          {
+                            listCategory.map(cat => (
+                              <option key={cat.id} value={cat.id} >{cat.name}</option>
+                            ))
+                          }
                         </Form.Select>
                         <Form.Control.Feedback type="invalid">
                           {errors.category}
@@ -280,8 +259,11 @@ const Basico = () => {
                           }
                         >
                           <option value="">Seleccionar</option>
-                          <option>Opción 1</option>
-                          <option>Opción 2</option>
+                          {
+                            sublistCategory.map(cat => (
+                              <option key={cat.id} value={cat.id} >{cat.name}</option>
+                            ))
+                          }
                         </Form.Select>
                         <Form.Control.Feedback type="invalid">
                           {errors.subCategoryOption}
@@ -353,7 +335,7 @@ const Basico = () => {
               </Col>
               <Col md={8}>
                 {/* <Form noValidate onSubmit={handleSubmit}> */}
-                <div className="border rounded-3 p-3 text-center">
+                <div className="border rounded-3 p-3 text-center bg-white">
                   <input
                     type="file"
                     accept=".jpg,.jpeg,.png,.gif,.webp"
@@ -408,7 +390,7 @@ const Basico = () => {
               </Col>
               <Col md={8}>
                 {/* <Form noValidate onSubmit={handleSubmit}> */}
-                <div className="border rounded-3 p-3 text-center">
+                <div className="border rounded-3 p-3 text-center bg-white">
                   <input
                     type="file"
                     accept=".mov,.mpeg,.avi,.mp4,.3gp,.wmv,.flv"
@@ -453,7 +435,7 @@ const Basico = () => {
             {/* Fecha límite de publicación */}
             <Row className="mb-4">
               <Col md={4}>
-                <h5>Fecha límite de publicación (opcional)</h5>
+                <h5>Fecha de lanzamiento prevista (opcional)</h5>
                 <p>
                   Te daremos recomendaciones sobre cuándo completar los pasos
                   que demoren unos días en procesarse. Podrás modificar esta
@@ -463,63 +445,36 @@ const Basico = () => {
               </Col>
               <Col md={8}>
                 {/* <Form noValidate onSubmit={handleSubmit}> */}
-                <div className="border rounded-3 p-3">
+                <div className="border rounded-3 p-3 bg-white">
                   <div className="d-flex">
-                    <Form.Control
-                      type="text"
-                      name="day"
-                      placeholder="DD"
-                      className="me-2"
-                      value={values.day}
-                      onChange={handleChange}
-                      isInvalid={!!errors.day && touched.day}
-                    />
-                    <Form.Control
-                      type="text"
-                      name="month"
-                      placeholder="MM"
-                      className="me-2"
-                      value={values.month}
-                      onChange={handleChange}
-                      isInvalid={!!errors.month && touched.month}
-                    />
-                    <Form.Control
-                      type="text"
-                      name="year"
-                      placeholder="YYYY"
-                      value={values.year}
-                      onChange={handleChange}
-                      isInvalid={!!errors.year && touched.year}
-                    />
-                    <DatePicker
-                      selected={selectedDate}
-                      onChange={(date) => {
-                        setSelectedDate(date);
-                        setFieldValue("day", date.getDate());
-                        setFieldValue("month", date.getMonth() + 1);
-                        setFieldValue("year", date.getFullYear());
-                      }}
-                      customInput={
-                        <Button
-                          variant="outline-secondary"
-                          onClick={() => setShowDatePicker(!showDatePicker)}
-                        >
-                          <i className="bi bi-calendar"></i>
-                        </Button>
-                      }
-                    />
+                     <Form.Group>
+                      <DatePicker
+                           minDate={tomorrow}
+                          placeholderText="MM/DD/YYYY"
+                          selected={selectedDate}
+                          onChange={(date) => {
+                              setSelectedDate(date);
+                              setFieldValue("day", date ? date.getDate() : '');
+                              setFieldValue("month", date ? date.getMonth() + 1 : '');
+                              setFieldValue("year", date ? date.getFullYear() : '');
+                          }}
+                          customInput={
+                              <Form.Control
+                                  type="text"
+                                  style={{
+                                      width: '100%',
+                                      padding: '0.5rem',
+                                      fontSize: '1rem',
+                                      borderRadius: '0.25rem',
+                                      border: '1px solid #ced4da',
+                                  }}
+                              />
+                          }
+                          dateFormat="MM/dd/yyyy"
+                      />
+                  </Form.Group>
                   </div>
                   <p className="my-4">
-                    <strong>
-                      Te recomendaremos cuando tú deberías hacerlo:
-                    </strong>
-                    <div className="ml-5">
-                      <li>
-                        Confirma tu identidad y proporciona la información de
-                        pago
-                      </li>
-                      <li>Envía tu proyecto a revisión</li>
-                    </div>
                   </p>
                   <p className="mt-2 text-success">
                     <i className="bi bi-lightbulb"></i> Configurar una fecha
@@ -546,82 +501,40 @@ const Basico = () => {
               <Col md={4}>
                 <h5>Duración de la campaña</h5>
                 <p>
-                  Define un límite de tiempo para tu campaña. No podrás
-                  cambiarlo después de la publicación.
+                  Define una fecha límite para tu campaña. <b> No podrás
+                  cambiarlo después de la publicación.</b>
                 </p>
               </Col>
               <Col md={8}>
-                <div className="border rounded-3 p-3">
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="duracion"
-                      id="fijo"
-                      value="fijo"
-                      checked={values.duracion === "fijo"}
-                      onChange={handleChange}
-                    />
-                    <label className="form-check-label" htmlFor="fijo">
-                      Número fijo de días (1-60)
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="duracion"
-                      id="fecha"
-                      value="fecha"
-                      checked={values.duracion === "fecha"}
-                      onChange={handleChange}
-                    />
-                    <label className="form-check-label" htmlFor="fecha">
-                      Finalizar en una fecha y hora específica
-                    </label>
-                  </div>
-                  {errors.duracion && touched.duracion && (
-                    <div className="text-danger">{errors.duracion}</div>
-                  )}
-                  <p className="mt-2 text-success">
-                    <i className="bi bi-lightbulb"></i> Las campañas cuya
-                    duración se establece por 30 días o menos...
-                  </p>
-                  <div className="form-check mt-3">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="contribuciones"
-                      id="noActivar"
-                      value="noActivar"
-                      checked={values.contribuciones === "noActivar"}
-                      onChange={handleChange}
-                    />
-                    <label className="form-check-label" htmlFor="noActivar">
-                      No activar las contribuciones tardías
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="contribuciones"
-                      id="activar"
-                      value="activar"
-                      checked={values.contribuciones === "activar"}
-                      onChange={handleChange}
-                    />
-                    <label className="form-check-label" htmlFor="activar">
-                      Activar las contribuciones tardías
-                    </label>
-                  </div>
-                  {errors.contribuciones && touched.contribuciones && (
-                    <div className="text-danger">{errors.contribuciones}</div>
-                  )}
-                </div>
+              <Form.Group>
+                      <DatePicker
+                           minDate={tomorrow}
+                          placeholderText="MM/DD/YYYY"
+                          selected={selectedDate}
+                          onChange={(date) => {
+                              setSelectedDate(date);
+                              setFieldValue("day", date ? date.getDate() : '');
+                              setFieldValue("month", date ? date.getMonth() + 1 : '');
+                              setFieldValue("year", date ? date.getFullYear() : '');
+                          }}
+                          customInput={
+                              <Form.Control
+                                  type="text"
+                                  style={{
+                                      width: '100%',
+                                      padding: '0.5rem',
+                                      fontSize: '1rem',
+                                      borderRadius: '0.25rem',
+                                      border: '1px solid #ced4da',
+                                  }}
+                              />
+                          }
+                          dateFormat="MM/dd/yyyy"
+                      />
+                  </Form.Group>
               </Col>
             </Row>
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" className="d-none">
               Guardar
             </Button>
           </Form>

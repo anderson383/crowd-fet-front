@@ -2,6 +2,14 @@ import icon from "@/assets/images/header-icon.png";
 import logo2 from "@/assets/images/logo-2.png";
 import logo from "@/assets/images/logo.png";
 
+export const navItemsBackOfice = [
+  {
+    id: 1,
+    name: "Inicio",
+    href: "/",
+  },
+];
+
 export const navItems = [
   {
     id: 1,
@@ -33,20 +41,6 @@ export const navItems = [
       { id: 3, name: "Team Members", href: "/team-members" },
     ],
   },
-  // {
-  //   id: 5,
-  //   name: "News",
-  //   href: "",
-  //   subNavItems: [
-  //     { id: 1, name: "News", href: "/news" },
-  //     { id: 2, name: "Single News", href: "/single-news" },
-  //   ],
-  // },
-  // {
-  //   id: 6,
-  //   name: "Contact",
-  //   href: "/contact",
-  // },
   {
     id: 6,
     name: "Iniciar sesión",
@@ -87,6 +81,7 @@ const headerData = {
   logo2,
   icon,
   navItems,
+  navItemsBackOfice,
   email: "crowdFet@crowdfet.com",
   phone: "3203770252",
   address: "Rivera huila",

@@ -23,5 +23,66 @@ a {
   color: $primary !important;
   text-decoration: none !important;
 }
+
+.main-header-backoffice {
+  top: 0 !important;
+  border-bottom: 1px solid #e3e6f0 !important;
+  // position: inherit !important;
+}
+
+.navegacion_project {
+  background-color: white;
+  margin-top: 82px;
+  box-shadow: 0 2px 6px 0 rgba(0,0,0,0.17);
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+button {
+  &:focus{
+    outline: none !important;
+    box-shadow: none !important;
+  }
+}
+
+.nav-item {
+  .nav-link {
+    padding: 2rem;
+    background-color: white !important;
+    color: $dark !important;
+    font-weight: bolder !important;
+    border-radius: 0px;
+    border:none;
+
+    &:focus{
+      outline: none !important;
+      box-shadow: none !important;
+    }
+  }
+
+  .active {
+    border-bottom: 4px solid $primary;
+  }
+}
+
+#avatar-dropdown {
+  text-decoration: none;
+  &::after {
+    display: none;
+  }
+}
+
+.main-header-item-back {
+  padding: 1rem 0;
+}
+
+.background-gray {
+  background-color: #f8f9fa;
+}
+
+.bg-white {
+  background-color: white !important
+}
 // Importa el resto de Bootstrap
 @import "node_modules/bootstrap/scss/bootstrap";
