@@ -2,18 +2,22 @@ import React, { useEffect, useState } from "react";
 
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { Form, Row, Col, Button, Alert } from "react-bootstrap";
+import { Form, Row, Col, Button, Alert, InputGroup } from "react-bootstrap";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axiosInstance from "src/config/axios/axios";
+import CitySearch from "@/components/SearchCity/SearchCity";
 
-const Basico = () => {
+const Basico = ({ formRef  }) => {
 
   const [fileName, setFileName] = useState("");
   const [videoName, setVideoName] = useState("");
   const [listCategory, setListCategory] = useState([]);
   const [sublistCategory, setSubListCategory] = useState([]);
+
+  const [listDeparment, setListDeparment] = useState([]);
+  const [listMunicipality, setListMunicipality] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -24,12 +28,13 @@ const Basico = () => {
     video: null,
     categoryId: "",
     subCategoryId: "",
+    deparment: "",
+    municipality: "",
     file: null,
-    day: "",
-    month: "",
-    year: "",
-    duracion: "",
     contribuciones: "",
+    montoMeta: null,
+    durationCampaign: null,
+    dateLaunch: null,
   };
 
   const validationBasic = Yup.object().shape({
@@ -40,10 +45,13 @@ const Basico = () => {
     subCategory: Yup.string().required(
       "La subcategoría principal es requerida"
     ),
-    category: Yup.string().required("La categoría es requerida"),
-    subCategoryOption: Yup.string().required("La subcategoría es requerida"),
+    categoryId: Yup.string().required("La categoría es requerida"),
+    subCategoryId: Yup.string().required("La subcategoría es requerida"),
 
-    location: Yup.string().required("La ubicación es requerida"),
+    deparment: Yup.string().required("El departamento es requerido"),
+    municipality: Yup.string().required("El municipio es requerido"),
+    montoMeta: Yup.number().required("El monto de la meta es requerido"),
+    
 
     file: Yup.mixed()
       .required("Se requiere un archivo")
@@ -58,42 +66,10 @@ const Basico = () => {
           )
         );
       }),
-
-    video: Yup.mixed()
-      .required("Se requiere un archivo")
-      .test("fileSize", "El archivo es demasiado grande", (value) => {
-        return value && value.size <= 5120 * 1024; // 5120 MB
-      })
-      .test("fileType", "El tipo de archivo no es válido", (value) => {
-        return (
-          value &&
-          [
-            "video/mp4",
-            "video/mpeg",
-            "video/avi",
-            "video/3gp",
-            "video/wmv",
-            "video/flv",
-          ].includes(value.type)
-        );
-      }),
-
-    pixelId: Yup.string().required("El ID de pixel es requerido"),
-    accessToken: Yup.string().required("El token de acceso es requerido"),
-
-    day: Yup.number()
-      .required("El día es requerido")
-      .min(1, "El día debe ser al menos 1")
-      .max(31, "El día debe ser como máximo 31"),
-    month: Yup.number()
-      .required("El mes es requerido")
-      .min(1, "El mes debe ser al menos 1")
-      .max(12, "El mes debe ser como máximo 12"),
-    year: Yup.number()
-      .required("El año es requerido")
-      .min(1900, "El año debe ser mayor a 1900"),
-
-    duracion: Yup.string().required("Debes seleccionar una duración"),
+    video: Yup.string().required("El municipio es requerido"),
+    
+    durationCampaign: Yup.string().required("Debes seleccionar una duración"),
+    dateLaunch: Yup.string().required("Debes seleccionar una fecha"),
     contribuciones: Yup.string().required(
       "Debes seleccionar una opción de contribuciones"
     ),
@@ -105,12 +81,23 @@ const Basico = () => {
       // setListCategory(data[0].listItem)
     })
   };
+  const getMunicipality = (id) => {
+    axiosInstance.get(`/common/list-item/?id=${id}`).then(({data: {data}}) => {
+      setListMunicipality(data)
+      // setListCategory(data[0].listItem)
+    })
+  };
+
 
   useEffect(() => {
     axiosInstance.get('/common/list-types/?codes=category_projects').then(({data: {data}}) => {
       setListCategory(data[0].listItem)
     })
+    axiosInstance.get('/common/list-types/?codes=deparments_list').then(({data: {data}}) => {
+      setListDeparment(data[0].listItem)
+    })
   }, [])
+
   const handleSubmitBasic = (values) => {
     console.log(values);
 
@@ -121,11 +108,12 @@ const Basico = () => {
 
   return (
     <>
-      <div className="mb-5">
+      <div className="mb-5 pb-5">
         <h2>Empieza con los fundamentos básicos</h2>
         <p>Haz que sea fácil para las personas conocer tu proyecto.</p>
       </div>
       <Formik
+        innerRef={formRef}
         initialValues={initialValuesBasic}
         validationSchema={validationBasic}
         onSubmit={handleSubmitBasic}
@@ -137,6 +125,7 @@ const Basico = () => {
           values,
           touched,
           errors,
+          handleBlur,
         }) => (
           <Form noValidate onSubmit={handleSubmit}>
             <Row className="mb-4">
@@ -165,6 +154,7 @@ const Basico = () => {
                       placeholder="El archivo histórico del Museo de Arte Moderno a tu alcance"
                       value={values.title}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       isInvalid={!!errors.title && touched.title}
                     />
                     <Form.Control.Feedback type="invalid">
@@ -180,6 +170,7 @@ const Basico = () => {
                       rows={3}
                       value={values.subtitle}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       isInvalid={!!errors.subtitle && touched.subtitle}
                     />
                     <Form.Control.Feedback type="invalid">
@@ -192,9 +183,6 @@ const Basico = () => {
                       patrocinadores la mejor primera impresión de tu proyecto
                       con títulos interesantes.
                     </p>
-                    <a href="#" className="text-success">
-                      Más información...
-                    </a>
                   </div>
                 </div>
               </Col>
@@ -223,16 +211,17 @@ const Basico = () => {
                 <div className="border rounded-3 p-3 bg-white">
                   <Row>
                     <Col md={6} className="mt-3">
-                      <Form.Group controlId="formCategory">
+                      <Form.Group controlId="categoryId">
                         <Form.Label>Categoría</Form.Label>
                         <Form.Select
-                          name="category"
-                          value={values.category}
+                          name="categoryId"
+                          value={values.categoryId}
+                          onBlur={handleBlur}
                           onChange={(e) => {
                             handleChange(e)
                             getSubCategory(e.target.value)
                           }}
-                          isInvalid={!!errors.category && touched.category}
+                          isInvalid={!!errors.categoryId && touched.categoryId}
                         >
                           <option value="">Seleccionar</option>
                           {
@@ -242,7 +231,7 @@ const Basico = () => {
                           }
                         </Form.Select>
                         <Form.Control.Feedback type="invalid">
-                          {errors.category}
+                          {errors.categoryId}
                         </Form.Control.Feedback>
                       </Form.Group>
                     </Col>
@@ -250,12 +239,13 @@ const Basico = () => {
                       <Form.Group controlId="formSubCategoryOption">
                         <Form.Label>Subcategoría</Form.Label>
                         <Form.Select
-                          name="subCategoryOption"
-                          value={values.subCategoryOption}
+                          name="subCategoryId"
+                          value={values.subCategoryId}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           isInvalid={
-                            !!errors.subCategoryOption &&
-                            touched.subCategoryOption
+                            !!errors.subCategoryId &&
+                            touched.subCategoryId
                           }
                         >
                           <option value="">Seleccionar</option>
@@ -266,7 +256,7 @@ const Basico = () => {
                           }
                         </Form.Select>
                         <Form.Control.Feedback type="invalid">
-                          {errors.subCategoryOption}
+                          {errors.subCategoryId}
                         </Form.Control.Feedback>
                       </Form.Group>
                     </Col>
@@ -285,24 +275,59 @@ const Basico = () => {
                 </p>
               </Col>
               <Col md={8}>
-                <div className="border rounded-3 p-3">
-                  {/* <Form noValidate onSubmit={handleSubmit}> */}
-                  <div className="input-group mb-3">
-                    <span className="input-group-text">
-                      <i className="bi bi-search"></i>
-                    </span>
-                    <Form.Control
-                      type="text"
-                      name="location"
-                      placeholder="Empieza a escribir tu ubicación..."
-                      value={values.location}
-                      onChange={handleChange}
-                      isInvalid={!!errors.location && touched.location}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.location}
-                    </Form.Control.Feedback>
-                  </div>
+                <div className="border rounded-3 p-3 bg-white">
+                  <Row>
+                    <Col md={6} className="mt-3">
+                      <Form.Group controlId="deparment">
+                        <Form.Label>Departamento</Form.Label>
+                        <Form.Select
+                          name="deparment"
+                          value={values.deparment}
+                          onBlur={handleBlur}
+                          onChange={(e) => {
+                            handleChange(e)
+                            getMunicipality(e.target.value)
+                          }}
+                          isInvalid={!!errors.deparment && touched.deparment}
+                        >
+                          <option value="">Seleccionar</option>
+                          {
+                            listDeparment.map(dep => (
+                              <option key={dep.id} value={dep.id} >{dep.name}</option>
+                            ))
+                          }
+                        </Form.Select>
+                        <Form.Control.Feedback type="invalid">
+                          {errors.deparment}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Col>
+                    <Col md={6} className="mt-3">
+                      <Form.Group controlId="municipality">
+                        <Form.Label>Municipio</Form.Label>
+                        <Form.Select
+                          name="municipality"
+                          value={values.municipality}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          isInvalid={
+                            !!errors.municipality &&
+                            touched.municipality
+                          }
+                        >
+                          <option value="">Seleccionar</option>
+                          {
+                            listMunicipality.map(mun => (
+                              <option key={mun.id} value={mun.id} >{mun.name}</option>
+                            ))
+                          }
+                        </Form.Select>
+                        <Form.Control.Feedback type="invalid">
+                          {errors.municipality}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Col>
+                  </Row>
                 </div>
               </Col>
             </Row>
@@ -323,22 +348,14 @@ const Basico = () => {
                   Tu imagen debe tener al menos 1024x576 píxeles. Se recortará
                   en una proporción de 16:9.
                 </p>
-                <p>
-                  <span className="text-success">
-                    Evita imágenes con banners, distintivos o texto
-                  </span>
-                  que podrían ser ilegibles en formatos más pequeños o ser
-                  penalizados por el algoritmo de Facebook. Además, reducen tus
-                  posibilidades de aparecer en la página de inicio y en los
-                  boletines de Kickstarter.
-                </p>
               </Col>
               <Col md={8}>
-                {/* <Form noValidate onSubmit={handleSubmit}> */}
                 <div className="border rounded-3 p-3 text-center bg-white">
                   <input
+                    name="file"
                     type="file"
                     accept=".jpg,.jpeg,.png,.gif,.webp"
+                    onBlur={handleBlur}
                     onChange={(event) => {
                       const file = event.currentTarget.files[0];
                       setFieldValue("file", file);
@@ -367,7 +384,6 @@ const Basico = () => {
                     <p className="mt-2">Archivo seleccionado: {fileName}</p>
                   )}
                 </div>
-                {/* </Form> */}
               </Col>
             </Row>
             <hr />
@@ -378,59 +394,76 @@ const Basico = () => {
                 <h5>Video del proyecto (opcional)</h5>
                 <p>Agrega un video que describa tu proyecto.</p>
                 <p>
-                  Cuéntale a las personas cómo se van a emplear los fondos
-                  recaudados, cómo planeas llevarlo a cabo, quién eres y por qué
-                  este proyecto es importante para ti.
+                  Cuéntale a las personas cómo se van a emplear los fondos recaudados, cómo planeas llevarlo a cabo, quién eres y por qué este proyecto es importante para ti.
                 </p>
                 <p>
-                  Después de que hayas subido tu video, utiliza nuestro editor
-                  para agregar subtítulos en el mismo u otro idioma de modo que
-                  tu proyecto sea más accesible para todos.
+                  Después de que hayas subido tu video, utiliza nuestro editor para agregar subtítulos en el mismo u otro idioma de modo que tu proyecto sea más accesible para todos.
                 </p>
               </Col>
               <Col md={8}>
-                {/* <Form noValidate onSubmit={handleSubmit}> */}
                 <div className="border rounded-3 p-3 text-center bg-white">
                   <input
-                    type="file"
-                    accept=".mov,.mpeg,.avi,.mp4,.3gp,.wmv,.flv"
-                    onChange={(event) => {
-                      const file = event.currentTarget.files[0];
-                      setFieldValue("video", file);
-                      setVideoName(file ? file.name : "");
-                    }}
-                    style={{ display: "none" }}
-                    id="video-upload"
+                    type="url"
+                    placeholder="Introduce la URL de YouTube"
+                    onChange={(event) => setFieldValue("videoUrl", event.currentTarget.value)}
+                    className="form-control"
                   />
-                  <label htmlFor="video-upload">
-                    <Button className="btn" as="span">
-                      Sube un video
-                    </Button>
-                  </label>
-                  <p className="mt-2">
-                    Coloca un video aquí o selecciona un archivo.
-                  </p>
-                  <small>
-                    Debe ser un archivo MOV, MPEG, AVI, MP4, 3GP, WMV o FLV, no
-                    mayor a 5120 MB.
+                  <small className="mt-2 d-block">
+                    Ingresa un enlace de YouTube para mostrar el video.
                   </small>
-                  {errors.video && touched.video && (
+                  {errors.videoUrl && touched.videoUrl && (
                     <Alert variant="danger" className="mt-2">
-                      {errors.video}
+                      {errors.videoUrl}
                     </Alert>
                   )}
-                  {videoName && (
-                    <p className="mt-2">Archivo seleccionado: {videoName}</p>
+                  {/* Vista previa del video */}
+                  {values.videoUrl && (
+                    <div className="mt-3">
+                      <iframe
+                        width="100%"
+                        height="315"
+                        src={`https://www.youtube.com/embed/${new URL(values.videoUrl).searchParams.get("v")}`}
+                        title="Video del proyecto"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
                   )}
                 </div>
                 <p className="text-success mt-2">
-                  <i className="bi bi-lightbulb"></i> El 80 % de los proyectos
-                  exitosos tienen un video...
+                  <i className="bi bi-lightbulb"></i> El 80 % de los proyectos exitosos tienen un video...
                 </p>
-                {/* </Form> */}
               </Col>
             </Row>
             <hr />
+            
+            <Row className="mb-4">
+              <Col md={4}>
+                <h5>Objetivo de financiación</h5>
+                <p>
+                Establezca una meta alcanzable que cubra lo que necesita para completar su proyecto.La financiación es de todo o nada. Si no alcanzas tu objetivo, no recibirás ningún dinero.
+                </p>
+              </Col>
+              <Col md={8}>
+                <InputGroup>
+                    <InputGroup.Text>$</InputGroup.Text>
+                    <Form.Control
+                        name="montoMeta"
+                        type="text"
+                        placeholder="0"
+                        value={values.montoMeta}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={!!errors.montoMeta && touched.montoMeta}
+                        aria-label="Amount (in pesos)"
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.montoMeta}
+                    </Form.Control.Feedback>
+                </InputGroup>
+              </Col>
+            </Row>
 
             {/* Fecha límite de publicación */}
             <Row className="mb-4">
@@ -449,29 +482,26 @@ const Basico = () => {
                   <div className="d-flex">
                      <Form.Group>
                       <DatePicker
-                           minDate={tomorrow}
-                          placeholderText="MM/DD/YYYY"
-                          selected={selectedDate}
-                          onChange={(date) => {
-                              setSelectedDate(date);
-                              setFieldValue("day", date ? date.getDate() : '');
-                              setFieldValue("month", date ? date.getMonth() + 1 : '');
-                              setFieldValue("year", date ? date.getFullYear() : '');
-                          }}
-                          customInput={
-                              <Form.Control
-                                  type="text"
-                                  style={{
-                                      width: '100%',
-                                      padding: '0.5rem',
-                                      fontSize: '1rem',
-                                      borderRadius: '0.25rem',
-                                      border: '1px solid #ced4da',
-                                  }}
-                              />
-                          }
-                          dateFormat="MM/dd/yyyy"
-                      />
+                        minDate={tomorrow}
+                        placeholderText="MM/DD/YYYY"
+                        selected={values.dateLaunch}
+                        onChange={(date) => {
+                          setFieldValue("dateLaunch", date)
+                        }}
+                        customInput={
+                            <Form.Control
+                                type="text"
+                                style={{
+                                    width: '100%',
+                                    padding: '0.5rem',
+                                    fontSize: '1rem',
+                                    borderRadius: '0.25rem',
+                                    border: '1px solid #ced4da',
+                                }}
+                            />
+                        }
+                        dateFormat="MM/dd/yyyy"
+                    />
                   </Form.Group>
                   </div>
                   <p className="my-4">
@@ -481,15 +511,6 @@ const Basico = () => {
                     objetivo no hará que el proyecto se publique
                     automáticamente.
                   </p>
-                  {errors.day && touched.day && (
-                    <div className="text-danger">{errors.day}</div>
-                  )}
-                  {errors.month && touched.month && (
-                    <div className="text-danger">{errors.month}</div>
-                  )}
-                  {errors.year && touched.year && (
-                    <div className="text-danger">{errors.year}</div>
-                  )}
                 </div>
                 {/* </Form> */}
               </Col>
@@ -507,36 +528,36 @@ const Basico = () => {
               </Col>
               <Col md={8}>
               <Form.Group>
-                      <DatePicker
-                           minDate={tomorrow}
-                          placeholderText="MM/DD/YYYY"
-                          selected={selectedDate}
-                          onChange={(date) => {
-                              setSelectedDate(date);
-                              setFieldValue("day", date ? date.getDate() : '');
-                              setFieldValue("month", date ? date.getMonth() + 1 : '');
-                              setFieldValue("year", date ? date.getFullYear() : '');
-                          }}
-                          customInput={
-                              <Form.Control
-                                  type="text"
-                                  style={{
-                                      width: '100%',
-                                      padding: '0.5rem',
-                                      fontSize: '1rem',
-                                      borderRadius: '0.25rem',
-                                      border: '1px solid #ced4da',
-                                  }}
-                              />
-                          }
-                          dateFormat="MM/dd/yyyy"
-                      />
-                  </Form.Group>
+                <DatePicker
+                    minDate={tomorrow}
+                    placeholderText="MM/DD/YYYY"
+                    selected={values.durationCampaign}
+                    onChange={(date) => {
+                      setFieldValue("durationCampaign", date)
+                    }}
+                    customInput={
+                        <Form.Control
+                            name="durationCampaign"
+                            type="text"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={!!errors.durationCampaign && touched.durationCampaign}
+                            style={{
+                                width: '100%',
+                                padding: '0.5rem',
+                                fontSize: '1rem',
+                                borderRadius: '0.25rem',
+                            }}
+                        />
+                    }
+                    dateFormat="MM/dd/yyyy"
+                />
+                 <Form.Control.Feedback type="invalid">
+                    {errors.durationCampaign}
+                  </Form.Control.Feedback>
+                </Form.Group>
               </Col>
             </Row>
-            <Button variant="primary" type="submit" className="d-none">
-              Guardar
-            </Button>
           </Form>
         )}
       </Formik>

@@ -1,11 +1,18 @@
 import React from 'react';
 import { Image, Dropdown } from 'react-bootstrap';
 import { Gear, BoxArrowRight } from 'react-bootstrap-icons';
+import { signOut } from 'next-auth/react';
 
-function Avatar({ src, name, size = 50, onOptionSelect }) {
+function Avatar({ src, name, size = 50 }) {
     const getInitials = (name) => {
         const initials = name.split(' ').map((word) => word[0]).join('');
         return initials.toUpperCase().substring(0, 2);
+    };
+
+    const onOptionSelect = (eventKey) => {
+        if (eventKey === 'logout') {
+            signOut({ callbackUrl: '/auth/login' }); // 
+        }
     };
 
     return (
@@ -34,13 +41,12 @@ function Avatar({ src, name, size = 50, onOptionSelect }) {
                     <span>{getInitials(name)}</span>
                 )}
             </Dropdown.Toggle>
-
             <Dropdown.Menu>
                 <Dropdown.Item eventKey="settings">
                     <Gear className="me-2" /> Configuración
                 </Dropdown.Item>
                 <Dropdown.Item eventKey="logout">
-                    <BoxArrowRight className="me-2" /> Cerrar sesión
+                    <BoxArrowRight className="me-2" />Cerrar sesión
                 </Dropdown.Item>
             </Dropdown.Menu>
         </Dropdown>

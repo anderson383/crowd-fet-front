@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Image, Row } from "react-bootstrap";
 import Link from "../Reuseable/Link";
 import HeaderInfo from "./HeaderInfo";
 import HeaderMenu from "./HeaderMenu";
 import Avatar from "../Avatar/Avatar";
+import { useSession } from "next-auth/react";
+import useUser from "@/hooks/useUser";
 
 const MainHeaderItemBackOffice = ({
   logo,
@@ -13,6 +15,7 @@ const MainHeaderItemBackOffice = ({
   socials,
   searchColor,
 }) => {
+  const user = useUser();
   return (
     <Row>
       <Col lg={12}>
@@ -23,9 +26,7 @@ const MainHeaderItemBackOffice = ({
                 <Image src={logo.src} alt="logo" width={128} />
               </Link>
             </div>
-
-            <Avatar name={'Anderson Vargas'}  />
-            
+            <Avatar name={user?.full_name + " " + user?.last_name}  />
           </div>
         </div>
       </Col>

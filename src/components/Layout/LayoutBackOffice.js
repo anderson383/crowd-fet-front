@@ -10,7 +10,7 @@ const LayoutBackOffice = ({ children }) => {
     <>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Crowdfet - Crowdfunding Projects & Charity NextJS Template</title>
+        <title>Crowdfet - Crowdfunding Projects</title>
       </Head>
       <main id="wrapper" className="animated fadeIn background-gray">
         {children}

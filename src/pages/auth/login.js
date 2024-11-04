@@ -27,7 +27,6 @@ const Home = () => {
     if (res?.error) {
       setFieldError('password', 'Credenciales incorrectas');
     } else {
-      console.log(res)
       const session = await getSession();
       if (session.user.rol === ROLES.ADMIN) {
         router.push('/admin');

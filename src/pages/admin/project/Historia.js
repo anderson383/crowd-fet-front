@@ -8,21 +8,20 @@ import { Form, Row, Col, Button, Alert } from "react-bootstrap";
 import "react-datepicker/dist/react-datepicker.css";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 
-const Historia = () => {
+const Historia = ( { formRef } ) => {
   const initialValues = {
     descripcion: "",
     riesgos: "",
     compromisosMedioambientales: [],
     usoIA: "",
+    file: null,
   };
 
   const validationSchema = Yup.object().shape({
     descripcion: Yup.string().required("Descripción es obligatorio"),
     riesgos: Yup.string().required("Riesgos y desafíos es obligatorio"),
-    compromisosMedioambientales: Yup.array()
-      .of(Yup.string())
-      .required("Debes seleccionar al menos un compromiso medioambiental"),
     usoIA: Yup.string().required("Debes indicar si usas IA"),
+    file: Yup.mixed().required("Por favor selecciona un archivo PDF"),
   });
 
   const handleSubmitBasic = (values) => {
@@ -43,6 +42,7 @@ const Historia = () => {
   return (
     <>
       <Formik
+        innerRef={formRef}
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmitBasic}
@@ -71,11 +71,6 @@ const Historia = () => {
                   cabo y quién eres. <a href="#">Leer más</a> sobre cómo contar
                   tu historia.
                 </p>
-                {/* <textarea
-                    className="form-control mb-3"
-                    rows="5"
-                    placeholder="Usa texto, imágenes, videos y audio para redactar una historia cautivadora."
-                  ></textarea> */}
               </Col>
             </Row>
             <Row>
@@ -84,20 +79,34 @@ const Historia = () => {
                 <Form.Control
                     type="file"
                     accept="application/pdf"
-                    onChange={handleFileChange}
+                    onChange={(event) => {
+                      const file = event.target.files[0];
+                      if (file && file.type === "application/pdf") {
+                        setFieldValue("file", file);
+                        setPdfFile(URL.createObjectURL(file));
+                      } else {
+                        alert("Por favor selecciona un archivo PDF");
+                      }
+                    }}
                     style={{ display: 'inline-block', width: 'auto', marginRight: '10px' }}
                 />
                 <Button variant="primary" onClick={() => document.getElementById('formFile').click()}>
                     Seleccionar PDF
                 </Button>
             </Form.Group>
-            {pdfFile && (
-                <div style={{ border: '1px solid #ddd', padding: '10px', marginTop: '20px',height: '750px', width: '80%', overflow: 'auto' }}>
-                    <Worker workerUrl={`https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js`}>
-                        <Viewer fileUrl={pdfFile} />
-                    </Worker>
-                </div>
-            )}
+              {pdfFile && (
+                  <div style={{ border: '1px solid #ddd', padding: '10px', marginTop: '20px',height: '750px', width: '80%', overflow: 'auto' }}>
+                      <Worker workerUrl={`https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js`}>
+                          <Viewer fileUrl={pdfFile} />
+                      </Worker>
+                  </div>
+              )}
+
+              {errors.file && touched.file && (
+                <Alert variant="danger" className="mt-2">
+                  {errors.file}
+                </Alert>
+              )}
             </Col>
             </Row>
             <hr />
@@ -136,91 +145,6 @@ const Historia = () => {
                     desafíos desde el principio para crear las expectativas
                     adecuadas. <a href="#">Más información...</a>
                   </p>
-                </div>
-              </Col>
-            </Row>
-            <hr />
-            {/* Compromisos medioambientales */}
-            <Row className="mb-4">
-              <Col md={4}>
-                <h5>Compromisos medioambientales (recomendado)</h5>
-                <p>
-                  Reduce el impacto de tu proyecto en el planeta y aumenta las
-                  posibilidades de destacarte entre los posibles patrocinadores.{" "}
-                  <a href="#">Visita nuestro centro de recursos</a> para conocer
-                  las prácticas clave.
-                </p>
-                <p className="text-success">
-                  ecovadis logo
-                  <br />
-                  Ofrecemos solo a los creadores de Kickstarter una
-                  actualización gratuita de Ecovadis Premium, que incluye una
-                  evaluación de sostenibilidad, un resumen de resultados y un
-                  distintivo para las páginas de proyectos con alto rendimiento.
-                </p>
-              </Col>
-              <Col md={8}>
-                <div className="border p-3">
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="diseno"
-                    />
-                    <label className="form-check-label" htmlFor="diseno">
-                      Diseño de larga duración
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="reciclaje"
-                    />
-                    <label className="form-check-label" htmlFor="reciclaje">
-                      Reutilización y reciclaje
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="materiales"
-                    />
-                    <label className="form-check-label" htmlFor="materiales">
-                      Materiales sustentables
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="fabricas"
-                    />
-                    <label className="form-check-label" htmlFor="fabricas">
-                      Fábricas ecológicas
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="entrega"
-                    />
-                    <label className="form-check-label" htmlFor="entrega">
-                      Entrega y distribución sustentables
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="algoMas"
-                    />
-                    <label className="form-check-label" htmlFor="algoMas">
-                      Algo más
-                    </label>
-                  </div>
                 </div>
               </Col>
             </Row>
@@ -320,10 +244,6 @@ const Historia = () => {
                 </div>
               </Col>
             </Row> */}
-{/* 
-            <Button variant="primary" type="submit">
-              Guardar
-            </Button> */}
           </Form>
         )}
       </Formik>

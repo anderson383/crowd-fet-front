@@ -27,7 +27,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "src/components/Avatar/Avatar.js"  ],
+, "src/components/Avatar/Avatar.js", "src/components/Project/ElementsManager.js"  ],
   "exclude": [
     "node_modules"
   ]
