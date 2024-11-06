@@ -2,6 +2,6 @@ import bg from "@/assets/images/together-bg.jpg";
 
 export const togetherArea = {
   bg,
-  tagline: "World is Full with Creativity",
-  title: "Together We can Bring More Creativity into the World",
+  tagline: "El mundo está lleno de creatividad",
+  title: "Juntos podemos traer más creatividad al mundo",
 };
