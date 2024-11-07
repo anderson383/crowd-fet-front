@@ -4,11 +4,9 @@ import { Table, Form, Button, Row, Col, Container } from "react-bootstrap";
 import axiosInstance from "src/config/axios/axios";
 
 
-
 const AdminPage = () => {
   const session = useSession();
   console.log(session, "sessionsessionsession");
-  // const [projects, setProjects] = useState(crowdfundingProjects);
   const [projects, setProjects] = useState([]);
   const [filters, setFilters] = useState({
     name: "",
@@ -22,7 +20,7 @@ const AdminPage = () => {
 
   useEffect(() => {
     axiosInstance
-      .get("/project/", {
+      .get("/project", {
         params: {
           page,
           limit,
