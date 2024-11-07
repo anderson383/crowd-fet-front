@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Table, Modal, Form } from 'react-bootstrap';
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
+import { Button, Table, Modal, Form,Alert } from 'react-bootstrap';
 import { Formik, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
@@ -22,7 +22,9 @@ const validationSchema = Yup.object({
         })
 });
 
-const ElementsManager = () => {
+// eslint-disable-next-line react/display-name
+const ElementsManager = forwardRef((props, ref) => {
+    const [alertElements, setAlertElements] = useState(false);
     const [elements, setElements] = useState([]); // Lista de elementos
     const [showModal, setShowModal] = useState(false); // Mostrar modal
     const [isEditing, setIsEditing] = useState(false); // Estado de edición
@@ -49,6 +51,18 @@ const ElementsManager = () => {
             setPreviewImage(URL.createObjectURL(file));
         }
     };
+    
+
+    const handleExternalSubmit = () => {
+        if ((elements || []).length === 0) {
+            setAlertElements(true)
+            return;
+        }
+    };
+
+    useImperativeHandle(ref, () => ({
+        handleExternalSubmit
+    }));
 
     return (
         <div className="container mt-5">
@@ -103,6 +117,12 @@ const ElementsManager = () => {
                     )}
                 </tbody>
             </Table>
+
+            {alertElements && (
+                <Alert variant="danger" className="mt-2">
+                Sebe añadir por lo menos una recompensa para poder continuar
+                </Alert>
+              )}
 
             {/* Modal para crear o editar elemento */}
             <Modal show={showModal} onHide={handleCloseModal}>
@@ -181,6 +201,6 @@ const ElementsManager = () => {
             </Modal>
         </div>
     );
-};
+});
 
 export default ElementsManager;

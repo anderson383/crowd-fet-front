@@ -17,15 +17,22 @@ import { FileEarmark  } from 'react-bootstrap-icons';
 const Proyect = () => {
   const formBasicRef = useRef(null);
   const formHistoryRef = useRef(null);
+  const formElements = useRef(null);
   const formPersonRef = useRef(null);
   const [activeTab, setActiveTab] = useState("basico");
 
 
 
   const handleExternalSubmit = () => {
-    if (formBasicRef.current && formHistoryRef.current) {
+    if (formBasicRef.current && formHistoryRef.current && formElements.current) {
+
+      console.log(formBasicRef.current, 'formBasicRef.current')
+      console.log(formHistoryRef.current, 'formBasicRef.current')
+      console.log(formElements.current, 'formHistoryRef.current')
+
       formBasicRef.current.submitForm(); // Llama a submitForm desde la referencia
-      formHistoryRef.current.submitForm(); // Llama a submitForm desde la referencia
+      formHistoryRef.current.submitForm();
+      formElements.current.handleExternalSubmit(); // Llama a submitForm desde la referencia
     }
   };
 
@@ -77,8 +84,8 @@ const Proyect = () => {
           <div className={activeTab === "basico" ? 'd-block' : 'd-none'}>
             <Basico formRef={formBasicRef} />
           </div>
-          <div className={activeTab === "recompensa" ? 'd-block' : 'd-none'}>
-            <ElementsManager />
+          <div className={activeTab === "recompensa" ? 'd-block' : 'd-none'} >
+            <ElementsManager ref={formElements} />
           </div>
           <div className={activeTab === "historia" ? 'd-block' : 'd-none'}>
             <Historia formRef={formHistoryRef}  />

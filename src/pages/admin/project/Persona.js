@@ -5,7 +5,12 @@ import * as Yup from "yup";
 import { Form, Row, Col, Button, Alert } from "react-bootstrap";
 
 import "react-datepicker/dist/react-datepicker.css";
+import useUser from "@/hooks/useUser";
+import Avatar from "@/components/Avatar/Avatar";
 const Proyect = ( { formRef } ) => {
+  const userSession = useUser()
+
+  console.log(userSession, 'userSession')
   const handleSubmitBasic = (values) => {
     console.log(values);
   };
@@ -32,14 +37,10 @@ const Proyect = ( { formRef } ) => {
         </Col>
         <Col md={8}>
           <div className="border rounded-3 p-3 d-flex align-items-center justify-content-between">
-            <div className="d-flex align-items-center">
-              <img
-                src="https://via.placeholder.com/50"
-                alt="Perfil"
-                className="rounded-circle me-3"
-              />
+            <div className="d-flex align-items-center gap-3">
+              <Avatar name={userSession?.full_name + " " + userSession?.last_name}  />
               <div>
-                <strong>freiman</strong>
+                <strong>{userSession?.full_name} {userSession?.last_name}</strong>
                 <p className="mb-0">Creador del proyecto</p>
               </div>
             </div>
