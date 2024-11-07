@@ -2,21 +2,26 @@ import thumb from "@/assets/images/why-choose-thumb-1.jpg";
 import thumb2 from "@/assets/images/why-choose-thumb-2.jpg";
 
 export const whyChoose = {
-  title: "We’re trusted by more than 3500 clients",
+  title: "Cumple tus sueños con la Fet",
   thumb,
   thumb2,
-  tagline: "Businesses You Can Back",
-  title2: "Why Choose Crowdfet Platform",
+  tagline: "",
+  title2: "Por qué elegir a Crowfet",
   items: [
     {
       id: 1,
-      title: "Highest Success Rates",
-      text: "Lorem Ipsum nibh vel velit auctor aliquet. Aenean sollic tudin, lorem is simply free text quis bibendum.",
+      title: "Impacto directo",
+      text: "Tu contribución se destina directamente a proyectos que benefician a estudiantes y la comunidad universitaria.",
     },
     {
       id: 2,
-      title: "Millions in Funding",
-      text: "Lorem Ipsum nibh vel velit auctor aliquet. Aenean sollic tudin, lorem is simply free text quis bibendum.",
+      title: "Transparencia total",
+      text: "Visualiza el progreso de las metas de financiación en tiempo real.",
+    },
+    {
+      id: 3,
+      title: "Transparencia total",
+      text: "Visualiza el progreso de las metas de financiación en tiempo real.",
     },
   ],
 };

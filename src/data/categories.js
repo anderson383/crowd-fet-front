@@ -1,44 +1,38 @@
 import bg from "@/assets/images/categories-bg.jpg";
-import categoriesUser from "@/assets/images/categories-user.png";
-import signIn from "@/assets/images/singin.png";
 
 export const categoriesSection = {
   bg,
-  tagline: "Which Category Intrest You",
-  title: "Top Categories",
-  text: " Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the when an unknown was popularised.",
-  categoriesUser,
-  signIn,
+  title: "Top Categorias",
   categories: [
     {
       id: 1,
       icon: "flaticon-networking",
-      title: "Technology",
+      title: "Tecnología",
     },
     {
       id: 2,
       icon: "flaticon-photograph",
-      title: "Film & Videos",
+      title: "Cine y Videos",
     },
     {
       id: 3,
       icon: "flaticon-translation",
-      title: "Education",
+      title: "Educación",
     },
     {
       id: 4,
       icon: "flaticon-stethoscope",
-      title: "Medical",
+      title: "Medicina",
     },
     {
       id: 5,
       icon: "flaticon-skincare",
-      title: "Fashion",
+      title: "Moda",
     },
     {
       id: 6,
       icon: "flaticon-design",
-      title: "Design",
+      title: "Diseño",
     },
   ],
 };

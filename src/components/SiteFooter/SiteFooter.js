@@ -5,8 +5,7 @@ import { Col, Container, Image, Row } from "react-bootstrap";
 import Link from "../Reuseable/Link";
 import FooterList from "./FooterList";
 
-const { bg, logo, text, author, year, links, socials, text2, shape } =
-  footerData;
+const { bg, logo, text, author, year, links, socials, text2, shape } = footerData;
 
 const SiteFooter = () => {
   const onSubmit = (data) => console.log(data);
@@ -18,15 +17,15 @@ const SiteFooter = () => {
     >
       <Container>
         <Row>
-          <Col lg={4} md={6} sm={8}>
+          <div>
             <div className="footer-about mt-30">
               <Link href="/">
-                <Image src={logo.src} alt=""  width={128}/>
+                <Image src={logo.src} alt="" width={128} />
               </Link>
               <p>{text}</p>
-              <ul>
+              <ul className="text-center">
                 {socials.map(({ id, icon, href }) => (
-                  <li key={id}>
+                  <li key={id} className="mx-2">
                     <a href={href}>
                       <i className={icon}></i>
                     </a>
@@ -34,10 +33,10 @@ const SiteFooter = () => {
                 ))}
               </ul>
             </div>
-          </Col>
-          <FooterList title="Company" list={links.slice(0, 5)} />
-          <FooterList title="Fundraising" list={links.slice(5)} />
-          <Col lg={4} md={6} sm={8}>
+          </div>
+          {/* <FooterList title="Company" list={links.slice(0, 5)} /> */}
+          {/* <FooterList title="Fundraising" list={links.slice(5)} /> */}
+          {/* <Col lg={4} md={6} sm={8}>
             <div className="footer-newsletter mt-30">
               <div className="footer-title">
                 <h4 className="title">Newsletter</h4>
@@ -56,7 +55,7 @@ const SiteFooter = () => {
               </form>
               <p>{text2}</p>
             </div>
-          </Col>
+          </Col> */}
         </Row>
         <Row>
           <Col lg={12}>
