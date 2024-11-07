@@ -61,6 +61,7 @@ const ElementsManager = forwardRef((props, ref) => {
     };
 
     useImperativeHandle(ref, () => ({
+        elements,
         handleExternalSubmit
     }));
 

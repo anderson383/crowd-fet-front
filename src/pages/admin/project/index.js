@@ -14,25 +14,53 @@ import HeaderBackOffice from "@/components/Header/HeaderBackOffice";
 import LayoutBackOffice from "@/components/Layout/LayoutBackOffice";
 import ElementsManager from "@/components/Project/ElementsManager";
 import { FileEarmark  } from 'react-bootstrap-icons';
+import axiosInstance from "src/config/axios/axios";
+import { createFormData } from "src/constants/formData";
+import { format } from "date-fns";
 const Proyect = () => {
   const formBasicRef = useRef(null);
   const formHistoryRef = useRef(null);
-  const formElements = useRef(null);
+  const formElementsRef = useRef(null);
   const formPersonRef = useRef(null);
   const [activeTab, setActiveTab] = useState("basico");
 
 
 
   const handleExternalSubmit = () => {
-    if (formBasicRef.current && formHistoryRef.current && formElements.current) {
+    console.log(formElementsRef.current, 'formElements.current')
+    if (formBasicRef.current && formHistoryRef.current && formElementsRef.current) {
+      const formBasic = formBasicRef.current;
+      const formHistory = formHistoryRef.current;
+      const formElements = formElementsRef.current;
 
-      console.log(formBasicRef.current, 'formBasicRef.current')
-      console.log(formHistoryRef.current, 'formBasicRef.current')
-      console.log(formElements.current, 'formHistoryRef.current')
+      formBasic.submitForm(); // Llama a submitForm desde la referencia
+      formHistory.submitForm();
+      formElements.handleExternalSubmit(); // Llama a submitForm desde la referencia
 
-      formBasicRef.current.submitForm(); // Llama a submitForm desde la referencia
-      formHistoryRef.current.submitForm();
-      formElements.current.handleExternalSubmit(); // Llama a submitForm desde la referencia
+      setTimeout(() => {
+        console.log("Formulario enviado");
+        console.log(formBasic.values)
+        console.log(formHistory.values)
+        console.log(formElements.elements)
+
+        const formData = createFormData(formBasic.values)
+        formData.delete('durationCampaign');
+        formData.delete('dateLaunch');
+
+        formData.append('durationCampaign',format( formBasic.values.durationCampaign, 'yyyy-MM-dd HH:mm:ss') )
+        formData.append('dateLaunch', format( formBasic.values.dateLaunch, 'yyyy-MM-dd HH:mm:ss') )
+
+        console.log(formData, 'file')
+        axiosInstance.post('/project/create-project', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data' // Este encabezado se ajusta automáticamente
+          }
+        }).then(res => {
+          console.log(res)
+        }).catch(err => {
+          console.log(err)
+        })
+      }, [100])
     }
   };
 
@@ -85,7 +113,7 @@ const Proyect = () => {
             <Basico formRef={formBasicRef} />
           </div>
           <div className={activeTab === "recompensa" ? 'd-block' : 'd-none'} >
-            <ElementsManager ref={formElements} />
+            <ElementsManager ref={formElementsRef} />
           </div>
           <div className={activeTab === "historia" ? 'd-block' : 'd-none'}>
             <Historia formRef={formHistoryRef}  />

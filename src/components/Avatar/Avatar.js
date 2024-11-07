@@ -4,7 +4,7 @@ import { Image, Dropdown } from 'react-bootstrap';
 import { Gear, BoxArrowRight } from 'react-bootstrap-icons';
 import { signOut } from 'next-auth/react';
 
-function Avatar({ src, name, size = 50 }) {
+function Avatar({ src, name, size = 50, simple = false }) {
     const router = useRouter();
     const getInitials = (name) => {
         const initials = name.split(' ').map((word) => word[0]).join('');
@@ -19,8 +19,35 @@ function Avatar({ src, name, size = 50 }) {
         }
     };
 
-    return (
-        <Dropdown onSelect={onOptionSelect}>
+    return simple ? (
+            <>
+                <Dropdown.Toggle
+                    id="avatar-dropdown"
+                    variant="link"
+                    style={{
+                        border: 'none',
+                        padding: 0,
+                        width: size,
+                        height: size,
+                        borderRadius: '50%',
+                        overflow: 'hidden',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: '#ccc',
+                        fontSize: size * 0.4,
+                        color: '#fff',
+                    }}
+                >
+                    {src ? (
+                        <Image src={src} roundedCircle style={{ width: '100%', height: '100%' }} />
+                    ) : (
+                        <span>{getInitials(name)}</span>
+                    )}
+                </Dropdown.Toggle>
+            </>
+        ): (
+        <Dropdown onSelect={ onOptionSelect}>
             <Dropdown.Toggle
                 id="avatar-dropdown"
                 variant="link"

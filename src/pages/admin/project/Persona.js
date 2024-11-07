@@ -50,30 +50,8 @@ const Proyect = ( { formRef } ) => {
         <Col md={8}>
           <div className="border rounded-3 p-3 d-flex align-items-center justify-content-between">
             <div className="d-flex align-items-center gap-3">
-              <Avatar name={userSession?.full_name + " " + userSession?.last_name}  />
+              <Avatar simple name={userSession?.full_name + " " + userSession?.last_name}  />
             <div className="d-flex align-items-center">
-              <div
-                id="avatar"
-                className="mr-4"
-                variant="link"
-                style={{
-                  border: "none",
-                  padding: 0,
-                  width: 50,
-                  height: 50,
-                  borderRadius: "50%",
-                  overflow: "hidden",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: "#ccc",
-                  fontSize: 50 * 0.4,
-                  color: "#fff",
-                  marginRight: "10px",
-                }}
-              >
-                <span>{getInitials()}</span>
-              </div>
               <div>
                 <strong>{userSession?.full_name} {userSession?.last_name}</strong>
                 <p className="mb-0">Creador del proyecto</p>
