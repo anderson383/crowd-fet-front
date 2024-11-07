@@ -16,9 +16,9 @@ const SingleExploreProject = ({ project = {} }) => {
       <div className="explore-projects-content">
         <div className="item d-flex align-items-center">
           <span>{tagline}</span>
-          <p>
-            <i className="fa fa-clock-o"></i> {date}
-          </p>
+          {/* <p> */}
+          {/* <i className="fa fa-clock-o"></i> {date} */}
+          {/* </p> */}
         </div>
         <Link href="/single-project">
           <h3 className="title">{title}</h3>
@@ -29,7 +29,20 @@ const SingleExploreProject = ({ project = {} }) => {
               <li>Raised:</li>
               <li>{raised}%</li>
             </ul>
-            <div className="range"></div>
+            <div className="progress">
+              <div
+                className="progress-bar"
+                role="progressbar"
+                style={{
+                  width: `${raised}%`,
+                }}
+                aria-valuenow={{ raised }}
+                aria-valuemin="0"
+                aria-valuemax="100"
+              >
+                {raised}%
+              </div>
+            </div>
           </div>
         </div>
       </div>
