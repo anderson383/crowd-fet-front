@@ -1,51 +1,43 @@
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Table, Form, Button, Row, Col, Container } from "react-bootstrap";
+import axiosInstance from "src/config/axios/axios";
 
-const crowdfundingProjects = [
-  {
-    id: 1,
-    name: "Green Energy Project",
-    category: "Environment",
-    status: "Ongoing",
-    goal: 50000,
-    raised: 35000,
-  },
-  {
-    id: 2,
-    name: "Tech for Education",
-    category: "Education",
-    status: "Completed",
-    goal: 30000,
-    raised: 30000,
-  },
-  {
-    id: 3,
-    name: "Healthcare for All",
-    category: "Health",
-    status: "Ongoing",
-    goal: 70000,
-    raised: 45000,
-  },
-  {
-    id: 4,
-    name: "Arts in Community",
-    category: "Art",
-    status: "Pending",
-    goal: 20000,
-    raised: 5000,
-  },
-];
 
 const AdminPage = () => {
   const session = useSession();
   console.log(session, "sessionsessionsession");
-  const [projects, setProjects] = useState(crowdfundingProjects);
+  const [projects, setProjects] = useState([]);
   const [filters, setFilters] = useState({
     name: "",
     category: "",
     status: "",
   });
+
+  const [page, setPage] = useState(1); // Página actual
+  const [totalPages, setTotalPages] = useState(1); // Total de páginas
+  const [limit, setLimit] = useState(10); // Límites por página
+
+  useEffect(() => {
+    axiosInstance
+      .get("/project", {
+        params: {
+          page,
+          limit,
+        },
+        headers: {
+          "Content-Type": "multipart/form-data", // Este encabezado se ajusta automáticamente
+        },
+      })
+      .then((response) => response.data.data)
+      .then((data) => {
+        setProjects(data.projects);
+        setTotalPages(data.totalPages);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [page, limit]);
 
   // Handle filter change
   const handleFilterChange = (e) => {
@@ -56,7 +48,8 @@ const AdminPage = () => {
   const filteredProjects = projects.filter((project) => {
     const filterByName =
       filters.name === "" ||
-      project.name.toLowerCase().includes(filters.name.toLowerCase());
+      project.title.toLowerCase().includes(filters.name.toLowerCase());
+
     const filterByCategory =
       filters.category === "" || project.category === filters.category;
     const filterByStatus =
@@ -64,20 +57,44 @@ const AdminPage = () => {
     return filterByName && filterByCategory && filterByStatus;
   });
 
+  // Change page
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setPage(newPage);
+    }
+  };
+
+  const fotmatPrice = (money) => {
+    const price =  new Intl.NumberFormat("es-CO", {
+      style: "currency",
+      currency: "COP",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(money);
+
+    return price;
+  };
+
+
+   const fotmatStatus = (status) => {
+    if (status === "approved") return "Aprobado";
+    if (status === "pending") return "Pendiente";
+   };
+
   return (
     <Container className="py-5">
-      <h1 className="mb-4 text-center">Crowdfunding Project Management</h1>
+      <h1 className="mb-4 text-center">Crowdfunding Proyectos</h1>
 
       {/* Filter Form */}
       <Form className="mb-4">
         <Row className="g-3">
           <Col md={4}>
             <Form.Group controlId="filterName">
-              <Form.Label>Project Name</Form.Label>
+              <Form.Label>Nombre del proyecto</Form.Label>
               <Form.Control
                 type="text"
                 name="name"
-                placeholder="Search by project name"
+                placeholder="Search por nombre"
                 value={filters.name}
                 onChange={handleFilterChange}
               />
@@ -85,14 +102,14 @@ const AdminPage = () => {
           </Col>
           <Col md={4}>
             <Form.Group controlId="filterCategory">
-              <Form.Label>Category</Form.Label>
+              <Form.Label>Categoria</Form.Label>
               <Form.Control
                 as="select"
                 name="category"
                 value={filters.category}
                 onChange={handleFilterChange}
               >
-                <option value="">All Categories</option>
+                <option value="">Categorias</option>
                 <option value="Environment">Environment</option>
                 <option value="Education">Education</option>
                 <option value="Health">Health</option>
@@ -102,14 +119,14 @@ const AdminPage = () => {
           </Col>
           <Col md={4}>
             <Form.Group controlId="filterStatus">
-              <Form.Label>Status</Form.Label>
+              <Form.Label>Estado</Form.Label>
               <Form.Control
                 as="select"
                 name="status"
                 value={filters.status}
                 onChange={handleFilterChange}
               >
-                <option value="">All Statuses</option>
+                <option value="">Estados</option>
                 <option value="Ongoing">Ongoing</option>
                 <option value="Completed">Completed</option>
                 <option value="Pending">Pending</option>
@@ -122,7 +139,7 @@ const AdminPage = () => {
           className="mt-3"
           onClick={() => setFilters({ name: "", category: "", status: "" })}
         >
-          Clear Filters
+          Limpiar Filtros
         </Button>
       </Form>
 
@@ -131,35 +148,37 @@ const AdminPage = () => {
         <thead className="table-dark">
           <tr>
             <th>#</th>
-            <th>Project Name</th>
-            <th>Category</th>
-            <th>Status</th>
+            <th>Nombre</th>
+            <th>Categoria</th>
+            <th>Estado</th>
             <th>Goal ($)</th>
             <th>Raised ($)</th>
           </tr>
         </thead>
         <tbody>
-          {filteredProjects.length > 0 ? (
-            filteredProjects.map((project) => (
+          {(filteredProjects || []).length > 0 ? (
+            (filteredProjects || []).map((project, index) => (
               <tr key={project.id}>
-                <td>{project.id}</td>
-                <td>{project.name}</td>
+                <td>{++index}</td>
+                <td>
+                  {project.title} - {project.subtitle}
+                </td>
                 <td>{project.category}</td>
                 <td>
                   <span
                     className={`badge ${
-                      project.status === "Ongoing"
+                      project.status === "approved"
                         ? "bg-primary"
-                        : project.status === "Completed"
-                        ? "bg-success"
-                        : "bg-warning"
+                        : project.status === "pending"
+                        ? "bg-warning"
+                        : "bg-success"
                     }`}
                   >
-                    {project.status}
+                    {fotmatStatus(project.status)}
                   </span>
                 </td>
-                <td>{project.goal.toLocaleString()}</td>
-                <td>{project.raised.toLocaleString()}</td>
+                <td>{fotmatPrice(project.fundingAmount)}</td>
+                <td>{fotmatPrice(project.fundingAmount)}</td>
               </tr>
             ))
           ) : (
@@ -171,6 +190,27 @@ const AdminPage = () => {
           )}
         </tbody>
       </Table>
+
+      {/* Pagination Controls */}
+      <div className="d-flex justify-content-between">
+        <Button
+          variant="secondary"
+          onClick={() => handlePageChange(page - 1)}
+          disabled={page === 1}
+        >
+          Anterior
+        </Button>
+        <span>
+          Pagina {page} de {totalPages}
+        </span>
+        <Button
+          variant="secondary"
+          onClick={() => handlePageChange(page + 1)}
+          disabled={page === totalPages}
+        >
+          Siguiente
+        </Button>
+      </div>
     </Container>
   );
 };

@@ -8,7 +8,7 @@ const Projects2 = () => {
   return (
     <Layout>
       <Header />
-      <PageTitle title="Explore" />
+      <PageTitle title="Proyectos" />
       <ExploreProjectsThree />
     </Layout>
   );

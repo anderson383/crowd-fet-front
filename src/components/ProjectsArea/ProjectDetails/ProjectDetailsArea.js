@@ -16,32 +16,45 @@ const {
   socials,
 } = projectDetailsArea;
 
-const ProjectDetailsArea = () => {
+const ProjectDetailsArea = ({project}) => {
+ const fotmatPrice = (money) => {
+   const price = new Intl.NumberFormat("es-CO", {
+     style: "currency",
+     currency: "COP",
+     minimumFractionDigits: 0,
+     maximumFractionDigits: 0,
+   }).format(money);
+
+   return price;
+ };
+
+  const porcentaje = (meta, mount) => {
+    const porcentajeFaltante = 100 - ((meta - mount) / meta) * 100;
+    return porcentajeFaltante;
+  };
+
   return (
-    <section className="project-details-area pt-120 pb-190">
+    <section className="project-details-area pt-120 pb-45">
       <Container>
         <Row>
           <Col lg={7}>
             <div className="project-details-thumb">
-              <Image src={thumb.src} alt="" />
-              <div className="icon">
-                <i className="fa fa-heart"></i>
-              </div>
+              <Image src={project.image} alt="" />
             </div>
           </Col>
           <Col lg={5}>
             <div className="project-details-content">
               <div className="details-btn">
-                <span>{tagline}</span>
-                <div className="flag">
+                <span>{project.category}</span>
+                {/* <div className="flag">
                   <Image src={flag.src} alt="" />
                   <p>{country}</p>
-                </div>
+                </div> */}
               </div>
-              <h3 className="title">{title}</h3>
+              <h3 className="title">{project.title}</h3>
               <div className="project-details-item">
                 <div className="item text-center">
-                  <h5 className="title">${pledged}</h5>
+                  <h5 className="title">{fotmatPrice(project.fundingAmount)}</h5>
                   <span>Pledged</span>
                 </div>
                 <div className="item text-center">
@@ -57,32 +70,44 @@ const ProjectDetailsArea = () => {
                 <div className="projects-range-content">
                   <ul>
                     <li>Raised:</li>
-                    <li>{raised}%</li>
+                    <li>
+                      {porcentaje(project.fundingAmount, project.fundingAmount)}
+                      %
+                    </li>
                   </ul>
-                  <div className="range"></div>
+                  <div className="progress">
+                    <div
+                      className="progress-bar"
+                      role="progressbar"
+                      style={{
+                        width: `${porcentaje(
+                          project.fundingAmount,
+                          project.fundingAmount
+                        )}%`,
+                      }}
+                      aria-valuenow={porcentaje(
+                        project.fundingAmount,
+                        project.fundingAmount
+                      )}
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    >
+                      {porcentaje(project.fundingAmount, project.fundingAmount)}
+                      %
+                    </div>
+                  </div>
+                  {/* <div className="range"></div> */}
                 </div>
               </div>
               <div className="projects-goal">
                 <span>
-                  Goal: <span>{goal} USD</span>
+                  Goal: <span>{fotmatPrice(project.fundingAmount)} Cop</span>
                 </span>
               </div>
               <div className="project-btn mt-25">
                 <a className="main-btn" href="#">
                   Back this project
                 </a>
-              </div>
-              <div className="project-share d-flex align-items-center">
-                <span>Share this Project</span>
-                <ul>
-                  {socials.map(({ id, icon, href }) => (
-                    <li key={id}>
-                      <a href={href}>
-                        <i className={icon}></i>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
               </div>
             </div>
           </Col>

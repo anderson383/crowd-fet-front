@@ -5167,6 +5167,12 @@ p {
   z-index: -1;
   opacity: 0;
 }
+.swiper-slide.swiper-slide-prev.swiper-slide-duplicate-next {
+  opacity: 0 !important;
+}
+.swiper-wrapper {
+  margin-bottom: 50px;
+}
 .client-area .client-item::after {
   position: absolute;
   content: "";
