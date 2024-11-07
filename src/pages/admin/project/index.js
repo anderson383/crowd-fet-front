@@ -79,6 +79,8 @@ const Proyect = () => {
           }).catch(err => {
             console.log(err)
           })
+        } else {
+          alert('Faltan campos por llenar')
         }
       }, [100])
     }
