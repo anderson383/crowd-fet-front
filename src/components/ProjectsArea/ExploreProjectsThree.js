@@ -4,8 +4,6 @@ import { Col, Button, Container, Row } from "react-bootstrap";
 import SingleExploreProject from "./SingleExploreProject";
 import axiosInstance from "src/config/axios/axios";
 
-// const { projects } = exploreProjects;
-
 const ExploreProjectsThree = () => {
   const [projects, setProjects] = useState([]);
   const [page, setPage] = useState(1); // Página actual
@@ -26,8 +24,6 @@ const ExploreProjectsThree = () => {
       .then((response) => response.data.data)
       .then((data) => {
         setProjects(data.projects);
-        console.log(data.projects);
-
         setTotalPages(data.totalPages);
       })
       .catch((err) => {
@@ -35,11 +31,27 @@ const ExploreProjectsThree = () => {
       });
   }, [page, limit]);
 
-  // Change page
   const handlePageChange = (newPage) => {
     if (newPage > 0 && newPage <= totalPages) {
       setPage(newPage);
     }
+  };
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <Button
+          className="mx-1"
+          key={i}
+          variant={i === page ? "primary" : "secondary"}
+          onClick={() => handlePageChange(i)}
+        >
+          {i}
+        </Button>
+      );
+    }
+    return pageNumbers;
   };
 
   return (
@@ -55,24 +67,41 @@ const ExploreProjectsThree = () => {
           </Row>
         </div>
         {/* Pagination Controls */}
-        <div className="d-flex justify-content-between">
+        <div className="d-flex justify-content-center align-items-center mt-4">
+          <Button
+            variant="secondary"
+            onClick={() => handlePageChange(1)}
+            disabled={page === 1}
+          >
+            {"<<"}
+          </Button>
           <Button
             variant="secondary"
             onClick={() => handlePageChange(page - 1)}
             disabled={page === 1}
           >
-            Anterior
+            {"<"}
           </Button>
-          <span>
-            Pagina {page} de {totalPages}
-          </span>
+          {renderPageNumbers()}
           <Button
             variant="secondary"
             onClick={() => handlePageChange(page + 1)}
             disabled={page === totalPages}
           >
-            Siguiente
+            {">"}
           </Button>
+          <Button
+            variant="secondary"
+            onClick={() => handlePageChange(totalPages)}
+            disabled={page === totalPages}
+          >
+           {">>"}
+          </Button>
+        </div>
+        <div className="d-flex justify-content-center mt-2">
+          <span>
+            Página {page} de {totalPages}
+          </span>
         </div>
       </Container>
     </section>

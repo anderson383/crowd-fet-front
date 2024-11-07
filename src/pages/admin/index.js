@@ -63,6 +63,23 @@ const AdminPage = () => {
       setPage(newPage);
     }
   };
+  
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <Button
+          className="mx-1"
+          key={i}
+          variant={i === page ? "primary" : "secondary"}
+          onClick={() => handlePageChange(i)}
+        >
+          {i}
+        </Button>
+      );
+    }
+    return pageNumbers;
+  };
 
   const fotmatPrice = (money) => {
     const price =  new Intl.NumberFormat("es-CO", {
@@ -190,26 +207,41 @@ const AdminPage = () => {
           )}
         </tbody>
       </Table>
-
-      {/* Pagination Controls */}
-      <div className="d-flex justify-content-between">
+      <div className="d-flex justify-content-center align-items-center mt-4">
+        <Button
+          variant="secondary"
+          onClick={() => handlePageChange(1)}
+          disabled={page === 1}
+        >
+          {"<<"}
+        </Button>
         <Button
           variant="secondary"
           onClick={() => handlePageChange(page - 1)}
           disabled={page === 1}
         >
-          Anterior
+          {"<"}
         </Button>
-        <span>
-          Pagina {page} de {totalPages}
-        </span>
+        {renderPageNumbers()}
         <Button
           variant="secondary"
           onClick={() => handlePageChange(page + 1)}
           disabled={page === totalPages}
         >
-          Siguiente
+          {">"}
         </Button>
+        <Button
+          variant="secondary"
+          onClick={() => handlePageChange(totalPages)}
+          disabled={page === totalPages}
+        >
+          {">>"}
+        </Button>
+      </div>
+      <div className="d-flex justify-content-center mt-2">
+        <span>
+          Página {page} de {totalPages}
+        </span>
       </div>
     </Container>
   );
