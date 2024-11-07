@@ -38,28 +38,48 @@ const Proyect = () => {
       formElements.handleExternalSubmit(); // Llama a submitForm desde la referencia
 
       setTimeout(() => {
-        console.log("Formulario enviado");
-        console.log(formBasic.values)
         console.log(formHistory.values)
-        console.log(formElements.elements)
+        if (formBasic.isValid && formElements?.elements?.length > 0 && formHistory.isValid) {
+          console.log(formBasic)
+          console.log(formHistory)
+          console.log(formElements)
+  
+          const formData = createFormData(formBasic.values)
+          formData.delete('durationCampaign');
+          formData.delete('dateLaunch');
+  
+          formData.append('durationCampaign',format( formBasic.values.durationCampaign, 'yyyy-MM-dd HH:mm:ss') )
+          formData.append('dateLaunch', format( formBasic.values.dateLaunch, 'yyyy-MM-dd HH:mm:ss') )
+  
+          const formDataHistory = createFormData(formHistory.values)
 
-        const formData = createFormData(formBasic.values)
-        formData.delete('durationCampaign');
-        formData.delete('dateLaunch');
+          formDataHistory.forEach((value, key) => {
+            formData.append(`history[${key}]`, value);
+          });
 
-        formData.append('durationCampaign',format( formBasic.values.durationCampaign, 'yyyy-MM-dd HH:mm:ss') )
-        formData.append('dateLaunch', format( formBasic.values.dateLaunch, 'yyyy-MM-dd HH:mm:ss') )
-
-        console.log(formData, 'file')
-        axiosInstance.post('/project/create-project', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data' // Este encabezado se ajusta automáticamente
-          }
-        }).then(res => {
-          console.log(res)
-        }).catch(err => {
-          console.log(err)
-        })
+          formElements?.elements?.forEach((element, index) => {
+            const item = createFormData(element)
+            item.forEach((value, key) => {
+              if (key === 'imageId') {
+                console.log(element.imageId)
+                formData.append(`elements[${index}][${key}]`, element.imageId);
+              } else {
+                formData.append(`elements[${index}][${key}]`, value);
+              }
+              formData.delete(`elements[${index}][id]`)
+            });
+          })
+  
+          axiosInstance.post('/project/create-project', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data' // Este encabezado se ajusta automáticamente
+            }
+          }).then(res => {
+            console.log(res)
+          }).catch(err => {
+            console.log(err)
+          })
+        }
       }, [100])
     }
   };

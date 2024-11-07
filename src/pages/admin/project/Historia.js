@@ -10,7 +10,6 @@ import { Viewer, Worker } from "@react-pdf-viewer/core";
 
 const Historia = ( { formRef } ) => {
   const initialValues = {
-    descripcion: "",
     riesgos: "",
     compromisosMedioambientales: [],
     usoIA: "",
@@ -18,7 +17,6 @@ const Historia = ( { formRef } ) => {
   };
 
   const validationSchema = Yup.object().shape({
-    descripcion: Yup.string().required("Descripción es obligatorio"),
     riesgos: Yup.string().required("Riesgos y desafíos es obligatorio"),
     usoIA: Yup.string().required("Debes indicar si usas IA"),
     file: Yup.mixed().required("Por favor selecciona un archivo PDF"),
