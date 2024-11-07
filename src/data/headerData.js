@@ -16,31 +16,31 @@ export const navItems = [
     name: "Inicio",
     href: "/",
   },
-  {
-    id: 2,
-    name: "Sobre nosotros",
-    href: "/about",
-  },
+  // {
+  //   id: 2,
+  //   name: "Sobre nosotros",
+  //   href: "/about",
+  // },
   {
     id: 3,
     name: "Explorar",
-    href: "",
-    subNavItems: [
-      { id: 1, name: "Project 1", href: "/projects-1" },
-      { id: 2, name: "Project 2", href: "/projects-2" },
-      { id: 3, name: "Single Project", href: "/single-project" },
-    ],
+    href: "/projects-2",
+    // subNavItems: [
+    //   // { id: 1, name: "Project 1", href: "/projects-1" },
+    //   { id: 2, name: "Project 2", href: "/projects-2" },
+    //   { id: 3, name: "Single Project", href: "/single-project" },
+    // ],
   },
-  {
-    id: 4,
-    name: "Pages",
-    href: "",
-    subNavItems: [
-      { id: 1, name: "FAQ", href: "/faq" },
-      { id: 2, name: "Gallery", href: "/gallery" },
-      { id: 3, name: "Team Members", href: "/team-members" },
-    ],
-  },
+  // {
+  //   id: 4,
+  //   name: "Pages",
+  //   href: "",
+  //   subNavItems: [
+  //     { id: 1, name: "FAQ", href: "/faq" },
+  //     { id: 2, name: "Gallery", href: "/gallery" },
+  //     { id: 3, name: "Team Members", href: "/team-members" },
+  //   ],
+  // },
   {
     id: 6,
     name: "Iniciar sesión",

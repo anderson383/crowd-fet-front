@@ -31,15 +31,7 @@ const Categories = () => {
         <Row className="align-items-center">
           <Col lg={5}>
             <div className="categories-content">
-              <span>{tagline}</span>
               <h3 className="title">{title}</h3>
-              <p>{text}</p>
-              <div className="item d-flex align-items-center">
-                <div className="thumb">
-                  <Image src={categoriesUser.src} alt="" />
-                </div>
-                <Image src={signIn.src} alt="singin" />
-              </div>
             </div>
           </Col>
           <Col lg={7}>

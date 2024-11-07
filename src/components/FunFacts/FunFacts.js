@@ -8,13 +8,13 @@ const { facts, shape1, shape2 } = funFacts;
 const FunFacts = ({ className = "" }) => {
   return (
     <section className={`fun-facts-area ${className}`}>
-      <Container>
+      {/* <Container>
         <Row>
           {facts.map((fact) => (
             <FunFactsItem key={fact.id} fact={fact} />
           ))}
         </Row>
-      </Container>
+      </Container> */}
       <div className="fun-facts-shape-1">
         <Image src={shape1.src} alt="" />
       </div>

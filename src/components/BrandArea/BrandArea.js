@@ -27,13 +27,13 @@ const BrandArea = () => {
                 <h3 className="title">{title}</h3>
               </div>
             </Col>
-            <Col lg={8}>
+            {/* <Col lg={8}>
               <Row>
                 {brands.map((brand) => (
                   <BrandItem key={brand.id} brand={brand} />
                 ))}
               </Row>
-            </Col>
+            </Col> */}
           </Row>
         </div>
       </Container>
