@@ -54,16 +54,18 @@ const ProjectDetailsArea = ({project}) => {
               <h3 className="title">{project.title}</h3>
               <div className="project-details-item">
                 <div className="item text-center">
-                  <h5 className="title">{fotmatPrice(project.fundingAmount)}</h5>
-                  <span>Pledged</span>
+                  <h5 className="title">
+                    {fotmatPrice(project.fundingAmount)}
+                  </h5>
+                  <span>Recaudado</span>
                 </div>
                 <div className="item text-center">
                   <h5 className="title">{backers}</h5>
-                  <span>Backers</span>
+                  <span>Patrocinadores</span>
                 </div>
                 <div className="item text-center">
                   <h5 className="title">{daysLeft}</h5>
-                  <span>Days Left</span>
+                  <span>Días restantes</span>
                 </div>
               </div>
               <div className="projects-range">
@@ -101,7 +103,7 @@ const ProjectDetailsArea = ({project}) => {
               </div>
               <div className="projects-goal">
                 <span>
-                  Goal: <span>{fotmatPrice(project.fundingAmount)} Cop</span>
+                  Meta: <span>{fotmatPrice(project.fundingAmount)} Cop</span>
                 </span>
               </div>
               <div className="project-btn mt-25">
