@@ -1,17 +1,21 @@
 import React from 'react';
+import { useRouter } from "next/router";
 import { Image, Dropdown } from 'react-bootstrap';
 import { Gear, BoxArrowRight } from 'react-bootstrap-icons';
 import { signOut } from 'next-auth/react';
 
 function Avatar({ src, name, size = 50 }) {
+    const router = useRouter();
     const getInitials = (name) => {
         const initials = name.split(' ').map((word) => word[0]).join('');
         return initials.toUpperCase().substring(0, 2);
     };
 
     const onOptionSelect = (eventKey) => {
-        if (eventKey === 'logout') {
-            signOut({ callbackUrl: '/auth/login' }); // 
+        if (eventKey === "settings") {
+          router.push("/user/Configuration");
+        } else if (eventKey === "logout") {
+          signOut({ callbackUrl: "/auth/login" }); //
         }
     };
 

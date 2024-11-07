@@ -2,14 +2,28 @@ import React, { useState } from "react";
 
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { Form, Row, Col, Button, Alert } from "react-bootstrap";
+import { Image, Form, Row, Col, Button, Alert } from "react-bootstrap";
+import useUser from "@/hooks/useUser";
+import { Envelope } from "react-bootstrap-icons";
+
 
 import "react-datepicker/dist/react-datepicker.css";
 const Proyect = ( { formRef } ) => {
   const handleSubmitBasic = (values) => {
     console.log(values);
   };
-
+  
+  
+  const getInitials = () => {
+    const user = useUser();
+    const l = `${user?.full_name} ${user?.last_name}`;
+    const initials = l || ''
+      .split(" ")
+      .map((word) => word[0])
+      .join("");
+    return initials.toUpperCase().substring(0, 2);
+  };
+  
   return (
     <Row>
       {/* Preséntate */}
@@ -33,11 +47,28 @@ const Proyect = ( { formRef } ) => {
         <Col md={8}>
           <div className="border rounded-3 p-3 d-flex align-items-center justify-content-between">
             <div className="d-flex align-items-center">
-              <img
-                src="https://via.placeholder.com/50"
-                alt="Perfil"
-                className="rounded-circle me-3"
-              />
+              <div
+                id="avatar"
+                className="mr-4"
+                variant="link"
+                style={{
+                  border: "none",
+                  padding: 0,
+                  width: 50,
+                  height: 50,
+                  borderRadius: "50%",
+                  overflow: "hidden",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "#ccc",
+                  fontSize: 50 * 0.4,
+                  color: "#fff",
+                  marginRight: "10px",
+                }}
+              >
+                <span>{getInitials()}</span>
+              </div>
               <div>
                 <strong>freiman</strong>
                 <p className="mb-0">Creador del proyecto</p>
@@ -154,7 +185,7 @@ const Proyect = ( { formRef } ) => {
                 <Form noValidate onSubmit={handleSubmit}>
                   <div className="input-group">
                     <span className="input-group-text">
-                      <i className="bi bi-envelope"></i>
+                      <Envelope />
                     </span>
                     <Form.Control
                       type="email"
