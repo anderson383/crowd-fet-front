@@ -41,10 +41,6 @@ const Basico = ({ formRef  }) => {
     title: Yup.string().required("El título es requerido"),
     subtitle: Yup.string().required("El subtítulo es requerido"),
 
-    mainCategory: Yup.string().required("La categoría principal es requerida"),
-    subCategory: Yup.string().required(
-      "La subcategoría principal es requerida"
-    ),
     categoryId: Yup.string().required("La categoría es requerida"),
     subCategoryId: Yup.string().required("La subcategoría es requerida"),
 
@@ -66,13 +62,8 @@ const Basico = ({ formRef  }) => {
           )
         );
       }),
-    video: Yup.string().required("El municipio es requerido"),
-    
     durationCampaign: Yup.string().required("Debes seleccionar una duración"),
     dateLaunch: Yup.string().required("Debes seleccionar una fecha"),
-    contribuciones: Yup.string().required(
-      "Debes seleccionar una opción de contribuciones"
-    ),
   });
 
   const getSubCategory = (id) => {
