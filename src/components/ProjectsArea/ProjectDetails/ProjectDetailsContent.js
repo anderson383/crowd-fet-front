@@ -30,9 +30,7 @@ const ProjectDetailsContent = ({project}) => {
             <Row>
               <Col lg={6} md={6} sm={6}>
                 <div className="project-details-thumb">
-                  {project.video}
                   <ReactPlayer url={project.video} />
-                  {/* <Image src={project.video} alt="" /> */}
                 </div>
               </Col>
             </Row>
