@@ -1,207 +1,549 @@
-import React, { forwardRef, useImperativeHandle, useState } from 'react';
-import { Button, Table, Modal, Form,Alert } from 'react-bootstrap';
-import { Formik, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
+import React, { useState, forwardRef, useImperativeHandle } from "react";
+import { Tabs, Tab, Button, Table, Modal, Form, Alert } from "react-bootstrap";
+import { Formik, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
 // Modelo inicial para un elemento nuevo
 const initialElementState = {
-    id: '',
-    title: '',
-    imageId: null, // Imagen se almacena como File
+  id: "",
+  title: "",
+  imageId: null,
 };
 
-// Esquema de validación con Yup
+// Modelo inicial para una recompensa (Reward)
+const initialRewardState = {
+  id: "",
+  title: "",
+  description: "",
+  pledgedAmount: 0,
+  availability: 0,
+  limitTime: "",
+  content: "",
+  estimatedDelivery: "",
+  shipping: false,
+  imageId: null,
+};
+
+// Esquema de validación para el formulario de `Element`
+const validationSchemaElement = Yup.object({
+  title: Yup.string()
+    .required("El título es obligatorio")
+    .min(3, "El título debe tener al menos 3 caracteres"),
+  imageId: Yup.mixed()
+    .required("La imagen es obligatoria")
+    .test("fileType", "Formato no válido. Solo imágenes", (value) => {
+      return (
+        value && ["image/jpeg", "image/png", "image/gif"].includes(value.type)
+      );
+    }),
+});
+
+// Esquema de validación para el formulario de `Reward`
 const validationSchema = Yup.object({
-    title: Yup.string()
-        .required('El título es obligatorio')
-        .min(3, 'El título debe tener al menos 3 caracteres'),
-    imageId: Yup.mixed()
-        .required('La imagen es obligatoria')
-        .test('fileType', 'Formato no válido. Solo imágenes', (value) => {
-            return value && ['image/jpeg', 'image/png', 'image/gif'].includes(value.type);
-        })
+  title: Yup.string().required("El título es obligatorio"),
+  description: Yup.string().required("La descripción es obligatoria"),
+  pledgedAmount: Yup.number()
+    .required("La cantidad prometida es obligatoria")
+    .min(0, "La cantidad debe ser positiva"),
+  availability: Yup.number()
+    .required("La disponibilidad es obligatoria")
+    .min(0, "Debe ser al menos 0"),
+  limitTime: Yup.date().nullable(),
+  content: Yup.string().required("El contenido es obligatorio"),
+  estimatedDelivery: Yup.date().required(
+    "La fecha de entrega estimada es obligatoria"
+  ),
+  shipping: Yup.boolean(),
 });
 
 // eslint-disable-next-line react/display-name
 const ElementsManager = forwardRef((props, ref) => {
-    const [alertElements, setAlertElements] = useState(false);
-    const [elements, setElements] = useState([]); // Lista de elementos
-    const [showModal, setShowModal] = useState(false); // Mostrar modal
-    const [isEditing, setIsEditing] = useState(false); // Estado de edición
-    const [previewImage, setPreviewImage] = useState(null); // Vista previa de la imagen
+  const [alertElements, setAlertElements] = useState(false);
+  const [isEditingReward, setIsEditingReward] = useState(false);
+  const [rewards, setRewards] = useState([]); // Lista de elementos
+  const [elements, setElements] = useState([]); // Lista de elementos
+  const [showModal, setShowModal] = useState(false); // Mostrar modal
+  const [showRewardModal, setShowRewardModal] = useState(false); // Mostrar modal de Reward
+  const [isEditing, setIsEditing] = useState(false); // Estado de edición
+  const [previewImage, setPreviewImage] = useState(null); // Vista previa de la imagen
+  const [currentReward, setCurrentReward] = useState(null);
 
-    // Función para abrir el modal y preparar los datos
-    const handleShowModal = (element = initialElementState) => {
-        setIsEditing(!!element.id);
-        setPreviewImage(element.imageId ? URL.createObjectURL(element.imageId) : null);
-        setShowModal(true);
-    };
-
-    // Función para cerrar el modal y limpiar los datos
-    const handleCloseModal = () => {
-        setShowModal(false);
-        setPreviewImage(null);
-    };
-
-    // Manejo de cambios para el archivo de imagen
-    const handleImageChange = (e, setFieldValue) => {
-        const file = e.target.files[0];
-        if (file) {
-            setFieldValue('imageId', file);
-            setPreviewImage(URL.createObjectURL(file));
-        }
-    };
-    
-
-    const handleExternalSubmit = () => {
-        if ((elements || []).length === 0) {
-            setAlertElements(true)
-            return;
-        }
-    };
-
-    useImperativeHandle(ref, () => ({
-        elements,
-        handleExternalSubmit
-    }));
-
-    return (
-        <div className="container mt-5">
-            <div className='d-flex justify-content-between mb-5 align-items-center'>
-              <div className='w-50'>
-                <h2>Crea tus recompensas</h2>
-                <p>Incluir artículos en sus recompensas y complementos facilita que los patrocinadores comprendan y comparen sus ofertas. Un artículo puede ser cualquier cosa que planee ofrecer a sus patrocinadores. Algunos ejemplos incluyen naipes, una copia digital de un libro, una entrada para una obra de teatro o incluso un agradecimiento en su documental.</p>
-              </div>
-                <Button variant="primary" onClick={() => handleShowModal()} className="mb-3" style={{ height: 'max-content' }}>
-                    Crear Elemento
-                </Button>
-            </div>
-            <Table striped bordered hover>
-                <thead>
-                    <tr>
-                        <th>Título</th>
-                        <th width="50%">Imagen</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {elements.map((element) => (
-                        <tr key={element.id}>
-                            <td>{element.title}</td>
-                            <td>
-                                {element.imageId ? (
-                                    <img 
-                                        src={URL.createObjectURL(element.imageId)} 
-                                        alt="preview" 
-                                        style={{ width: '50px', height: '50px', objectFit: 'cover' }} 
-                                    />
-                                ) : (
-                                    'No image'
-                                )}
-                            </td>
-                            <td>
-                                <Button variant="primary" onClick={() => handleShowModal(element)} className="me-2">
-                                    Editar
-                                </Button>
-                                <Button variant="danger" onClick={() => setElements(elements.filter((el) => el.id !== element.id))}>
-                                    Eliminar
-                                </Button>
-                            </td>
-                        </tr>
-                    ))}
-                    {elements.length === 0 && (
-                        <tr>
-                            <td colSpan="4" className="text-center">
-                                No hay elementos disponibles.
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </Table>
-
-            {alertElements && (
-                <Alert variant="danger" className="mt-2">
-                Sebe añadir por lo menos una recompensa para poder continuar
-                </Alert>
-              )}
-
-            {/* Modal para crear o editar elemento */}
-            <Modal show={showModal} onHide={handleCloseModal}>
-                <Modal.Header closeButton>
-                    <Modal.Title>{isEditing ? 'Editar Elemento' : 'Crear Elemento'}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Formik
-                        initialValues={initialElementState}
-                        validationSchema={validationSchema}
-                        onSubmit={(values, { resetForm }) => {
-                            if (isEditing) {
-                                setElements((prevElements) =>
-                                    prevElements.map((el) => (el.id === values.id ? values : el))
-                                );
-                            } else {
-                                setElements((prevElements) => [
-                                    ...prevElements,
-                                    { ...values, id: Date.now().toString() } // Genera ID temporal
-                                ]);
-                            }
-                            handleCloseModal();
-                            resetForm();
-                        }}
-                    >
-                        {({ setFieldValue, handleSubmit }) => (
-                            <Form onSubmit={handleSubmit}>
-                                <Form.Group controlId="formTitle">
-                                    <Form.Label>Título</Form.Label>
-                                    <Field
-                                        type="text"
-                                        name="title"
-                                        className="form-control"
-                                        placeholder="Ingresa el título"
-                                    />
-                                    <ErrorMessage
-                                        name="title"
-                                        component="div"
-                                        className="text-danger"
-                                    />
-                                </Form.Group>
-                                <Form.Group controlId="formImageId" className="mt-3">
-                                    <Form.Label>Imagen</Form.Label>
-                                    <Form.Control
-                                        type="file"
-                                        name="imageId"
-                                        onChange={(e) => handleImageChange(e, setFieldValue)}
-                                    />
-                                    {previewImage && (
-                                        <div className="mt-2">
-                                            <img 
-                                                src={previewImage} 
-                                                alt="preview" 
-                                                style={{ width: '100px', height: '100px', objectFit: 'cover' }} 
-                                            />
-                                        </div>
-                                    )}
-                                    <ErrorMessage
-                                        name="imageId"
-                                        component="div"
-                                        className="text-danger"
-                                    />
-                                </Form.Group>
-                                <Modal.Footer>
-                                    <Button variant="secondary" onClick={handleCloseModal}>
-                                        Cancelar
-                                    </Button>
-                                    <Button variant="primary" type="submit">
-                                        {isEditing ? 'Guardar Cambios' : 'Crear Elemento'}
-                                    </Button>
-                                </Modal.Footer>
-                            </Form>
-                        )}
-                    </Formik>
-                </Modal.Body>
-            </Modal>
-        </div>
+  // Función para abrir el modal de Element
+  const handleShowElementModal = (element = initialElementState) => {
+    setIsEditing(!!element.id);
+    setPreviewImage(
+      element.imageId ? URL.createObjectURL(element.imageId) : null
     );
+    setShowModal(true);
+  };
+
+  // Función para abrir el modal de Reward
+  const handleShowRewardModal = (reward = initialRewardState) => {
+    setIsEditing(!!reward.id);
+    setPreviewImage(
+      reward.imageId ? URL.createObjectURL(reward.imageId) : null
+    );
+    setShowRewardModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setPreviewImage(null);
+  };
+
+  const handleCloseRewardModal = () => {
+    setShowRewardModal(false);
+    setPreviewImage(null);
+  };
+
+  // Manejador de cambios para archivos de imagen
+  const handleImageChange = (e, setFieldValue) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFieldValue("imageId", file);
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
+
+  // Configuración para uso externo del componente
+  useImperativeHandle(ref, () => ({
+    elements,
+  }));
+
+  const onSubmitReward = (values) => {
+    if (isEditingReward) {
+      setRewards(
+        rewards.map((reward) =>
+          reward.id === currentReward.id ? { ...values, id: currentReward.id } : reward
+        )
+      );
+    } else {
+      setRewards([...rewards, { ...values, id: Date.now() }]);
+    }
+    handleCloseRewardModal();
+  };
+
+  const onEditReward = (reward) => {
+    console.log(reward)
+    setCurrentReward(reward);
+    setIsEditingReward(true);
+    handleShowRewardModal();
+  };
+
+  const onDeleteReward = (id) => {
+    setRewards(rewards.filter((reward) => reward.id !== id));
+  };
+
+  return (
+    <Tabs defaultActiveKey="elements" id="element-reward-tabs" className="mb-3">
+      <Tab eventKey="elements" title="Elementos">
+        <div className="container mt-5">
+          <div className="d-flex justify-content-between mb-5 align-items-center">
+            <h2>Crea tus elementos</h2>
+            <Button
+              variant="primary"
+              onClick={() => handleShowElementModal()}
+              className="mb-3"
+            >
+              Crear Elemento
+            </Button>
+          </div>
+          {/* Tabla de elementos */}
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Título</th>
+                <th width="50%">Imagen</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {elements.map((element) => (
+                <tr key={element.id}>
+                  <td>{element.title}</td>
+                  <td>
+                    {element.imageId ? (
+                      <img
+                        src={URL.createObjectURL(element.imageId)}
+                        alt="preview"
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          objectFit: "cover",
+                        }}
+                      />
+                    ) : (
+                      "No image"
+                    )}
+                  </td>
+                  <td>
+                    <Button
+                      variant="primary"
+                      onClick={() => handleShowElementModal(element)}
+                      className="me-2"
+                    >
+                      Editar
+                    </Button>
+                    <Button
+                      variant="danger"
+                      onClick={() =>
+                        setElements(
+                          elements.filter((el) => el.id !== element.id)
+                        )
+                      }
+                    >
+                      Eliminar
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+              {elements.length === 0 && (
+                <tr>
+                  <td colSpan="4" className="text-center">
+                    No hay elementos disponibles.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
+
+          {/* Modal para crear o editar un Elemento */}
+          <Modal show={showModal} onHide={handleCloseModal}>
+            <Modal.Header closeButton>
+              <Modal.Title>
+                {isEditing ? "Editar Elemento" : "Crear Elemento"}
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Formik
+                initialValues={initialElementState}
+                validationSchema={validationSchemaElement}
+                onSubmit={(values, { resetForm }) => {
+                  setElements((prevElements) =>
+                    isEditing
+                      ? prevElements.map((el) =>
+                          el.id === values.id ? values : el
+                        )
+                      : [
+                          ...prevElements,
+                          { ...values, id: Date.now().toString() },
+                        ]
+                  );
+                  handleCloseModal();
+                  resetForm();
+                }}
+              >
+                {({ setFieldValue, handleSubmit }) => (
+                  <Form onSubmit={handleSubmit}>
+                    <Form.Group controlId="formTitle">
+                      <Form.Label>Título</Form.Label>
+                      <Field
+                        type="text"
+                        name="title"
+                        className="form-control"
+                        placeholder="Ingresa el título"
+                      />
+                      <ErrorMessage
+                        name="title"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </Form.Group>
+                    <Form.Group controlId="formImageId" className="mt-3">
+                      <Form.Label>Imagen</Form.Label>
+                      <Form.Control
+                        type="file"
+                        name="imageId"
+                        onChange={(e) => handleImageChange(e, setFieldValue)}
+                      />
+                      {previewImage && (
+                        <img
+                          src={previewImage}
+                          alt="preview"
+                          style={{
+                            width: "100px",
+                            height: "100px",
+                            objectFit: "cover",
+                          }}
+                        />
+                      )}
+                      <ErrorMessage
+                        name="imageId"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </Form.Group>
+                    <Modal.Footer>
+                      <Button variant="secondary" onClick={handleCloseModal}>
+                        Cancelar
+                      </Button>
+                      <Button variant="primary" type="submit">
+                        {isEditing ? "Guardar Cambios" : "Crear Elemento"}
+                      </Button>
+                    </Modal.Footer>
+                  </Form>
+                )}
+              </Formik>
+            </Modal.Body>
+          </Modal>
+        </div>
+      </Tab>
+      <Tab eventKey="rewards" title="Recompensas">
+        {/* Aquí iría el formulario y tabla de Recompensas */}
+
+        <div className="d-flex justify-content-between mb-5 align-items-center">
+            <h2>Crea tus recompensas</h2>
+            <Button
+            variant="primary"
+            onClick={() => handleShowRewardModal()}
+            className="mb-3"
+            >
+            Crear Recompensa
+            </Button>
+        </div>
+        <Table striped bordered hover responsive>
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Descripción</th>
+                    <th>Cantidad Prometida</th>
+                    <th>Disponibilidad</th>
+                    <th>Límite de Tiempo</th>
+                    <th>Entrega Estimada</th>
+                    <th>Envío</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {rewards.map((reward) => (
+                    <tr key={reward.id}>
+                        <td>{reward.title}</td>
+                        <td>{reward.description}</td>
+                        <td>${reward.pledgedAmount.toFixed(2)}</td>
+                        <td>{reward.availability}</td>
+                        <td>{reward.limitTime ? new Date(reward.limitTime).toLocaleString() : 'N/A'}</td>
+                        <td>{new Date(reward.estimatedDelivery).toLocaleString()}</td>
+                        <td>{reward.shipping ? 'Sí' : 'No'}</td>
+                        <td>
+                            <Button variant="warning" size="sm" onClick={() => onEditReward(reward)}>Editar</Button>{' '}
+                            <Button variant="danger" size="sm" onClick={() => onDeleteReward(reward.id)}>Eliminar</Button>
+                        </td>
+                    </tr>
+                ))}
+                {rewards.length === 0 && (
+                    <tr>
+                    <td colSpan="8" className="text-center">
+                        No hay elementos disponibles.
+                    </td>
+                    </tr>
+                )}
+            </tbody>
+        </Table>
+        {/* Modal de recompensas */}
+        <Modal show={showRewardModal} onHide={handleCloseRewardModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              {isEditing ? "Editar Recompensa" : "Crear Recompensa"}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Formik
+                initialValues={isEditingReward ? currentReward : initialRewardState}
+            //   initialValues={initialRewardState}
+            enableReinitialize
+              validationSchema={validationSchema}
+              onSubmit={(values, { resetForm }) => {
+                onSubmitReward(values);
+                handleCloseRewardModal();
+                resetForm();
+              }}
+            >
+              {({ handleSubmit, setFieldValue }) => (
+                <Form onSubmit={handleSubmit}>
+                  <Modal.Body>
+                    {/* Campo: Título */}
+                    <Form.Group controlId="formTitle">
+                      <Form.Label>Título</Form.Label>
+                      <Field
+                        type="text"
+                        name="title"
+                        className="form-control"
+                        placeholder="Título de la recompensa"
+                      />
+                      <ErrorMessage
+                        name="title"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </Form.Group>
+
+                    {/* Campo: Descripción */}
+                    <Form.Group controlId="formDescription" className="mt-3">
+                      <Form.Label>Descripción</Form.Label>
+                      <Field
+                        as="textarea"
+                        name="description"
+                        className="form-control"
+                        placeholder="Descripción detallada"
+                      />
+                      <ErrorMessage
+                        name="description"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </Form.Group>
+
+                    {/* Campo: Cantidad Prometida */}
+                    <div className="d-flex gap-3">
+
+                        <Form.Group controlId="formPledgedAmount" className="mt-3">
+                        <Form.Label>Cantidad Prometida</Form.Label>
+                        <Field
+                            type="number"
+                            name="pledgedAmount"
+                            className="form-control"
+                            placeholder="Cantidad prometida en USD"
+                        />
+                        <ErrorMessage
+                            name="pledgedAmount"
+                            component="div"
+                            className="text-danger"
+                        />
+                        </Form.Group>
+
+                        {/* Campo: Disponibilidad */}
+                        <Form.Group controlId="formAvailability" className="mt-3">
+                        <Form.Label>Disponibilidad</Form.Label>
+                        <Field
+                            type="number"
+                            name="availability"
+                            className="form-control"
+                            placeholder="Cantidad disponible"
+                        />
+                        <ErrorMessage
+                            name="availability"
+                            component="div"
+                            className="text-danger"
+                        />
+                        </Form.Group>
+                    </div>
+
+                    {/* Campo: Límite de Tiempo */}
+                    <Form.Group controlId="formLimitTime" className="mt-3">
+                      <Form.Label>Límite de Tiempo</Form.Label>
+                      <Field
+                        type="date"
+                        name="limitTime"
+                        className="form-control"
+                        placeholder="Fecha límite (opcional)"
+                      />
+                      <ErrorMessage
+                        name="limitTime"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </Form.Group>
+
+                    {/* Campo: Contenido */}
+                    <Form.Group controlId="formContent" className="mt-3">
+                      <Form.Label>Contenido</Form.Label>
+                      <Field
+                        as="textarea"
+                        name="content"
+                        className="form-control"
+                        placeholder="Contenido adicional"
+                      />
+                      <ErrorMessage
+                        name="content"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </Form.Group>
+
+                    {/* Campo: Fecha de Entrega Estimada */}
+                    <Form.Group
+                      controlId="formEstimatedDelivery"
+                      className="mt-3"
+                    >
+                      <Form.Label>Fecha de Entrega Estimada</Form.Label>
+                      <Field
+                        type="date"
+                        name="estimatedDelivery"
+                        className="form-control"
+                        placeholder="Fecha estimada de entrega"
+                      />
+                      <ErrorMessage
+                        name="estimatedDelivery"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </Form.Group>
+
+                    {/* Campo: Envío */}
+                    <Form.Group controlId="formShipping" className="mt-3">
+                      <Form.Check
+                        type="checkbox"
+                        name="shipping"
+                        label="Requiere Envío"
+                        onChange={(e) =>
+                          setFieldValue("shipping", e.target.checked)
+                        }
+                      />
+                      <ErrorMessage
+                        name="shipping"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </Form.Group>
+
+                    {/* Campo: ID del Proyecto */}
+                    {/* <Form.Group controlId="formProjectId" className="mt-3">
+                      <Form.Label>ID del Proyecto</Form.Label>
+                      <Field
+                        type="text"
+                        name="projectId"
+                        className="form-control"
+                        placeholder="ID del proyecto asociado"
+                      />
+                      <ErrorMessage
+                        name="projectId"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </Form.Group> */}
+
+                    {/* Campo: ID de Imagen */}
+                    {/* <Form.Group controlId="formImageId" className="mt-3">
+                      <Form.Label>ID de la Imagen</Form.Label>
+                      <Field
+                        type="text"
+                        name="imageId"
+                        className="form-control"
+                        placeholder="ID de la imagen asociada"
+                      />
+                      <ErrorMessage
+                        name="imageId"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </Form.Group> */}
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseRewardModal}>
+                      Cancelar
+                    </Button>
+                    <Button variant="primary" type="submit">
+                      Guardar Cambios
+                    </Button>
+                  </Modal.Footer>
+                </Form>
+              )}
+            </Formik>
+          </Modal.Body>
+        </Modal>
+      </Tab>
+    </Tabs>
+  );
 });
 
 export default ElementsManager;

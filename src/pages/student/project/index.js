@@ -6,10 +6,10 @@ import { Form, Row, Col, Button, Alert, Container } from "react-bootstrap";
 
 // import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Basico from "./Basico";
-import Funcionamiento from "./Funcionamiento";
-import Historia from "./Historia";
-import Persona from "./Persona";
+import Basico from "../../../components/Project/Basico";
+import Funcionamiento from "../../../components/Project/Funcionamiento";
+import Historia from "../../../components/Project/Historia";
+import Persona from "../../../components/Project/Persona";
 import HeaderBackOffice from "@/components/Header/HeaderBackOffice";
 import LayoutBackOffice from "@/components/Layout/LayoutBackOffice";
 import ElementsManager from "@/components/Project/ElementsManager";
@@ -27,7 +27,6 @@ const Proyect = () => {
 
 
   const handleExternalSubmit = () => {
-    console.log(formElementsRef.current, 'formElements.current')
     if (formBasicRef.current && formHistoryRef.current && formElementsRef.current) {
       const formBasic = formBasicRef.current;
       const formHistory = formHistoryRef.current;

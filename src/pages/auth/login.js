@@ -28,10 +28,11 @@ const Home = () => {
       setFieldError('password', 'Credenciales incorrectas');
     } else {
       const session = await getSession();
+      console.log(session, 'sesss')
       if (session.user.rol === ROLES.ADMIN) {
         router.push('/admin');
       } else {
-        router.push('/estudent');
+        router.push('/student');
       }
     }
     setSubmitting(false);

@@ -84,5 +84,16 @@ button {
 .bg-white {
   background-color: white !important
 }
+
+.btn-outline-primary {
+  color: $primary !important;
+  border-color: $primary !important;
+
+  &:hover {
+    color: white !important;
+    background-color: $primary !important;
+    border-color: $primary !important;
+  }
+}
 // Importa el resto de Bootstrap
 @import "node_modules/bootstrap/scss/bootstrap";

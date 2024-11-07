@@ -1,7 +1,92 @@
+import HeaderBackOffice from "@/components/Header/HeaderBackOffice";
+import LayoutBackOffice from "@/components/Layout/LayoutBackOffice";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import { Table, Form, Button, Row, Col, Container } from "react-bootstrap";
+import { Table, Form, Button, Row, Col, Container, Pagination } from "react-bootstrap";
 import axiosInstance from "src/config/axios/axios";
+
+function PaginationComponent({ page, totalPages, handlePageChange }) {
+  const renderPageItems = () => {
+    const items = [];
+
+    // Mostrar siempre la primera página y la última
+    items.push(
+      <Pagination.Item
+        key={1}
+        active={page === 1}
+        onClick={() => handlePageChange(1)}
+      >
+        {1}
+      </Pagination.Item>
+    );
+
+    // Mostrar "..." si estamos lejos del inicio
+    if (page > 3) {
+      items.push(<Pagination.Ellipsis key="start-ellipsis" disabled />);
+    }
+
+    // Páginas cercanas a la actual
+    for (let number = Math.max(2, page - 1); number <= Math.min(totalPages - 1, page + 1); number++) {
+      items.push(
+        <Pagination.Item
+          key={number}
+          active={number === page}
+          onClick={() => handlePageChange(number)}
+        >
+          {number}
+        </Pagination.Item>
+      );
+    }
+
+    // Mostrar "..." si estamos lejos del final
+    if (page < totalPages - 2) {
+      items.push(<Pagination.Ellipsis key="end-ellipsis" disabled />);
+    }
+
+    // Mostrar siempre la última página
+    if (totalPages > 1) {
+      items.push(
+        <Pagination.Item
+          key={totalPages}
+          active={page === totalPages}
+          onClick={() => handlePageChange(totalPages)}
+        >
+          {totalPages}
+        </Pagination.Item>
+      );
+    }
+
+    return items;
+  };
+
+  return (
+    <>
+      <div className="d-flex justify-content-center align-items-center mt-4">
+        <Pagination>
+          <Pagination.First
+            onClick={() => handlePageChange(1)}
+            disabled={page === 1}
+          />
+          <Pagination.Prev
+            onClick={() => handlePageChange(page - 1)}
+            disabled={page === 1}
+          />
+
+          {renderPageItems()}
+
+          <Pagination.Next
+            onClick={() => handlePageChange(page + 1)}
+            disabled={page === totalPages}
+          />
+          <Pagination.Last
+            onClick={() => handlePageChange(totalPages)}
+            disabled={page === totalPages}
+          />
+        </Pagination>
+      </div>
+    </>
+  );
+}
 
 
 const AdminPage = () => {
@@ -99,151 +184,133 @@ const AdminPage = () => {
    };
 
   return (
-    <Container className="py-5">
-      <h1 className="mb-4 text-center">Crowdfunding Proyectos</h1>
-
-      {/* Filter Form */}
-      <Form className="mb-4">
+    <LayoutBackOffice>
+       <HeaderBackOffice />
+      <Container style={{  marginTop: '82px'}} className="py-5">
+      <h1 className="display-4">Crowdfunding Proyectos</h1>
+      <p className="text-muted">Explora y filtra proyectos por categoría, estado, y más</p>
+      
+      <Form className="p-4 shadow-sm rounded bg-light">
         <Row className="g-3">
           <Col md={4}>
             <Form.Group controlId="filterName">
-              <Form.Label>Nombre del proyecto</Form.Label>
-              <Form.Control
-                type="text"
-                name="name"
-                placeholder="Search por nombre"
-                value={filters.name}
-                onChange={handleFilterChange}
-              />
+              <Form.Label>Nombre del Proyecto</Form.Label>
+              <div className="input-group">
+                <Form.Control
+                  type="text"
+                  name="name"
+                  placeholder="Buscar por nombre"
+                  value={filters.name}
+                  onChange={handleFilterChange}
+                />
+              </div>
             </Form.Group>
           </Col>
           <Col md={4}>
             <Form.Group controlId="filterCategory">
-              <Form.Label>Categoria</Form.Label>
-              <Form.Control
-                as="select"
-                name="category"
-                value={filters.category}
-                onChange={handleFilterChange}
-              >
-                <option value="">Categorias</option>
-                <option value="Environment">Environment</option>
-                <option value="Education">Education</option>
-                <option value="Health">Health</option>
-                <option value="Art">Art</option>
-              </Form.Control>
+              <Form.Label>Categoría</Form.Label>
+              <div className="input-group">
+                <Form.Control
+                  as="select"
+                  name="category"
+                  value={filters.category}
+                  onChange={handleFilterChange}
+                >
+                  <option value="">Seleccionar Categoría</option>
+                  <option value="Environment">Environment</option>
+                  <option value="Education">Education</option>
+                  <option value="Health">Health</option>
+                  <option value="Art">Art</option>
+                </Form.Control>
+              </div>
             </Form.Group>
           </Col>
           <Col md={4}>
             <Form.Group controlId="filterStatus">
               <Form.Label>Estado</Form.Label>
-              <Form.Control
-                as="select"
-                name="status"
-                value={filters.status}
-                onChange={handleFilterChange}
-              >
-                <option value="">Estados</option>
-                <option value="Ongoing">Ongoing</option>
-                <option value="Completed">Completed</option>
-                <option value="Pending">Pending</option>
-              </Form.Control>
+              <div className="input-group">
+                <Form.Control
+                  as="select"
+                  name="status"
+                  value={filters.status}
+                  onChange={handleFilterChange}
+                >
+                  <option value="">Seleccionar Estado</option>
+                  <option value="Ongoing">Ongoing</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Pending">Pending</option>
+                </Form.Control>
+              </div>
             </Form.Group>
           </Col>
         </Row>
-        <Button
-          variant="outline-primary"
-          className="mt-3"
-          onClick={() => setFilters({ name: "", category: "", status: "" })}
-        >
-          Limpiar Filtros
-        </Button>
+        <div className="d-flex justify-content-end mt-3">
+          <Button
+            variant="outline-danger"
+            className="d-flex align-items-center"
+            onClick={() => setFilters({ name: "", category: "", status: "" })}
+          >
+            {/* <FaTimes className="me-2" /> */}
+            Limpiar Filtros
+          </Button>
+        </div>
       </Form>
 
-      {/* Project Table */}
-      <Table striped bordered hover responsive>
-        <thead className="table-dark">
-          <tr>
-            <th>#</th>
-            <th>Nombre</th>
-            <th>Categoria</th>
-            <th>Estado</th>
-            <th>Goal ($)</th>
-            <th>Raised ($)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {(filteredProjects || []).length > 0 ? (
-            (filteredProjects || []).map((project, index) => (
-              <tr key={project.id}>
-                <td>{++index}</td>
-                <td>
-                  {project.title} - {project.subtitle}
-                </td>
-                <td>{project.category}</td>
-                <td>
-                  <span
-                    className={`badge ${
-                      project.status === "approved"
-                        ? "bg-primary"
-                        : project.status === "pending"
-                        ? "bg-warning"
-                        : "bg-success"
-                    }`}
-                  >
-                    {fotmatStatus(project.status)}
-                  </span>
-                </td>
-                <td>{fotmatPrice(project.fundingAmount)}</td>
-                <td>{fotmatPrice(project.fundingAmount)}</td>
+        {/* Project Table */}
+        <div className="shadow-sm rounded mt-4 pt-3">
+          <Table striped bordered hover responsive className="">
+            <thead className="table-dark">
+              <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Categoria</th>
+                <th>Estado</th>
+                <th>Meta $</th>
+                <th width="10%">Acumulado $</th>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="6" className="text-center text-muted">
-                No projects found
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </Table>
-      <div className="d-flex justify-content-center align-items-center mt-4">
-        <Button
-          variant="secondary"
-          onClick={() => handlePageChange(1)}
-          disabled={page === 1}
-        >
-          {"<<"}
-        </Button>
-        <Button
-          variant="secondary"
-          onClick={() => handlePageChange(page - 1)}
-          disabled={page === 1}
-        >
-          {"<"}
-        </Button>
-        {renderPageNumbers()}
-        <Button
-          variant="secondary"
-          onClick={() => handlePageChange(page + 1)}
-          disabled={page === totalPages}
-        >
-          {">"}
-        </Button>
-        <Button
-          variant="secondary"
-          onClick={() => handlePageChange(totalPages)}
-          disabled={page === totalPages}
-        >
-          {">>"}
-        </Button>
-      </div>
-      <div className="d-flex justify-content-center mt-2">
-        <span>
-          Página {page} de {totalPages}
-        </span>
-      </div>
-    </Container>
+            </thead>
+            <tbody>
+              {(filteredProjects || []).length > 0 ? (
+                filteredProjects.map((project, index) => (
+                  <tr key={project.id}>
+                    <td className="align-middle">{index + 1}</td>
+                    <td className="align-middle">
+                      <strong>{project.title}</strong>
+                      <small className="text-muted d-block">{project.subtitle}</small>
+                    </td>
+                    <td className="align-middle text-capitalize">{project.category}</td>
+                    <td className="align-middle">
+                      <span
+                        className={`badge rounded-pill ${
+                          project.status === "approved"
+                            ? "bg-primary"
+                            : project.status === "pending"
+                            ? "bg-warning text-dark"
+                            : "bg-success"
+                        }`}
+                      >
+                        {fotmatStatus(project.status)}
+                      </span>
+                    </td>
+                    <td className="align-middle text-end">{fotmatPrice(project.fundingAmount)}</td>
+                    <td className="align-middle text-end">{fotmatPrice(project.fundingAmount)}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center text-muted">
+                    No projects found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
+            <div className="d-flex justify-content-end px-5">
+              <PaginationComponent handlePageChange={handlePageChange} page={page} totalPages={totalPages}  />
+            </div>
+        </div>
+      </Container>
+      </LayoutBackOffice>
   );
 };
 
