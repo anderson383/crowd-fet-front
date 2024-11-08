@@ -108,7 +108,7 @@ const ProjectDetailsArea = ({project}) => {
               </div>
               <div className="project-btn mt-25">
                 <a className="main-btn" href="#">
-                  Back this project
+                  Respalda este proyecto
                 </a>
               </div>
             </div>
