@@ -1,8 +1,8 @@
-import thumb from "@/assets/images/why-choose-thumb-1.jpg";
-import thumb2 from "@/assets/images/why-choose-thumb-2.jpg";
+import thumb from "@/assets/images/image_crowd2.jpeg";
+import thumb2 from "@/assets/images/image_crowd1.jpeg";
 
 export const whyChoose = {
-  title: "Cumple tus sueños con la Fet",
+  title: "Cumple tus sueños con la FET",
   thumb,
   thumb2,
   tagline: "",
