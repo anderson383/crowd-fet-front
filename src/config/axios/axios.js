@@ -11,7 +11,7 @@ const axiosInstance = axios.create({
     'Content-Type': 'application/json',
     'WEB-Accept-Charset': 'utf-8'
   },
-  timeout: 30000
+  timeout: 500000
 });
 
 export default axiosInstance;

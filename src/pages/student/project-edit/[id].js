@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -17,12 +17,41 @@ import { FileEarmark  } from 'react-bootstrap-icons';
 import axiosInstance from "src/config/axios/axios";
 import { createFormData } from "src/constants/formData";
 import { format } from "date-fns";
-const Proyect = () => {
+import { useRouter } from "next/router";
+const ProyectEdit = () => {
+  const router = useRouter()
   const formBasicRef = useRef(null);
   const formHistoryRef = useRef(null);
   const formElementsRef = useRef(null);
   const formPersonRef = useRef(null);
   const [activeTab, setActiveTab] = useState("basico");
+
+  
+  const [initialValuesBasic, setInitialValuesBasic] = useState(
+    {
+      title: "",
+      subtitle: "",
+      location: "",
+      video: null,
+      categoryId: "",
+      subCategoryId: "",
+      deparment: "",
+      municipality: "",
+      file: null,
+      contribuciones: "",
+      montoMeta: null,
+      durationCampaign: null,
+      dateLaunch: null,
+    }
+  );
+
+  const [initialValuesHistoryProp, setInitialValuesHistoryProp] = useState({
+    riesgos: "",
+    compromisosMedioambientales: [],
+    usoIA: "",
+    file: null,
+  });
+
 
   const handleExternalSubmit = () => {
     if (formBasicRef.current && formHistoryRef.current && formElementsRef.current) {
@@ -38,6 +67,9 @@ const Proyect = () => {
       setTimeout(() => {
         console.log(formHistory.values)
         if (formBasic.isValid && formElements?.elements?.length > 0 && formHistory.isValid) {
+          console.log(formBasic)
+          console.log(formHistory)
+          console.log(formElements)
   
           const formData = createFormData(formBasic.values)
           formData.delete('durationCampaign');
@@ -91,8 +123,39 @@ const Proyect = () => {
     }
   };
 
+  useEffect(() => {
+    console.log(router.query,'')
+    if (formBasicRef.current && formHistoryRef.current && formElementsRef.current) {
+      axiosInstance.get(`/project/get-project/${router.query.id}`).then(({data: {data}}) => {
+        setInitialValuesBasic({
+          title: data.title,
+          subtitle: data.subtitle,
+          categoryId: data.categoryId,
+          subCategoryId: data.subCategoryId,
+          municipality: data.municipalityId,
+          deparment: data.deparmentId,
+          video: data.video,
+          montoMeta: data.fundingAmount,
+          dateLaunch: data.launchDate,
+          durationCampaign: data.campaignDuration
+        })
+
+        const history = data.history.length > 0 ? data.history[0] :null
+        if (history) {
+          console.log(history, 'historrr')
+          setInitialValuesHistoryProp({
+            riesgos: history.risksChallenges,
+            usoIA: history.aiUsage ? "siActivar" : "noActivar",
+          })
+        }
+        // formBasicRef?.current?.initialValues
+        console.log(data, 'data')
+      })
+    }
+  }, [router.query])
+
   return (
-    <LayoutBackOffice> 
+    <LayoutBackOffice>
       <HeaderBackOffice />
         <ul className="navegacion_project">
             <li className="nav-item">
@@ -137,13 +200,13 @@ const Proyect = () => {
         </div>
         <div className="tab-content mt-3">
           <div className={activeTab === "basico" ? 'd-block' : 'd-none'}>
-            <Basico formRef={formBasicRef} />
+            <Basico formRef={formBasicRef} initialValuesBasicProp={initialValuesBasic} />
           </div>
           <div className={activeTab === "recompensa" ? 'd-block' : 'd-none'} >
             <ElementsManager ref={formElementsRef} />
           </div>
           <div className={activeTab === "historia" ? 'd-block' : 'd-none'}>
-            <Historia formRef={formHistoryRef}  />
+            <Historia formRef={formHistoryRef}  initialValuesHistoryProp={initialValuesHistoryProp} />
           </div>
           <div className={activeTab === "persona" ? 'd-block' : 'd-none'}>
             <Persona  formRef={formPersonRef} />
@@ -154,4 +217,4 @@ const Proyect = () => {
   );
 };
 
-export default Proyect;
+export default ProyectEdit;

@@ -12,7 +12,6 @@ import useUser from "@/hooks/useUser";
 const Proyect = ( { formRef } ) => {
   const userSession = useUser()
 
-  console.log(userSession, 'userSession')
   const handleSubmitBasic = (values) => {
     console.log(values);
   };

@@ -93,6 +93,7 @@ const AdminPage = () => {
   const session = useSession();
   console.log(session, "sessionsessionsession");
   const [projects, setProjects] = useState([]);
+  const [listCategory, setListCategory] = useState([]);
   const [filters, setFilters] = useState({
     name: "",
     category: "",
@@ -183,11 +184,19 @@ const AdminPage = () => {
     if (status === "pending") return "Pendiente";
    };
 
+   
+  useEffect(() => {
+    axiosInstance.get('/common/list-types/?codes=category_projects').then(({data: {data}}) => {
+      setListCategory(data[0].listItem)
+    })
+  }, [])
+
+
   return (
     <LayoutBackOffice>
        <HeaderBackOffice />
       <Container style={{  marginTop: '82px'}} className="py-5">
-      <h1 className="display-4">Crowdfunding Proyectos</h1>
+      <h1 className="display-4">Crowdfet Proyectos</h1>
       <p className="text-muted">Explora y filtra proyectos por categoría, estado, y más</p>
       
       <Form className="p-4 shadow-sm rounded bg-light">
@@ -217,10 +226,11 @@ const AdminPage = () => {
                   onChange={handleFilterChange}
                 >
                   <option value="">Seleccionar Categoría</option>
-                  <option value="Environment">Environment</option>
-                  <option value="Education">Education</option>
-                  <option value="Health">Health</option>
-                  <option value="Art">Art</option>
+                  {
+                    listCategory.map(cat => (
+                      <option key={cat.id} value={cat.name} >{cat.name}</option>
+                    ))
+                  }
                 </Form.Control>
               </div>
             </Form.Group>
@@ -236,9 +246,8 @@ const AdminPage = () => {
                   onChange={handleFilterChange}
                 >
                   <option value="">Seleccionar Estado</option>
-                  <option value="Ongoing">Ongoing</option>
-                  <option value="Completed">Completed</option>
-                  <option value="Pending">Pending</option>
+                  <option value="Completed">Publicado</option>
+                  <option value="Pending">Pendiente</option>
                 </Form.Control>
               </div>
             </Form.Group>

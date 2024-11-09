@@ -1,8 +1,10 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react";
 import { Tabs, Tab, Button, Table, Modal, Form, Alert } from "react-bootstrap";
 import { Formik, Field, ErrorMessage } from "formik";
+import { InfoCircle } from 'react-bootstrap-icons';
 import * as Yup from "yup";
-
+import { es } from 'date-fns/locale';
+import {format} from 'date-fns';
 // Modelo inicial para un elemento nuevo
 const initialElementState = {
   id: "",
@@ -22,6 +24,7 @@ const initialRewardState = {
   estimatedDelivery: "",
   shipping: false,
   imageId: null,
+  selectedOptions: []
 };
 
 // Esquema de validación para el formulario de `Element`
@@ -49,16 +52,17 @@ const validationSchema = Yup.object({
     .required("La disponibilidad es obligatoria")
     .min(0, "Debe ser al menos 0"),
   limitTime: Yup.date().nullable(),
-  content: Yup.string().required("El contenido es obligatorio"),
-  estimatedDelivery: Yup.date().required(
-    "La fecha de entrega estimada es obligatoria"
-  ),
   shipping: Yup.boolean(),
+  selectedOptions: Yup.array()
+    .min(1, 'Debes seleccionar al menos una opción')
+    .required('Este campo es obligatorio'),
 });
 
 // eslint-disable-next-line react/display-name
 const ElementsManager = forwardRef((props, ref) => {
   const [alertElements, setAlertElements] = useState(false);
+  const [alertRewards, setAlertRewards] = useState(false);
+  
   const [isEditingReward, setIsEditingReward] = useState(false);
   const [rewards, setRewards] = useState([]); // Lista de elementos
   const [elements, setElements] = useState([]); // Lista de elementos
@@ -105,12 +109,29 @@ const ElementsManager = forwardRef((props, ref) => {
     }
   };
 
+  const handleExternalSubmit = () => {
+    if (!elements?.length) {
+      setAlertElements(true);
+    } else {
+      setAlertElements(false);
+    }
+
+    if (!rewards?.length) {
+      setAlertRewards(true);
+    } else {
+      setAlertRewards(false);
+    }
+  }
+
   // Configuración para uso externo del componente
   useImperativeHandle(ref, () => ({
     elements,
+    rewards,
+    handleExternalSubmit
   }));
 
   const onSubmitReward = (values) => {
+    console.log(values)
     if (isEditingReward) {
       setRewards(
         rewards.map((reward) =>
@@ -118,13 +139,13 @@ const ElementsManager = forwardRef((props, ref) => {
         )
       );
     } else {
+      
       setRewards([...rewards, { ...values, id: Date.now() }]);
     }
     handleCloseRewardModal();
   };
 
   const onEditReward = (reward) => {
-    console.log(reward)
     setCurrentReward(reward);
     setIsEditingReward(true);
     handleShowRewardModal();
@@ -136,7 +157,11 @@ const ElementsManager = forwardRef((props, ref) => {
 
   return (
     <Tabs defaultActiveKey="elements" id="element-reward-tabs" className="mb-3">
-      <Tab eventKey="elements" title="Elementos">
+      <Tab eventKey="elements" title={
+         <>
+            Elementos {  alertElements && <InfoCircle style={{ marginLeft: '5px', color: 'red' }}  title="Información sobre Elementos" />} 
+          </>
+      }>
         <div className="container mt-5">
           <div className="d-flex justify-content-between mb-5 align-items-center">
             <h2>Crea tus elementos</h2>
@@ -148,6 +173,14 @@ const ElementsManager = forwardRef((props, ref) => {
               Crear Elemento
             </Button>
           </div>
+          {
+            alertElements && (
+              <Alert variant="danger" className="mt-2">
+                  No has cargado elementos
+              </Alert>
+            )
+          }
+         
           {/* Tabla de elementos */}
           <Table striped bordered hover>
             <thead>
@@ -288,26 +321,46 @@ const ElementsManager = forwardRef((props, ref) => {
           </Modal>
         </div>
       </Tab>
-      <Tab eventKey="rewards" title="Recompensas">
-        {/* Aquí iría el formulario y tabla de Recompensas */}
+      <Tab
+        eventKey="rewards"
+        title={
+          <>
+            Recompensas {  alertRewards && <InfoCircle style={{ marginLeft: '5px', color: 'red' }}  title="Información sobre Elementos" />} 
+          </>
+        }
 
+        
+      >
+        {/* Aquí iría el formulario y tabla de Recompensas */}
         <div className="d-flex justify-content-between mb-5 align-items-center">
             <h2>Crea tus recompensas</h2>
             <Button
             variant="primary"
-            onClick={() => handleShowRewardModal()}
+            onClick={() => {
+              handleShowRewardModal()
+              setIsEditingReward(false)
+            }}
             className="mb-3"
             >
-            Crear Recompensa
+              Crear Recompensa
             </Button>
         </div>
+
+        {
+            alertElements && (
+              <Alert variant="danger" className="mt-2">
+                  No has cargado recompensas
+              </Alert>
+            )
+          }
+
         <Table striped bordered hover responsive>
             <thead>
                 <tr>
                     <th>Título</th>
                     <th>Descripción</th>
                     <th>Cantidad Prometida</th>
-                    <th>Disponibilidad</th>
+                    <th>Total de Disponibilidad</th>
                     <th>Límite de Tiempo</th>
                     <th>Entrega Estimada</th>
                     <th>Envío</th>
@@ -321,8 +374,8 @@ const ElementsManager = forwardRef((props, ref) => {
                         <td>{reward.description}</td>
                         <td>${reward.pledgedAmount.toFixed(2)}</td>
                         <td>{reward.availability}</td>
-                        <td>{reward.limitTime ? new Date(reward.limitTime).toLocaleString() : 'N/A'}</td>
-                        <td>{new Date(reward.estimatedDelivery).toLocaleString()}</td>
+                        <td>{reward.limitTime ? format(reward.limitTime, 'dd-MM-yyyy', { locale: es }) : 'N/A'}</td>
+                        <td>{format(new Date(reward.estimatedDelivery), 'MMMM yyyy', { locale: es })}</td>
                         <td>{reward.shipping ? 'Sí' : 'No'}</td>
                         <td>
                             <Button variant="warning" size="sm" onClick={() => onEditReward(reward)}>Editar</Button>{' '}
@@ -358,7 +411,7 @@ const ElementsManager = forwardRef((props, ref) => {
                 resetForm();
               }}
             >
-              {({ handleSubmit, setFieldValue }) => (
+              {({ handleSubmit, setFieldValue, values }) => (
                 <Form onSubmit={handleSubmit}>
                   <Modal.Body>
                     {/* Campo: Título */}
@@ -413,7 +466,7 @@ const ElementsManager = forwardRef((props, ref) => {
 
                         {/* Campo: Disponibilidad */}
                         <Form.Group controlId="formAvailability" className="mt-3">
-                        <Form.Label>Disponibilidad</Form.Label>
+                        <Form.Label>Total de disponibilidad</Form.Label>
                         <Field
                             type="number"
                             name="availability"
@@ -467,7 +520,7 @@ const ElementsManager = forwardRef((props, ref) => {
                     >
                       <Form.Label>Fecha de Entrega Estimada</Form.Label>
                       <Field
-                        type="date"
+                        type="month"
                         name="estimatedDelivery"
                         className="form-control"
                         placeholder="Fecha estimada de entrega"
@@ -482,6 +535,7 @@ const ElementsManager = forwardRef((props, ref) => {
                     {/* Campo: Envío */}
                     <Form.Group controlId="formShipping" className="mt-3">
                       <Form.Check
+                        checked={values.shipping}
                         type="checkbox"
                         name="shipping"
                         label="Requiere Envío"
@@ -496,37 +550,28 @@ const ElementsManager = forwardRef((props, ref) => {
                       />
                     </Form.Group>
 
-                    {/* Campo: ID del Proyecto */}
-                    {/* <Form.Group controlId="formProjectId" className="mt-3">
-                      <Form.Label>ID del Proyecto</Form.Label>
+                    <Form.Group controlId="formMultipleSelect" className="mt-3">
+                      <Form.Label>Selecciona los elementos de la recompensa</Form.Label>
                       <Field
-                        type="text"
-                        name="projectId"
+                        as="select"
+                        name="selectedOptions"
+                        multiple
                         className="form-control"
-                        placeholder="ID del proyecto asociado"
-                      />
-                      <ErrorMessage
-                        name="projectId"
-                        component="div"
-                        className="text-danger"
-                      />
-                    </Form.Group> */}
-
-                    {/* Campo: ID de Imagen */}
-                    {/* <Form.Group controlId="formImageId" className="mt-3">
-                      <Form.Label>ID de la Imagen</Form.Label>
-                      <Field
-                        type="text"
-                        name="imageId"
-                        className="form-control"
-                        placeholder="ID de la imagen asociada"
-                      />
-                      <ErrorMessage
-                        name="imageId"
-                        component="div"
-                        className="text-danger"
-                      />
-                    </Form.Group> */}
+                        onChange={(event) => {
+                          const selectedValues = Array.from(event.target.selectedOptions, (option) => option.value);
+                          setFieldValue("selectedOptions", selectedValues);
+                        }}
+                      >
+                        {
+                          elements.map((element) => (
+                            <option key={element.id} value={element.id}>
+                              {element.title}
+                            </option>
+                          ))
+                        }
+                      </Field>
+                      <ErrorMessage name="selectedOptions" component="div" className="text-danger" />
+                    </Form.Group>
                   </Modal.Body>
                   <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseRewardModal}>

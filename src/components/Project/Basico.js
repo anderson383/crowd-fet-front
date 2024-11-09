@@ -9,7 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import axiosInstance from "src/config/axios/axios";
 import CitySearch from "@/components/SearchCity/SearchCity";
 
-const Basico = ({ formRef  }) => {
+const Basico = ({ formRef, initialValuesBasicProp  }) => {
 
   const [fileName, setFileName] = useState("");
   const [videoName, setVideoName] = useState("");
@@ -21,21 +21,31 @@ const Basico = ({ formRef  }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const initialValuesBasic = {
-    title: "",
-    subtitle: "",
-    location: "",
-    video: null,
-    categoryId: "",
-    subCategoryId: "",
-    deparment: "",
-    municipality: "",
-    file: null,
-    contribuciones: "",
-    montoMeta: null,
-    durationCampaign: null,
-    dateLaunch: null,
-  };
+  const [initialValuesBasic, setInitialValuesBasic] = useState(
+    {
+      title: "",
+      subtitle: "",
+      location: "",
+      video: null,
+      categoryId: "",
+      subCategoryId: "",
+      deparment: "",
+      municipality: "",
+      file: null,
+      contribuciones: "",
+      montoMeta: null,
+      durationCampaign: null,
+      dateLaunch: null,
+    }
+  );
+  useEffect(() => {
+    if (initialValuesBasicProp) {
+      setInitialValuesBasic(initialValuesBasicProp);
+      console.log(initialValuesBasicProp.categoryId, 'initialValuesBasicProp.categoryIdinitialValuesBasicProp.categoryId')
+      getSubCategory(initialValuesBasicProp.categoryId);
+      getMunicipality(initialValuesBasicProp.deparment);
+    }
+  }, [initialValuesBasicProp])
 
   const validationBasic = Yup.object().shape({
     title: Yup.string().required("El título es requerido"),
@@ -67,16 +77,25 @@ const Basico = ({ formRef  }) => {
   });
 
   const getSubCategory = (id) => {
-    axiosInstance.get(`/common/list-item/?id=${id}`).then(({data: {data}}) => {
-      setSubListCategory(data)
-      // setListCategory(data[0].listItem)
-    })
+    if (id) {
+      axiosInstance.get(`/common/list-item/?id=${id}`).then(({data: {data}}) => {
+        if (data) {
+          console.log(data, 'xd')
+          setSubListCategory(data)
+        }
+        // setListCategory(data[0].listItem)
+      })
+    }
   };
   const getMunicipality = (id) => {
-    axiosInstance.get(`/common/list-item/?id=${id}`).then(({data: {data}}) => {
-      setListMunicipality(data)
-      // setListCategory(data[0].listItem)
-    })
+    if (id) {
+      axiosInstance.get(`/common/list-item/?id=${id}`).then(({data: {data}}) => {
+        if (data) {
+          setListMunicipality(data)
+        }
+        // setListCategory(data[0].listItem)
+      })
+    }
   };
 
 
@@ -105,6 +124,7 @@ const Basico = ({ formRef  }) => {
       </div>
       <Formik
         innerRef={formRef}
+        enableReinitialize
         initialValues={initialValuesBasic}
         validationSchema={validationBasic}
         onSubmit={handleSubmitBasic}
@@ -394,26 +414,27 @@ const Basico = ({ formRef  }) => {
               <Col md={8}>
                 <div className="border rounded-3 p-3 text-center bg-white">
                   <input
+                    value={values.video}
                     type="url"
                     placeholder="Introduce la URL de YouTube"
-                    onChange={(event) => setFieldValue("videoUrl", event.currentTarget.value)}
+                    onChange={(event) => setFieldValue("video", event.currentTarget.value)}
                     className="form-control"
                   />
                   <small className="mt-2 d-block">
                     Ingresa un enlace de YouTube para mostrar el video.
                   </small>
-                  {errors.videoUrl && touched.videoUrl && (
+                  {errors.video && touched.video && (
                     <Alert variant="danger" className="mt-2">
-                      {errors.videoUrl}
+                      {errors.video}
                     </Alert>
                   )}
                   {/* Vista previa del video */}
-                  {values.videoUrl && (
+                  {values.video && (
                     <div className="mt-3">
                       <iframe
                         width="100%"
                         height="315"
-                        src={`https://www.youtube.com/embed/${new URL(values.videoUrl).searchParams.get("v")}`}
+                        src={`https://www.youtube.com/embed/${new URL(values.video).searchParams.get("v")}`}
                         title="Video del proyecto"
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

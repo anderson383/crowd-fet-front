@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -8,19 +8,25 @@ import { Form, Row, Col, Button, Alert } from "react-bootstrap";
 import "react-datepicker/dist/react-datepicker.css";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 
-const Historia = ( { formRef } ) => {
-  const initialValues = {
+const Historia = ( { formRef, initialValuesHistoryProp } ) => {
+  const [initialValues, setInitialValues] = useState({
     riesgos: "",
     compromisosMedioambientales: [],
     usoIA: "",
     file: null,
-  };
+  });
 
   const validationSchema = Yup.object().shape({
     riesgos: Yup.string().required("Riesgos y desafíos es obligatorio"),
     usoIA: Yup.string().required("Debes indicar si usas IA"),
     file: Yup.mixed().required("Por favor selecciona un archivo PDF"),
   });
+
+  useEffect(() => {
+    if (initialValuesHistoryProp) {
+      setInitialValues(initialValuesHistoryProp);
+    }
+  }, [initialValuesHistoryProp])
 
   const handleSubmitBasic = (values) => {
     console.log(values);
@@ -44,6 +50,7 @@ const Historia = ( { formRef } ) => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmitBasic}
+        enableReinitialize
       >
         {({
           handleSubmit,

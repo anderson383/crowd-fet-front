@@ -154,7 +154,7 @@ const AdminPage = () => {
   };
 
   const handleEdit = (projectId) => {
-    router.push(`/edit-project/${projectId}`);
+    router.push(`/student/project-edit/${projectId}`);
   };
 
   const handleDeleteClick = (project) => {
