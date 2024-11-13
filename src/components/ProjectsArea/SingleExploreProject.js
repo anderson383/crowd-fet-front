@@ -1,14 +1,12 @@
 import React from "react";
 import { Image } from "react-bootstrap";
 import Link from "../Reuseable/Link";
+import { calcularPorcentaje } from "@/utils/helpers";
+
 
 const SingleExploreProject = ({ project = {} }) => {
   const { fundingAmount, category, title, id, image } = project;
 
-  const porcentaje  = (meta, mount) => {
-    const porcentajeFaltante = 100 - (((meta - mount) / meta) * 100);
-    return porcentajeFaltante
-  }
   return (
     <div className="explore-projects-item mt-30">
       <Image src={image} alt={title} />
@@ -17,26 +15,27 @@ const SingleExploreProject = ({ project = {} }) => {
           <span>{category}</span>
         </div>
         <Link href={`/single-project/${id}`}>
+        {/* <Link href={`/single-project-admin/${id}`}> */}
           <h3 className="title">{title}</h3>
         </Link>
         <div className="projects-range">
           <div className="projects-range-content">
             <ul>
               <li>Recaudado:</li>
-              <li>{porcentaje(fundingAmount, fundingAmount)}%</li>
+              <li>{calcularPorcentaje(fundingAmount, fundingAmount)}%</li>
             </ul>
             <div className="progress">
               <div
                 className="progress-bar"
                 role="progressbar"
                 style={{
-                  width: `${porcentaje(fundingAmount, fundingAmount)}%`,
+                  width: `${calcularPorcentaje(fundingAmount, fundingAmount)}%`,
                 }}
-                aria-valuenow={porcentaje(fundingAmount, fundingAmount)}
+                aria-valuenow={calcularPorcentaje(fundingAmount, fundingAmount)}
                 aria-valuemin="0"
                 aria-valuemax="100"
               >
-                {porcentaje(fundingAmount, fundingAmount)}%
+                {calcularPorcentaje(fundingAmount, fundingAmount)}%
               </div>
             </div>
           </div>

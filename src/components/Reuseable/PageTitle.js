@@ -2,11 +2,10 @@ import bg from "@/assets/images/baner_fet.png";
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import Link from "./Link";
+import { capitalizeText } from "@/utils/helpers";
 
 const PageTitle = ({ title = "", page = "", parent = "" }) => {
-  function capitalizeTitle(text) {
-    return `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
-  }
+
   return (
     <section
       className="page-title-area bg_cover"
@@ -16,7 +15,7 @@ const PageTitle = ({ title = "", page = "", parent = "" }) => {
         <Row>
           <Col lg={12}>
             <div className="page-title-content">
-              <h3 className="title">{capitalizeTitle(title)}</h3>
+              <h3 className="title">{capitalizeText(title)}</h3>
               <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
                   <li className="breadcrumb-item">

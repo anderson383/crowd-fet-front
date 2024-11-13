@@ -847,7 +847,26 @@ p {
   right: 0;
   z-index: 999;
 }
+
+.modal-dialog.modal-90w {
+  max-width: none !important;
+  width: 90%;
+  height: 90%;
+}
+
+.modal-dialog.modal-90w .modal-content {
+  height: 100%;
+  // padding-bottom: 20px;
+}
+
+.proyect-admin .main-header {
+  top: 90px;
+}
+
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+  .proyect-admin .main-header {
+    top: 90px;
+  }
   .main-header {
     padding: 31px 0;
   }
@@ -856,6 +875,9 @@ p {
   .main-header {
     top: 0;
     padding: 15px 0;
+  }
+  .proyect-admin .main-header {
+    top: 105px;
   }
 }
 .main-header .main-header-item .header-btn a {
@@ -1235,6 +1257,25 @@ p {
   animation: sticky 1.2s;
   box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.04);
 }
+.proyect-admin .main-header.sticky {
+  top: 9%;
+  // top: 47px;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  .proyect-admin .main-header.sticky {
+    top: 90px;
+  }
+}
+
+// @media (max-width: 767px) {
+//   .main-header {
+//     top: 0;
+//     padding: 15px 0;
+//   }
+
+// }
+
 .main-header.sticky .main-header-item .header-logo {
   margin-top: 0;
 }
@@ -2120,6 +2161,11 @@ p {
   .explore-projects-area.explore-projects-page-area::before {
     height: 520px;
   }
+}
+
+.explore-projects-item, .explore-projects-item img {
+  height: 90%;
+  border-radius: 10px;
 }
 
 .explore-projects-item {
@@ -3398,6 +3444,22 @@ p {
   }
 }
 
+
+div.abc {
+  position: sticky;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  padding: 15px;
+  text-align: center;
+  background-image: linear-gradient(to right top, #0c9f0f, #00a656, #00aa83, #00aca3, #3cabb5);
+  -webkit-box-shadow: 0px 9px 19px -3px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0px 9px 19px -3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 9px 19px -3px rgba(0, 0, 0, 0.5);
+  border-radius: 0px 0px 25px 25px;
+  min-height: 100px;
+}
+
 /*===========================
     11.TEAM css 
 ===========================*/
@@ -3760,7 +3822,7 @@ p {
 ===========================*/
 .footer-area {
   background-size: 100% 100%;
-  padding-top: 90px;
+  padding-top: 50px;
   position: relative;
   z-index: 10;
 }
@@ -3910,7 +3972,7 @@ p {
   }
 }
 .footer-area .footer-copyright {
-  margin-top: 107px;
+  margin-top: 20px;
   border-top: 1px solid #2d313e;
 }
 .footer-area .footer-copyright p {
