@@ -1,37 +1,15 @@
 import { projectDetailsArea } from "@/data/projectsArea";
 import React from "react";
 import { Col, Container, Image, Row } from "react-bootstrap";
+import {
+  formatPrice,
+  calcularPorcentaje,
+  calcularDiasConMoment,
+} from "@/utils/helpers";
 
-const {
-  thumb,
-  flag,
-  tagline,
-  country,
-  title,
-  pledged,
-  backers,
-  daysLeft,
-  raised,
-  goal,
-  socials,
-} = projectDetailsArea;
+const { backers } = projectDetailsArea;
 
 const ProjectDetailsArea = ({project}) => {
- const fotmatPrice = (money) => {
-   const price = new Intl.NumberFormat("es-CO", {
-     style: "currency",
-     currency: "COP",
-     minimumFractionDigits: 0,
-     maximumFractionDigits: 0,
-   }).format(money);
-
-   return price;
- };
-
-  const porcentaje = (meta, mount) => {
-    const porcentajeFaltante = 100 - ((meta - mount) / meta) * 100;
-    return porcentajeFaltante;
-  };
 
   return (
     <section className="project-details-area pt-120 pb-45">
@@ -55,7 +33,7 @@ const ProjectDetailsArea = ({project}) => {
               <div className="project-details-item">
                 <div className="item text-center">
                   <h5 className="title">
-                    {fotmatPrice(project.fundingAmount)}
+                    {formatPrice(project.fundingAmount)}
                   </h5>
                   <span>Recaudado</span>
                 </div>
@@ -64,7 +42,12 @@ const ProjectDetailsArea = ({project}) => {
                   <span>Patrocinadores</span>
                 </div>
                 <div className="item text-center">
-                  <h5 className="title">{daysLeft}</h5>
+                  <h5 className="title">
+                    {calcularDiasConMoment(
+                      project.launchDate,
+                      project.campaignDuration
+                    )}
+                  </h5>
                   <span>Días restantes</span>
                 </div>
               </div>
@@ -73,7 +56,7 @@ const ProjectDetailsArea = ({project}) => {
                   <ul>
                     <li>Raised:</li>
                     <li>
-                      {porcentaje(project.fundingAmount, project.fundingAmount)}
+                      {calcularPorcentaje(project.fundingAmount, project.fundingAmount)}
                       %
                     </li>
                   </ul>
@@ -82,19 +65,19 @@ const ProjectDetailsArea = ({project}) => {
                       className="progress-bar"
                       role="progressbar"
                       style={{
-                        width: `${porcentaje(
+                        width: `${calcularPorcentaje(
                           project.fundingAmount,
                           project.fundingAmount
                         )}%`,
                       }}
-                      aria-valuenow={porcentaje(
+                      aria-valuenow={calcularPorcentaje(
                         project.fundingAmount,
                         project.fundingAmount
                       )}
                       aria-valuemin="0"
                       aria-valuemax="100"
                     >
-                      {porcentaje(project.fundingAmount, project.fundingAmount)}
+                      {calcularPorcentaje(project.fundingAmount, project.fundingAmount)}
                       %
                     </div>
                   </div>
@@ -103,7 +86,7 @@ const ProjectDetailsArea = ({project}) => {
               </div>
               <div className="projects-goal">
                 <span>
-                  Meta: <span>{fotmatPrice(project.fundingAmount)} Cop</span>
+                  Meta: <span>{formatPrice(project.fundingAmount)} Cop</span>
                 </span>
               </div>
               <div className="project-btn mt-25">

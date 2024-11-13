@@ -18,7 +18,7 @@ const SiteFooter = () => {
       <Container>
         <Row>
           <div>
-            <div className="footer-about mt-30">
+            <div className="footer-about">
               <Link href="/">
                 <Image src={logo.src} alt="" width={128} />
               </Link>
