@@ -24,62 +24,62 @@ const footerData = {
   logo,
   bg,
   socials: socials2,
-  text: "Lorem quas utamur delicata qui, vix ei prima mentitum omnesque. Duo corrumpit cotidieque ne.",
-//   text2:
-//     "Sign up for our latest news & articles. We won’t give you spam mails.",
+  text: "Plataforma de financiamiento colaborativo académico de la Fundación Escuela Tecnológica de Neiva (FET). Apoyamos a estudiantes y docentes en la realización de proyectos innovadores a través del crowdfunding seguro y transparente.",
+  //   text2:
+  //     "Sign up for our latest news & articles. We won’t give you spam mails.",
   shape,
-//   links: [
-//     {
-//       id: 1,
-//       text: "About uss",
-//       href: "/about",
-//     },
-//     {
-//       id: 2,
-//       text: "How It Works",
-//       href: "/team",
-//     },
-//     {
-//       id: 3,
-//       text: "Knowledge hub",
-//       href: "/case",
-//     },
-//     {
-//       id: 4,
-//       text: "Success Stories",
-//       href: "/blog",
-//     },
-//     {
-//       id: 5,
-//       text: "Contact",
-//       href: "/contact",
-//     },
-//     {
-//       id: 6,
-//       text: "Education",
-//       href: "/about",
-//     },
-//     {
-//       id: 7,
-//       text: "Design",
-//       href: "/about",
-//     },
-//     {
-//       id: 8,
-//       text: "Film & Video",
-//       href: "/about",
-//     },
-//     {
-//       id: 9,
-//       text: "Technology",
-//       href: "/about",
-//     },
-//     {
-//       id: 10,
-//       text: "Games",
-//       href: "/about",
-//     },
-//   ],
+  //   links: [
+  //     {
+  //       id: 1,
+  //       text: "About uss",
+  //       href: "/about",
+  //     },
+  //     {
+  //       id: 2,
+  //       text: "How It Works",
+  //       href: "/team",
+  //     },
+  //     {
+  //       id: 3,
+  //       text: "Knowledge hub",
+  //       href: "/case",
+  //     },
+  //     {
+  //       id: 4,
+  //       text: "Success Stories",
+  //       href: "/blog",
+  //     },
+  //     {
+  //       id: 5,
+  //       text: "Contact",
+  //       href: "/contact",
+  //     },
+  //     {
+  //       id: 6,
+  //       text: "Education",
+  //       href: "/about",
+  //     },
+  //     {
+  //       id: 7,
+  //       text: "Design",
+  //       href: "/about",
+  //     },
+  //     {
+  //       id: 8,
+  //       text: "Film & Video",
+  //       href: "/about",
+  //     },
+  //     {
+  //       id: 9,
+  //       text: "Technology",
+  //       href: "/about",
+  //     },
+  //     {
+  //       id: 10,
+  //       text: "Games",
+  //       href: "/about",
+  //     },
+  //   ],
   author: "Crowdfet",
   year: new Date().getFullYear(),
 };

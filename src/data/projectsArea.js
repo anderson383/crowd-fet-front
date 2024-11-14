@@ -203,10 +203,10 @@ export const projectDetailsTabBtns = [
     id: "pills-contact",
     name: "Documento",
   },
-  {
-    id: "pills-4",
-    name: "Riesgos",
-  },
+  // {
+  //   id: "pills-4",
+  //   name: "Riesgos",
+  // },
 ];
 
 export const projectDetailsStory = {

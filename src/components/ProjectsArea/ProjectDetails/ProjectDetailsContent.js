@@ -110,7 +110,7 @@ const ProjectDetailsContent = ({project}) => {
                   file={project.file}
                   getClassName={getClassName}
                 />
-                <ProjectDetailsComments getClassName={getClassName} />
+                {/* <ProjectDetailsComments getClassName={getClassName} /> */}
               </div>
             {/* </Col> */}
             {/* <Col lg={4} md={7} sm={9}>

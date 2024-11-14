@@ -56,24 +56,25 @@ export const navItems = [
 export const socials = [
   {
     id: 1,
-    icon: "fa fa-facebook-square",
-    href: "#",
+    icon: "fa fa-whatsapp",
+    href: "https://api.whatsapp.com/send/?phone=573223042498&text&type=phone_number&app_absent=0",
   },
   {
     id: 2,
-    icon: "fa fa-twitter",
-    href: "#",
+    icon: "fa fa-facebook-official",
+    href: "https://www.facebook.com/YoSoyFet/?locale=es_LA",
   },
   {
     id: 3,
     icon: "fa fa-instagram",
-    href: "#",
+    href: "https://www.instagram.com/fetneiva/?hl=es-la",
   },
-  {
-    id: 4,
-    icon: "fa fa-dribbble",
-    href: "#",
-  },
+
+  // {
+  //   id: 4,
+  //   icon: "fa fa-dribbble",
+  //   href: "#",
+  // },
 ];
 
 const headerData = {
