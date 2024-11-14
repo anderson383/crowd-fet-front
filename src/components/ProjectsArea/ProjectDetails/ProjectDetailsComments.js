@@ -9,7 +9,7 @@ const ProjectDetailsComments = ({ getClassName }) => {
   return (
     <div className={getClassName(id)} id="pills-4" role="tabpanel">
       <CommentOne comments={comments} className="mt-50" />
-      <CommentForm />
+      {/* <CommentForm /> */}
     </div>
   );
 };

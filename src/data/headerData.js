@@ -24,7 +24,7 @@ export const navItems = [
   {
     id: 3,
     name: "Explorar",
-    href: "/projects-2",
+    href: "/projects-1",
     // subNavItems: [
     //   // { id: 1, name: "Project 1", href: "/projects-1" },
     //   { id: 2, name: "Project 2", href: "/projects-2" },

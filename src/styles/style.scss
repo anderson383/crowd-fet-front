@@ -2176,9 +2176,11 @@ p {
   }
 }
 
-.explore-projects-item, .explore-projects-item img {
+.explore-projects-item,
+.explore-projects-thumb img,
+.explore-projects-item img {
   height: 90%;
-  border-radius: 10px;
+  // border-radius: 10px;
 }
 
 .explore-projects-item {
@@ -6263,6 +6265,16 @@ div.abc {
   position: relative;
   margin-top: 4px;
 }
+
+div.progress{
+  height: 9px;
+  border-radius: 0px;
+}
+
+div.progress .progress-bar {
+  background-color: #29f0b4;
+}
+
 .project-details-area
   .project-details-content
   .projects-range

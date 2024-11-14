@@ -193,19 +193,19 @@ export const projectDetailsArea = {
 export const projectDetailsTabBtns = [
   {
     id: "pills-home",
-    name: "Story",
+    name: "Detalles",
   },
   {
     id: "pills-profile",
-    name: "FAQs",
+    name: "Recompensas",
   },
   {
     id: "pills-contact",
-    name: "Updates",
+    name: "Documento",
   },
   {
     id: "pills-4",
-    name: "Comments",
+    name: "Riesgos",
   },
 ];
 

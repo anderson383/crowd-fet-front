@@ -14,6 +14,16 @@ const { backers } = projectDetailsArea;
 
 const ProjectDetailsArea = ({project}) => {
 
+    const {
+      id,
+      image,
+      category,
+      title,
+      fundingAmount,
+      launchDate,
+      campaignDuration,
+    } = project;
+
   const [isModal, setIsModal] = useState(false)
 
   useEffect(() => {
@@ -67,7 +77,7 @@ const ProjectDetailsArea = ({project}) => {
   
   const handleSubmitForm  = (values, actions) => {
     actions.setSubmitting(true);
-    axiosInstance.post(`/payment/create-payment/${project.id}`, {
+    axiosInstance.post(`/payment/create-payment/${id}`, {
       name: values.nombre,
       lastname: values.apellido,
       email: values.email,
@@ -86,23 +96,23 @@ const ProjectDetailsArea = ({project}) => {
         <Row>
           <Col lg={7}>
             <div className="project-details-thumb">
-              <Image src={project.image} alt="" />
+              <Image src={image} alt="" />
             </div>
           </Col>
           <Col lg={5}>
             <div className="project-details-content">
               <div className="details-btn">
-                <span>{project.category}</span>
+                <span>{category}</span>
                 {/* <div className="flag">
                   <Image src={flag.src} alt="" />
                   <p>{country}</p>
                 </div> */}
               </div>
-              <h3 className="title">{project.title}</h3>
+              <h3 className="title">{title}</h3>
               <div className="project-details-item">
                 <div className="item text-center">
                   <h5 className="title">
-                    {formatPrice(project.fundingAmount)}
+                    {formatPrice(fundingAmount)}
                   </h5>
                   <span>Recaudado</span>
                 </div>
@@ -113,8 +123,8 @@ const ProjectDetailsArea = ({project}) => {
                 <div className="item text-center">
                   <h5 className="title">
                     {calcularDiasConMoment(
-                      project.launchDate,
-                      project.campaignDuration
+                      launchDate,
+                      campaignDuration
                     )}
                   </h5>
                   <span>Días restantes</span>
@@ -125,7 +135,7 @@ const ProjectDetailsArea = ({project}) => {
                   <ul>
                     <li>Raised:</li>
                     <li>
-                      {calcularPorcentaje(project.fundingAmount, project.fundingAmount)}
+                      {calcularPorcentaje(fundingAmount, fundingAmount)}
                       %
                     </li>
                   </ul>
@@ -135,19 +145,17 @@ const ProjectDetailsArea = ({project}) => {
                       role="progressbar"
                       style={{
                         width: `${calcularPorcentaje(
-                          project.fundingAmount,
-                          project.fundingAmount
+                          fundingAmount,
+                          fundingAmount
                         )}%`,
                       }}
                       aria-valuenow={calcularPorcentaje(
-                        project.fundingAmount,
-                        project.fundingAmount
+                        fundingAmount,
+                        fundingAmount
                       )}
                       aria-valuemin="0"
                       aria-valuemax="100"
                     >
-                      {calcularPorcentaje(project.fundingAmount, project.fundingAmount)}
-                      %
                     </div>
                   </div>
                  {/* <div className="range"></div>  */}
@@ -155,7 +163,7 @@ const ProjectDetailsArea = ({project}) => {
               </div>
               <div className="projects-goal">
                 <span>
-                  Meta: <span>{formatPrice(project.fundingAmount)} Cop</span>
+                  Meta: <span>{formatPrice(fundingAmount)} Cop</span>
                 </span>
               </div>
               <div className="project-btn mt-25">
