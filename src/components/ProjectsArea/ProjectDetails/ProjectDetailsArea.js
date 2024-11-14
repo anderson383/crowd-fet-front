@@ -111,9 +111,7 @@ const ProjectDetailsArea = ({project}) => {
               <h3 className="title">{title}</h3>
               <div className="project-details-item">
                 <div className="item text-center">
-                  <h5 className="title">
-                    {formatPrice(fundingAmount)}
-                  </h5>
+                  <h5 className="title">{formatPrice(fundingAmount)}</h5>
                   <span>Recaudado</span>
                 </div>
                 <div className="item text-center">
@@ -122,10 +120,7 @@ const ProjectDetailsArea = ({project}) => {
                 </div>
                 <div className="item text-center">
                   <h5 className="title">
-                    {calcularDiasConMoment(
-                      launchDate,
-                      campaignDuration
-                    )}
+                    {calcularDiasConMoment(launchDate, campaignDuration)}
                   </h5>
                   <span>Días restantes</span>
                 </div>
@@ -134,10 +129,7 @@ const ProjectDetailsArea = ({project}) => {
                 <div className="projects-range-content">
                   <ul>
                     <li>Raised:</li>
-                    <li>
-                      {calcularPorcentaje(fundingAmount, fundingAmount)}
-                      %
-                    </li>
+                    <li>{calcularPorcentaje(fundingAmount, fundingAmount)}%</li>
                   </ul>
                   <div className="progress">
                     <div
@@ -155,10 +147,9 @@ const ProjectDetailsArea = ({project}) => {
                       )}
                       aria-valuemin="0"
                       aria-valuemax="100"
-                    >
-                    </div>
+                    ></div>
                   </div>
-                 {/* <div className="range"></div>  */}
+                  {/* <div className="range"></div>  */}
                 </div>
               </div>
               <div className="projects-goal">
@@ -167,12 +158,16 @@ const ProjectDetailsArea = ({project}) => {
                 </span>
               </div>
               <div className="project-btn mt-25">
-                <button className="main-btn" href="#" onClick={() => {
-                  setIsModal(true)
-                  setTimeout(() => {
-                    handleModal()
-                  }, 500)
-                }}>
+                <button
+                  className="main-btn"
+                  href="#"
+                  onClick={() => {
+                    setIsModal(true);
+                    setTimeout(() => {
+                      handleModal();
+                    }, 500);
+                  }}
+                >
                   Apoya este proyecto
                 </button>
               </div>
@@ -193,9 +188,8 @@ const ProjectDetailsArea = ({project}) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-
           <Formik
-            initialValues={{ nombre: '', email: '', apellido: '', precio: '' }}
+            initialValues={{ nombre: "", email: "", apellido: "", precio: "" }}
             validationSchema={validationSchema}
             onSubmit={handleSubmitForm}
           >
@@ -206,86 +200,109 @@ const ProjectDetailsArea = ({project}) => {
               touched,
               errors,
               isSubmitting,
-              handleBlur
+              handleBlur,
             }) => (
-              <Form noValidate onSubmit={handleSubmit}>
-                <div className="d-flex gap-3">
-                  <Form.Group className="mb-3 flex-grow-1" controlId="formNombre" >
-                    <Form.Label>Nombre</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="nombre"
-                      placeholder="Ingresa tu nombre"
-                      value={values.nombre}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      disabled={isSubmitting}
-                      isInvalid={!!errors.nombre && touched.nombre}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.nombre}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                  <Form.Group className="mb-3 flex-grow-1" controlId="formNombre">
-                    <Form.Label>Apellido</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="apellido"
-                      placeholder="Ingresa tu apellido"
-                      value={values.apellido}
-                      disabled={isSubmitting}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      isInvalid={!!errors.apellido && touched.apellido}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.apellido}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                </div>
-                <Form.Group className="mb-3" controlId="formEmail">
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control
-                    type="email"
-                    name="email"
-                    placeholder="Ingresa tu email"
-                    disabled={isSubmitting}
-                    value={values.email}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    isInvalid={!!errors.email && touched.email}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.email}
-                  </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formPrecio">
-                  <Form.Label>Precio</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="precio"
-                    placeholder="Ingresa el precio"
-                    disabled={isSubmitting}
-                    value={values.precio}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    isInvalid={!!errors.precio && touched.precio}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.precio}
-                  </Form.Control.Feedback>
-                </Form.Group>
+                <div className="conten-form">
+                  <Form className="form" noValidate onSubmit={handleSubmit}>
+                    <div className="d-flex gap-3">
+                      <Form.Group
+                        className="input-box mb-3 flex-grow-1"
+                        controlId="formNombre"
+                      >
+                        <Form.Label>Nombre</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="nombre"
+                          placeholder="Ingresa tu nombre"
+                          value={values.nombre}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          disabled={isSubmitting}
+                          isInvalid={!!errors.nombre && touched.nombre}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.nombre}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                      <Form.Group
+                        className="input-box mb-3 flex-grow-1"
+                        controlId="formNombre"
+                      >
+                        <Form.Label>Apellido</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="apellido"
+                          placeholder="Ingresa tu apellido"
+                          value={values.apellido}
+                          disabled={isSubmitting}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          isInvalid={!!errors.apellido && touched.apellido}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.apellido}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </div>
+                    <Form.Group
+                      className="input-box mb-3"
+                      controlId="formEmail"
+                    >
+                      <Form.Label>Email</Form.Label>
+                      <Form.Control
+                        type="email"
+                        name="email"
+                        placeholder="Ingresa tu email"
+                        disabled={isSubmitting}
+                        value={values.email}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={!!errors.email && touched.email}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.email}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group
+                      className="input-box mb-3"
+                      controlId="formPrecio"
+                    >
+                      <Form.Label>Precio</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="precio"
+                        placeholder="Ingresa el precio"
+                        disabled={isSubmitting}
+                        value={values.precio}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={!!errors.precio && touched.precio}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.precio}
+                      </Form.Control.Feedback>
+                    </Form.Group>
 
-                <Button
-                  variant="primary"
-                  type="submit"
-                  className="w-100"
-                  disabled={isSubmitting}
-                >
-                  Enviar
-                </Button>
-                <div className="mt-3 w-100" id="widget-container" ></div>
-              </Form>
+                    {/* <Button
+                      variant="primary"
+                      type="submit"
+                      className="w-100"
+                      disabled={isSubmitting}
+                    >
+                      Enviar
+                    </Button> */}
+                    <div className="input-box">
+                      <button
+                        type="submit"
+                        className="main-btn w-100"
+                        disabled={isSubmitting}
+                      >
+                        Enviar
+                      </button>
+                    </div>
+                    <div className="mt-3 w-100" id="widget-container"></div>
+                  </Form>
+                </div>
             )}
           </Formik>
         </Modal.Body>
