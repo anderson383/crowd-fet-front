@@ -7,7 +7,7 @@ const { bg, title } = ctaArea;
 
 const CtaArea = () => {
   return (
-    <section className="cta-area">
+    <section className="cta-area mb-100">
       <Container>
         <Row>
           <Col lg={12}>
