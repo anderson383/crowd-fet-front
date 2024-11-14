@@ -1,36 +1,39 @@
 import { projectDetailsStory } from "@/data/projectsArea";
 import React from "react";
 import { Col, Image, Row } from "react-bootstrap";
+import ReactPlayer from "react-player";
 
 const { id, text, lists, text2, items, text3, image, images } =
   projectDetailsStory;
 
-const ProjectDetailsStory = ({ getClassName }) => {
+const ProjectDetailsStory = ({ project, getClassName }) => {
+  const { subtitle, image } = project;
   return (
     <div className={getClassName?.(id)} id={id} role="tabpanel">
       <div className="project-details-content-top">
-        <p>{text}</p>
-        <ul>
+        <p>{subtitle}</p>
+        {/* <ul>
           {lists.map((list, i) => (
             <li key={i}>
               <i className="flaticon-check"></i> {list}
             </li>
           ))}
-        </ul>
-        <div className="project-details-thumb">
-          <Image src={image.src} alt="" />
+        </ul> */}
+        <div className="project-details-thumb mb-5">
+          {/* <Image src={image} alt="" /> */}
+          <ReactPlayer url={project.video} />
         </div>
       </div>
-      <div className="project-details-item">
-        <p>{text2}</p>
-        {items.map(({ id, title, text, className = "" }) => (
+      {/* <div className="project-details-item"> */}
+        {/* <p>{text2}</p> */}
+        {/* {items.map(({ id, title, text, className = "" }) => (
           <div className={`item ${className}`} key={id}>
             <i className="flaticon-checkmark"></i>
             <h5 className="title">{title}</h5>
             <p>{text}</p>
           </div>
-        ))}
-        <Row>
+        ))} */}
+        {/* <Row>
           {images.map((image, i) => (
             <Col lg={6} md={6} sm={6} key={i}>
               <div className="project-details-thumb">
@@ -39,8 +42,8 @@ const ProjectDetailsStory = ({ getClassName }) => {
             </Col>
           ))}
         </Row>
-        <p className="text">{text3}</p>
-      </div>
+        <p className="text">{text3}</p> */}
+      {/* </div> */}
     </div>
   );
 };
