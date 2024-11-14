@@ -1,5 +1,5 @@
 import { projectDetailsTabBtns } from "@/data/projectsArea";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Button, Modal, Image, Container, Row } from "react-bootstrap";
 import ProjectDetailsComments from "./ProjectDetailsComments";
 import ProjectDetailsFaq from "./ProjectDetailsFaq";
@@ -7,12 +7,19 @@ import ProjectDetailsSidebar from "./ProjectDetailsSidebar";
 import ProjectDetailsStory from "./ProjectDetailsStory";
 import ProjectDetailsUpdates from "./ProjectDetailsUpdates";
 import ReactPlayer from "react-player";
+import { set } from "date-fns";
 
 const ProjectDetailsContent = ({project}) => {
 
-   const [show, setShow] = useState(false);
+  const [show, setShow] = useState(false);
+
+  const [isLoad, setIsLoad] = useState(false)
+  useEffect(() => {
+    setIsLoad(true)
+  }, [])
+  
   return (
-    <section className="project-details-content-area pb-100">
+    isLoad && <section className="project-details-content-area pb-100">
       <Container>
         <div className="justify-content-center">
           <div className="project-details-content-top">

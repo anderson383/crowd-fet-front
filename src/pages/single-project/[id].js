@@ -33,14 +33,16 @@ const SingleProject = () => {
       .catch((err) => {
         console.error(err);
       });
-  }, []);
+  }, [id]);
 
   return (
     <Layout>
       <Header />
-      <PageTitle title={project.title} page="Explore" />
-      <ProjectDetailsArea project={project} />
-      <ProjectDetailsContent project={project} />
+      <PageTitle title={project?.title} page="Explore" />
+      <ProjectDetailsArea project={project || {}} />
+      {
+        project &&  <ProjectDetailsContent project={project || {}} />
+      }
       {/* <SimilarProjects /> */}
     </Layout>
   );

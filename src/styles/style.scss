@@ -854,6 +854,13 @@ p {
   height: 90%;
 }
 
+.modal-dialog.modal-50w {
+  max-width: none !important;
+  width: 50%;
+  height: 80%;
+}
+
+
 .modal-dialog.modal-90w .modal-content {
   height: 100%;
   // padding-bottom: 20px;
@@ -861,6 +868,12 @@ p {
 
 .proyect-admin .main-header {
   top: 90px;
+}
+
+#widget-container {
+  button {
+    width: 100% !important;
+  }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
