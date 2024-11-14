@@ -32,9 +32,9 @@ const Baner = ({ projectId, projectStatus }) => {
   return (
     <div className="abc">
       <Container>
-        <p className="text-white fw-bold">{statusText}</p>
+        <p className="text-white banner-text">{statusText}</p>
         {projectStatus === "pending" && (
-          <Button className="px-5" onClick={btnAct}>
+          <Button className="px-5 main-btn" onClick={btnAct}>
             Aprobar
           </Button>
         )}

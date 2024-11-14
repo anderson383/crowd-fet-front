@@ -194,76 +194,78 @@ const AdminPage = () => {
 
   return (
     <LayoutBackOffice>
-       <HeaderBackOffice />
-      <Container style={{  marginTop: '82px'}} className="py-5">
-      <h1 className="display-4">Crowdfet Proyectos</h1>
-      <p className="text-muted">Explora y filtra proyectos por categoría, estado, y más</p>
-      
-      <Form className="p-4 shadow-sm rounded bg-light">
-        <Row className="g-3">
-          <Col md={4}>
-            <Form.Group controlId="filterName">
-              <Form.Label>Nombre del Proyecto</Form.Label>
-              <div className="input-group">
-                <Form.Control
-                  type="text"
-                  name="name"
-                  placeholder="Buscar por nombre"
-                  value={filters.name}
-                  onChange={handleFilterChange}
-                />
-              </div>
-            </Form.Group>
-          </Col>
-          <Col md={4}>
-            <Form.Group controlId="filterCategory">
-              <Form.Label>Categoría</Form.Label>
-              <div className="input-group">
-                <Form.Control
-                  as="select"
-                  name="category"
-                  value={filters.category}
-                  onChange={handleFilterChange}
-                >
-                  <option value="">Seleccionar Categoría</option>
-                  {
-                    listCategory.map(cat => (
-                      <option key={cat.id} value={cat.name} >{cat.name}</option>
-                    ))
-                  }
-                </Form.Control>
-              </div>
-            </Form.Group>
-          </Col>
-          <Col md={4}>
-            <Form.Group controlId="filterStatus">
-              <Form.Label>Estado</Form.Label>
-              <div className="input-group">
-                <Form.Control
-                  as="select"
-                  name="status"
-                  value={filters.status}
-                  onChange={handleFilterChange}
-                >
-                  <option value="">Seleccionar Estado</option>
-                  <option value="Completed">Publicado</option>
-                  <option value="Pending">Pendiente</option>
-                </Form.Control>
-              </div>
-            </Form.Group>
-          </Col>
-        </Row>
-        <div className="d-flex justify-content-end mt-3">
-          <Button
-            variant="outline-danger"
-            className="d-flex align-items-center"
-            onClick={() => setFilters({ name: "", category: "", status: "" })}
-          >
-            {/* <FaTimes className="me-2" /> */}
-            Limpiar Filtros
-          </Button>
-        </div>
-      </Form>
+      <HeaderBackOffice />
+      <Container style={{ marginTop: "82px" }} className="py-5">
+        <h1 className="display-4">Crowdfet Proyectos</h1>
+        <p className="text-muted">
+          Explora y filtra proyectos por categoría, estado, y más
+        </p>
+
+        <Form className="p-4 shadow-sm rounded bg-light">
+          <Row className="g-3">
+            <Col md={4}>
+              <Form.Group controlId="filterName">
+                <Form.Label>Nombre del Proyecto</Form.Label>
+                <div className="input-group">
+                  <Form.Control
+                    type="text"
+                    name="name"
+                    placeholder="Buscar por nombre"
+                    value={filters.name}
+                    onChange={handleFilterChange}
+                  />
+                </div>
+              </Form.Group>
+            </Col>
+            <Col md={4}>
+              <Form.Group controlId="filterCategory">
+                <Form.Label>Categoría</Form.Label>
+                <div className="input-group">
+                  <Form.Control
+                    as="select"
+                    name="category"
+                    value={filters.category}
+                    onChange={handleFilterChange}
+                  >
+                    <option value="">Seleccionar Categoría</option>
+                    {listCategory.map((cat) => (
+                      <option key={cat.id} value={cat.name}>
+                        {cat.name}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </div>
+              </Form.Group>
+            </Col>
+            <Col md={4}>
+              <Form.Group controlId="filterStatus">
+                <Form.Label>Estado</Form.Label>
+                <div className="input-group">
+                  <Form.Control
+                    as="select"
+                    name="status"
+                    value={filters.status}
+                    onChange={handleFilterChange}
+                  >
+                    <option value="">Seleccionar Estado</option>
+                    <option value="Completed">Publicado</option>
+                    <option value="Pending">Pendiente</option>
+                  </Form.Control>
+                </div>
+              </Form.Group>
+            </Col>
+          </Row>
+          <div className="d-flex justify-content-end mt-3">
+            <Button
+              variant="outline-danger"
+              className="d-flex align-items-center"
+              onClick={() => setFilters({ name: "", category: "", status: "" })}
+            >
+              {/* <FaTimes className="me-2" /> */}
+              Limpiar Filtros
+            </Button>
+          </div>
+        </Form>
 
         {/* Project Table */}
         <div className="shadow-sm rounded mt-4 pt-3">
@@ -285,9 +287,11 @@ const AdminPage = () => {
                     <td className="align-middle">{index + 1}</td>
                     <td className="align-middle">
                       <strong>{project.title}</strong>
-                      <small className="text-muted d-block">{project.subtitle}</small>
+                      {/* <small className="text-muted d-block">{project.subtitle}</small> */}
                     </td>
-                    <td className="align-middle text-capitalize">{project.category}</td>
+                    <td className="align-middle text-capitalize">
+                      {project.category}
+                    </td>
                     <td className="align-middle">
                       <span
                         className={`badge rounded-pill ${
@@ -299,10 +303,15 @@ const AdminPage = () => {
                         }`}
                       >
                         {fotmatStatus(project.status)}
+                        <a href={`/single-project-admin/${project.id}`}>h</a>
                       </span>
                     </td>
-                    <td className="align-middle text-end">{fotmatPrice(project.fundingAmount)}</td>
-                    <td className="align-middle text-end">{fotmatPrice(project.fundingAmount)}</td>
+                    <td className="align-middle text-end">
+                      {fotmatPrice(project.fundingAmount)}
+                    </td>
+                    <td className="align-middle text-end">
+                      {fotmatPrice(project.fundingAmount)}
+                    </td>
                   </tr>
                 ))
               ) : (
@@ -314,12 +323,16 @@ const AdminPage = () => {
               )}
             </tbody>
           </Table>
-            <div className="d-flex justify-content-end px-5">
-              <PaginationComponent handlePageChange={handlePageChange} page={page} totalPages={totalPages}  />
-            </div>
+          <div className="d-flex justify-content-end px-5">
+            <PaginationComponent
+              handlePageChange={handlePageChange}
+              page={page}
+              totalPages={totalPages}
+            />
+          </div>
         </div>
       </Container>
-      </LayoutBackOffice>
+    </LayoutBackOffice>
   );
 };
 
