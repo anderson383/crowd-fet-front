@@ -3,6 +3,7 @@ import LayoutBackOffice from "@/components/Layout/LayoutBackOffice";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { Table, Form, Button, Row, Col, Container, Pagination } from "react-bootstrap";
+import Link from "@/components/Reuseable/Link";
 import axiosInstance from "src/config/axios/axios";
 
 function PaginationComponent({ page, totalPages, handlePageChange }) {
@@ -277,7 +278,8 @@ const AdminPage = () => {
                 <th>Categoria</th>
                 <th>Estado</th>
                 <th>Meta $</th>
-                <th width="10%">Acumulado $</th>
+                <th>Acumulado $</th>
+                <th>Inversores</th>
               </tr>
             </thead>
             <tbody>
@@ -286,14 +288,13 @@ const AdminPage = () => {
                   <tr key={project.id}>
                     <td className="align-middle">{index + 1}</td>
                     <td className="align-middle">
-                      <a
+                      <Link
                         className="w-100"
                         href={`/single-project-admin/${project.id}`}
                         target="_blanck"
                       >
                         <strong>{project.title}</strong>
-                      </a>
-                      {/* <small className="text-muted d-block">{project.subtitle}</small> */}
+                      </Link>
                     </td>
                     <td className="align-middle text-capitalize">
                       {project.category}
@@ -316,6 +317,9 @@ const AdminPage = () => {
                     </td>
                     <td className="align-middle text-end">
                       {fotmatPrice(project.transaction.totalSum)}
+                    </td>
+                    <td className="align-middle text-center">
+                      <Link href={`inversores/${project.id}`}>Ver...</Link>
                     </td>
                   </tr>
                 ))
