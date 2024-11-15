@@ -2188,7 +2188,8 @@ img.image-recompensa {
 .explore-projects-item,
 .explore-projects-thumb img,
 .explore-projects-item img {
-  height: 90%;
+  height: 100%;
+  object-fit: cover;
   // border-radius: 10px;
 }
 
@@ -2198,6 +2199,7 @@ img.image-recompensa {
 .explore-projects-item .explore-projects-thumb {
   position: relative;
   overflow: hidden;
+  height: 330px;
 }
 .explore-projects-item .explore-projects-thumb a {
   position: absolute;
