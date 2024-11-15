@@ -131,7 +131,7 @@ const AdminPage = () => {
   };
 
   // Filter projects
-  const filteredProjects = projects.filter((project) => {
+  const filteredProjects = (projects||[]).filter((project) => {
     const filterByName =
       filters.name === "" ||
       project.title.toLowerCase().includes(filters.name.toLowerCase());
@@ -286,7 +286,13 @@ const AdminPage = () => {
                   <tr key={project.id}>
                     <td className="align-middle">{index + 1}</td>
                     <td className="align-middle">
-                      <strong>{project.title}</strong>
+                      <a
+                        className="w-100"
+                        href={`/single-project-admin/${project.id}`}
+                        target="_blanck"
+                      >
+                        <strong>{project.title}</strong>
+                      </a>
                       {/* <small className="text-muted d-block">{project.subtitle}</small> */}
                     </td>
                     <td className="align-middle text-capitalize">
@@ -303,14 +309,13 @@ const AdminPage = () => {
                         }`}
                       >
                         {fotmatStatus(project.status)}
-                        <a href={`/single-project-admin/${project.id}`}>h</a>
                       </span>
                     </td>
                     <td className="align-middle text-end">
                       {fotmatPrice(project.fundingAmount)}
                     </td>
                     <td className="align-middle text-end">
-                      {fotmatPrice(project.fundingAmount)}
+                      {fotmatPrice(project.transaction.totalSum)}
                     </td>
                   </tr>
                 ))
