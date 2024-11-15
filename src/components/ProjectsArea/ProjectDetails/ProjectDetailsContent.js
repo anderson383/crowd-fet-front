@@ -24,7 +24,8 @@ const ProjectDetailsContent = ({project}) => {
   useEffect(() => {
     setIsLoad(true)
   }, [])
-  
+
+  console.log(project, 'projectprojectproject')
   return (
     isLoad && (
       <section className="project-details-content-area pb-100 pt-100">
@@ -114,6 +115,13 @@ const ProjectDetailsContent = ({project}) => {
                 getClassName={getClassName}
               />
               <ProjectDetailsComments getClassName={getClassName} />
+              <div>
+                <p style={{marginTop: 20}}>
+                  {
+                    project?.history[0]?.risksChallenges || 'No hay riesgos'
+                  }
+                </p>
+              </div>
             </div>
             {/* </Col> */}
             {/* <Col lg={4} md={7} sm={9}> */}

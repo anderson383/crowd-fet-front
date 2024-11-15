@@ -203,6 +203,10 @@ export const projectDetailsTabBtns = [
     id: "pills-contact",
     name: "Historia",
   },
+  {
+    id: "pills-riesgos",
+    name: "Riesgos",
+  },
   // {
   //   id: "pills-4",
   //   name: "Riesgos",
