@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Faqs from "@/components/FaqArea/Faqs";
+import moment from "moment";
 import { projectDetailsFaq } from "@/data/projectsArea";
 import { Col, Button, Modal, Image, Container, Row } from "react-bootstrap";
 import { projectDetailsStory } from "@/data/projectsArea";
@@ -58,66 +59,67 @@ const ProjectDetailsFaq = ({ recompensas, getClassName }) => {
 
       <div className={`faq-accordion overflow-hidden `}>
         <div className={`accrodion-grp faq-accrodion`}>
-          {(recompensas || []).map(({ id, title, description, elements }, index) => (
-            <div
-              key={id}
-              className={`accrodion overflow-hidden${
-                current === id ? " active" : ""
-              }`}
-            >
-              <div className="accrodion-inner">
-                <div
-                  onClick={() => handleCurrent(id)}
-                  className="accrodion-title"
-                >
-                  <h4>
-                    {/* <i className="flaticon-checkmark"></i> */}
-                    <span>{++index}.</span> {title}
-                  </h4>
-                </div>
-                <div
-                  className={`accrodion-content${
-                    current === id ? "" : " d-none"
-                  }`}
-                >
+          {(recompensas || []).map(
+            ({ id, title, description, elements, estimatedDelivery }, index) => (
+              <div
+                key={id}
+                className={`accrodion overflow-hidden${
+                  current === id ? " active" : ""
+                }`}
+              >
+                <div className="accrodion-inner">
                   <div
-                    className={`inner animated${
-                      current === id ? " fadeInUp" : ""
+                    onClick={() => handleCurrent(id)}
+                    className="accrodion-title"
+                  >
+                    <h4>
+                      {/* <i className="flaticon-checkmark"></i> */}
+                      <span>{++index}.</span> {title}
+                    </h4>
+                  </div>
+                  <div
+                    className={`accrodion-content${
+                      current === id ? "" : " d-none"
                     }`}
                   >
-                    <p>{description}</p>
+                    <div
+                      className={`inner animated${
+                        current === id ? " fadeInUp" : ""
+                      }`}
+                    >
+                      <span className="fw-bold mb-1">Fecha estimada de entrega: </span> {moment(estimatedDelivery).format('l')}
+                      <p>{description}</p>
 
-                    {(elements || []).map(
-                      ({ id, title, image }) => (
-                          <div className="project-details-sidebar" key={id}>
-                            <div className="project-details-info box">
-                              <div className="info">
-                                <Image
-                                  src={image?.fileUrl}
-                                  className="image-recompensa"
-                                  alt=""
-                                />
-                                <h5 className="title">{title}</h5>
-                                {/* <span>{info.backed} backed</span> */}
-                              </div>
-                              {/* <p>{title}</p> */}
+                      {(elements || []).map(({ id, title, image }) => (
+                        <div className="project-details-sidebar" key={id}>
+                          <div className="project-details-info box">
+                            <div className="info">
+                              <Image
+                                src={image?.fileUrl}
+                                className="image-recompensa"
+                                alt=""
+                              />
+                              <h5 className="title">{title}</h5>
+                              {/* <span>{info.backed} backed</span> */}
                             </div>
-                            {/* {perks.map((perk) => (
+                            {/* <p>{title}</p> */}
+                          </div>
+                          {/* {perks.map((perk) => (
                     <ProjectDetailsPark perk={perk} key={perk.id} />
                   ))} */}
-                          </div>
-                      )
-                    )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            )
+          )}
         </div>
       </div>
       {/* <div className="project-details-item mt-70"> */}
-        {/* <p>{text2}</p> */}
-        {/* {(recompensas || []).map(({ id, title, description, elements }) => (
+      {/* <p>{text2}</p> */}
+      {/* {(recompensas || []).map(({ id, title, description, elements }) => (
           <div className={`item`} key={id}>
             <i className="flaticon-checkmark"></i>
             <h5 className="title">{title}</h5>
@@ -134,24 +136,24 @@ const ProjectDetailsFaq = ({ recompensas, getClassName }) => {
                     />
                     <h5 className="title">{title}</h5>
                     {/* <span>{info.backed} backed</span> */}
-                  {/* </div> */}
-                  {/* <p>{title}</p> */}
-                {/* </div> */}
-                {/* {perks.map((perk) => (
+      {/* </div> */}
+      {/* <p>{title}</p> */}
+      {/* </div> */}
+      {/* {perks.map((perk) => (
                     <ProjectDetailsPark perk={perk} key={perk.id} />
                   ))} */}
-              {/* </div> */}
-            {/* ))} */}
-          {/* </div> */}
-        {/* ))} */}
-        {/* {items.map(({ id, title, text, className = "" }) => (
+      {/* </div> */}
+      {/* ))} */}
+      {/* </div> */}
+      {/* ))} */}
+      {/* {items.map(({ id, title, text, className = "" }) => (
           <div className={`item ${className}`} key={id}>
             <i className="flaticon-checkmark"></i>
             <h5 className="title">{title}</h5>
             <p>{text}</p>
           </div>
         ))} */}
-        {/* <Row>
+      {/* <Row>
           {images.map((image, i) => (
             <Col lg={6} md={6} sm={6} key={i}>
               <div className="project-details-thumb">

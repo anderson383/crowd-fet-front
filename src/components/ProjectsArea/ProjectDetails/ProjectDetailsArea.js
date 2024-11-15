@@ -104,10 +104,6 @@ const ProjectDetailsArea = ({project}) => {
             <div className="project-details-content">
               <div className="details-btn">
                 <span>{category}</span>
-                {/* <div className="flag">
-                  <Image src={flag.src} alt="" />
-                  <p>{country}</p>
-                </div> */}
               </div>
               <h3 className="title">{title}</h3>
               <div className="project-details-item">
