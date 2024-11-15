@@ -22,7 +22,7 @@ const Home = () => {
       <BannerSlider />
       <Categories />
       <CtaArea />
-      {/* <ProjectsArea /> */}
+      <ProjectsArea />
       <WhyChoose />
       <FunFacts />
       <TogetherArea />
