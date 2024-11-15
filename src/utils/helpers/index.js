@@ -18,6 +18,7 @@ export const calcularPorcentaje = (meta, mount) => {
 
 export const calcularDiasConMoment = (launchDate, campaignDuration) => {
   const fechaInicio = moment(launchDate);
+  console.log(fechaInicio, "fechaInicio");
   const fechaFin = moment(campaignDuration);
 
   const dias = fechaFin.diff(fechaInicio, "days");

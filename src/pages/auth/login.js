@@ -31,8 +31,10 @@ const Home = () => {
       console.log(session, 'sesss')
       if (session.user.rol === ROLES.ADMIN) {
         router.push('/admin');
-      } else {
+      } else if (session.user.rol === ROLES.STUDENT) {
         router.push('/student');
+      } else {
+        router.push('/inversor');
       }
     }
     setSubmitting(false);
