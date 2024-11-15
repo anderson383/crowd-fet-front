@@ -7,7 +7,7 @@ import {
 } from "@/utils/helpers";
 import Link from "../Reuseable/Link";
 
-const SingleProject = ({ project = {} }) => {
+const SingleProject = ({ project = {}, className = "" }) => {
   const {
     id,
     image,
@@ -36,7 +36,7 @@ const SingleProject = ({ project = {} }) => {
           </p>
         </div>
         <Link href={`/single-project/${id}`}>
-          <h3 className="title">{title}</h3>
+          <h3 className={`title ${className}`}>{title}</h3>
         </Link>
         <div className="projects-range">
           <div className="projects-range-content">
