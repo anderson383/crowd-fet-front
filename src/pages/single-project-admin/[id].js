@@ -1,5 +1,5 @@
 // import Header from "@/components/Header/Header";
-// import BanerProject from "@/components/Header/BanerProject";
+// import BannerProject from "@/components/Header/BannerProject";
 // import Layout from "@/components/Layout/Layout";
 // import ProjectDetailsArea from "@/components/ProjectsArea/ProjectDetails/ProjectDetailsArea";
 // import ProjectDetailsContent from "@/components/ProjectsArea/ProjectDetails/ProjectDetailsContent";
@@ -38,7 +38,7 @@
 
 //   return (
 //     <Layout>
-//       <BanerProject projectId={project.id} projectStatus={project.status} />
+//       <BannerProject projectId={project.id} projectStatus={project.status} />
 
 //       <Header className="proyect-admin" />
 
@@ -52,7 +52,7 @@
 
 // export default SingleProject;
 
-import BanerProject from "@/components/Header/BanerProject";
+import BannerProject from "@/components/Header/BannerProject";
 import Header from "@/components/Header/Header";
 import Layout from "@/components/Layout/Layout";
 import ProjectDetailsArea from "@/components/ProjectsArea/ProjectDetails/ProjectDetailsArea";
@@ -92,9 +92,10 @@ const SingleProject = () => {
 
   return (
     <Layout>
-      <BanerProject projectId={project?.id} projectStatus={project?.status} />
+      <BannerProject projectId={project?.id} projectStatus={project?.status} />
       {/* <Header /> */}
-      <PageTitle title={project?.title} page="Explore" />
+      {/* <div className="mt-0"></div> */}
+      <PageTitle className="mt-0" title={project?.title} page="Explore" />
       <ProjectDetailsArea project={project || {}} />
       {project && <ProjectDetailsContent project={project || {}} />}
       {/* <SimilarProjects /> */}

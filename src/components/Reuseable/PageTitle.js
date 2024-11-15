@@ -4,11 +4,11 @@ import { Col, Container, Row } from "react-bootstrap";
 import Link from "./Link";
 import { capitalizeText } from "@/utils/helpers";
 
-const PageTitle = ({ title = "", page = "", parent = "" }) => {
+const PageTitle = ({ title = "", page = "", parent = "", className="" }) => {
 
   return (
     <section
-      className="page-title-area bg_cover"
+      className={`page-title-area bg_cover ${className}`}
       style={{ backgroundImage: `url(${bg.src})` }}
     >
       <Container>
