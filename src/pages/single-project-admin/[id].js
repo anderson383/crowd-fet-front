@@ -72,22 +72,24 @@ const SingleProject = () => {
   const [project, setProject] = useState({});
 
   useEffect(() => {
-    axiosInstance
-      .get(`project/project?id=${id}`, {
-        headers: {
-          "Content-Type": "multipart/form-data", // Este encabezado se ajusta automáticamente
-        },
-      })
-      .then((response) => response.data.data)
-      .then((data) => {
-        setProject(data);
-        console.log(data);
-
-        // setTotalPages(data.totalPages);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    if (id) {
+      axiosInstance
+        .get(`project/project?id=${id}`, {
+          headers: {
+            "Content-Type": "multipart/form-data", // Este encabezado se ajusta automáticamente
+          },
+        })
+        .then((response) => response.data.data)
+        .then((data) => {
+          setProject(data);
+          console.log(data);
+  
+          // setTotalPages(data.totalPages);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   }, [id]);
 
   return (

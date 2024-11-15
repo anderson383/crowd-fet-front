@@ -115,10 +115,10 @@ const ProjectDetailsContent = ({project}) => {
                 getClassName={getClassName}
               />
               <ProjectDetailsComments getClassName={getClassName} />
-              <div>
+              <div id="pills-4" role="tabpanel" className={getClassName('pills-riesgos')}>
                 <p style={{marginTop: 20}}>
                   {
-                    project?.history[0]?.risksChallenges || 'No hay riesgos'
+                    project?.history ? project?.history[0]?.risksChallenges || 'No hay riesgos' : ''
                   }
                 </p>
               </div>
