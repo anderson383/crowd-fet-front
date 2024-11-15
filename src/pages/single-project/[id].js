@@ -4,6 +4,7 @@ import ProjectDetailsArea from "@/components/ProjectsArea/ProjectDetails/Project
 import ProjectDetailsContent from "@/components/ProjectsArea/ProjectDetails/ProjectDetailsContent";
 import SimilarProjects from "@/components/ProjectsArea/SimilarProjects";
 import PageTitle from "@/components/Reuseable/PageTitle";
+
 import React, {useEffect, useState} from "react";
 
 import { useRouter } from "next/router";

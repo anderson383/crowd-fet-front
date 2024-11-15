@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { Table, Form, Button, Row, Col, Container, Pagination, Modal } from "react-bootstrap";
+import Link from "@/components/Reuseable/Link";
 import axiosInstance from "src/config/axios/axios";
 
 function PaginationComponent({ page, totalPages, handlePageChange }) {
@@ -191,7 +192,9 @@ const AdminPage = () => {
       <HeaderBackOffice />
       <Container style={{ marginTop: "82px" }} className="py-5">
         <h1 className="display-4">Gestión de Proyectos</h1>
-        <p className="text-muted">Explora y administra tus proyectos de crowdfunding</p>
+        <p className="text-muted">
+          Explora y administra tus proyectos de crowdfunding
+        </p>
 
         <Button
           variant="primary"
@@ -225,11 +228,11 @@ const AdminPage = () => {
                   onChange={handleFilterChange}
                 >
                   <option value="">Seleccionar Categoría</option>
-                  {
-                    listCategory.map(cat => (
-                      <option key={cat.id} value={cat.name} >{cat.name}</option>
-                    ))
-                  }
+                  {listCategory.map((cat) => (
+                    <option key={cat.id} value={cat.name}>
+                      {cat.name}
+                    </option>
+                  ))}
                 </Form.Control>
               </Form.Group>
             </Col>
@@ -260,7 +263,13 @@ const AdminPage = () => {
           </div>
         </Form>
 
-        <Table striped bordered hover responsive className="shadow-sm rounded mt-4">
+        <Table
+          striped
+          bordered
+          hover
+          responsive
+          className="shadow-sm rounded mt-4"
+        >
           <thead className="table-dark">
             <tr>
               <th>#</th>
@@ -269,6 +278,7 @@ const AdminPage = () => {
               <th>Estado</th>
               <th>Meta $</th>
               <th>Acumulado $</th>
+              <th>Inversores</th>
               <th width="15%">Acciones</th>
             </tr>
           </thead>
@@ -294,6 +304,9 @@ const AdminPage = () => {
                   </td>
                   <td>{formatPrice(project.fundingAmount)}</td>
                   <td>{formatPrice(project.raisedAmount)}</td>
+                  <td className="align-middle text-center">
+                    <Link href={`inversores/${project.id}`}>Ver...</Link>
+                  </td>
                   <td>
                     <Button
                       variant="outline-primary"
@@ -323,17 +336,27 @@ const AdminPage = () => {
           </tbody>
         </Table>
         <div className="d-flex justify-content-end px-5">
-              <PaginationComponent handlePageChange={handlePageChange} page={page} totalPages={totalPages}  />
-            </div>
+          <PaginationComponent
+            handlePageChange={handlePageChange}
+            page={page}
+            totalPages={totalPages}
+          />
+        </div>
 
         {/* Modal de confirmación para eliminar */}
         <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Confirmar Eliminación</Modal.Title>
           </Modal.Header>
-          <Modal.Body>¿Estás seguro de que deseas eliminar el proyecto {selectedProject?.title}?</Modal.Body>
+          <Modal.Body>
+            ¿Estás seguro de que deseas eliminar el proyecto{" "}
+            {selectedProject?.title}?
+          </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            <Button
+              variant="secondary"
+              onClick={() => setShowDeleteModal(false)}
+            >
               Cancelar
             </Button>
             <Button variant="danger" onClick={handleDeleteConfirm}>
