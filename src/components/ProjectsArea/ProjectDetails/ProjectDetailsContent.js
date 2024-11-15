@@ -83,39 +83,42 @@ const ProjectDetailsContent = ({project}) => {
           {/* <Row className="justify-content-center"> */}
           <Container className="justify-content-center">
             {/* <Col lg={8}> */}
-              <div className="tab-btns">
-                <ul className="nav nav-pills" id="pills-tab" role="tablist">
-                  {projectDetailsTabBtns.map(({ id, name }) => (
-                    <li key={id} className="nav-item" role="presentation">
-                      <a
-                        onClick={() => setCurrent(id)}
-                        className={`nav-link cursor-pointer${
-                          id === current ? " active" : ""
-                        }`}
-                        role="tab"
-                      >
-                        {name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="tab-content" id="pills-tabContent">
-                <ProjectDetailsStory
-                  project={project}
-                  getClassName={getClassName}
-                />
-                <ProjectDetailsFaq getClassName={getClassName} />
-                <ProjectDetailsUpdates
-                  file={project.file}
-                  getClassName={getClassName}
-                />
-                {/* <ProjectDetailsComments getClassName={getClassName} /> */}
-              </div>
+            <div className="tab-btns">
+              <ul className="nav nav-pills" id="pills-tab" role="tablist">
+                {projectDetailsTabBtns.map(({ id, name }) => (
+                  <li key={id} className="nav-item" role="presentation">
+                    <a
+                      onClick={() => setCurrent(id)}
+                      className={`nav-link cursor-pointer${
+                        id === current ? " active" : ""
+                      }`}
+                      role="tab"
+                    >
+                      {name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="tab-content" id="pills-tabContent">
+              <ProjectDetailsStory
+                project={project}
+                getClassName={getClassName}
+              />
+              <ProjectDetailsFaq
+                recompensas={project.rewards}
+                getClassName={getClassName}
+              />
+              <ProjectDetailsUpdates
+                file={project.file}
+                getClassName={getClassName}
+              />
+              <ProjectDetailsComments getClassName={getClassName} />
+            </div>
             {/* </Col> */}
-            {/* <Col lg={4} md={7} sm={9}>
-              <ProjectDetailsSidebar />
-            </Col> */}
+            {/* <Col lg={4} md={7} sm={9}> */}
+              {/* <ProjectDetailsSidebar /> */}
+            {/* </Col> */}
           </Container>
         </Container>
       </section>

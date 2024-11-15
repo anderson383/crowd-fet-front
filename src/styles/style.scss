@@ -897,6 +897,11 @@ p {
   font-size: 20px;
   font-weight: 500 !important;
 }
+img.image-recompensa {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
 .main-header .main-header-item .header-btn a {
   background: #29f0b4;
   line-height: 70px;
@@ -4994,7 +4999,7 @@ div.abc {
 }
 .faq-accrodion .accrodion .accrodion-content p {
   margin: 0;
-  color: #d1c8fe;
+  color: #1b1f2e;
   font-size: 16px;
   line-height: 30px;
   font-weight: 400;
@@ -6567,14 +6572,14 @@ div.progress .progress-bar {
 .project-details-content-area .tab-content .tab-pane .faq-accrodion .accrodion {
   background: #f7f7f9;
 }
-.project-details-content-area
-  .tab-content
-  .tab-pane
-  .faq-accrodion
-  .accrodion.active
-  .accrodion-inner {
-  background: $primary-color;
-}
+// .project-details-content-area
+//   .tab-content
+//   .tab-pane
+//   .faq-accrodion
+//   .accrodion.active
+//   .accrodion-inner {
+//   background: $primary-color;
+// }
 .project-details-content-area
   .tab-content
   .tab-pane
@@ -6582,16 +6587,16 @@ div.progress .progress-bar {
   .accrodion.active
   .accrodion-title
   h4 {
-  color: #fff;
+  color: #1b1f2e;
 }
-.project-details-content-area
-  .tab-content
-  .tab-pane
-  .faq-accrodion
-  .accrodion.active
-  .accrodion-title::after {
-  color: #fff;
-}
+// .project-details-content-area
+//   .tab-content
+//   .tab-pane
+//   .faq-accrodion
+//   .accrodion.active
+//   .accrodion-title::after {
+//   color: #fff;
+// }
 .project-details-content-area
   .tab-content
   .tab-pane

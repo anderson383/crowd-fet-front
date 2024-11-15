@@ -8,7 +8,16 @@ import {
 import Link from "../Reuseable/Link";
 
 const SingleProject = ({ project = {} }) => {
-  const { id, image, category, launchDate, title, campaignDuration, fundingAmount } = project;
+  const {
+    id,
+    image,
+    category,
+    launchDate,
+    title,
+    campaignDuration,
+    fundingAmount,
+    transaction,
+  } = project;
 
   return (
     <div className="explore-projects-item mt-30">
@@ -22,10 +31,8 @@ const SingleProject = ({ project = {} }) => {
         <div className="item d-flex align-items-center">
           <span>{category}</span>
           <p>
-            <i className="fa fa-clock-o"></i> {calcularDiasConMoment(
-                      launchDate,
-                      campaignDuration
-                    )} días restantes
+            <i className="fa fa-clock-o"></i>{" "}
+            {calcularDiasConMoment(launchDate, campaignDuration)} días restantes
           </p>
         </div>
         <Link href={`/single-project/${id}`}>
@@ -35,20 +42,27 @@ const SingleProject = ({ project = {} }) => {
           <div className="projects-range-content">
             <ul>
               <li>Recaudado:</li>
-              <li>{calcularPorcentaje(fundingAmount, fundingAmount)}%</li>
+              <li>
+                {calcularPorcentaje(fundingAmount, transaction?.totalSum)}%
+              </li>
             </ul>
             <div className="progress">
               <div
                 className="progress-bar"
                 role="progressbar"
                 style={{
-                  width: `${calcularPorcentaje(fundingAmount, fundingAmount)}%`,
+                  width: `${calcularPorcentaje(
+                    fundingAmount,
+                    transaction?.totalSum
+                  )}%`,
                 }}
-                aria-valuenow={calcularPorcentaje(fundingAmount, fundingAmount)}
+                aria-valuenow={calcularPorcentaje(
+                  fundingAmount,
+                  transaction?.totalSum
+                )}
                 aria-valuemin="0"
                 aria-valuemax="100"
-              >
-              </div>
+              ></div>
             </div>
           </div>
         </div>
