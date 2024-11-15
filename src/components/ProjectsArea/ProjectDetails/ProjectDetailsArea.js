@@ -22,6 +22,7 @@ const ProjectDetailsArea = ({project}) => {
       fundingAmount,
       launchDate,
       campaignDuration,
+      transaction,
     } = project;
 
   const [isModal, setIsModal] = useState(false)
@@ -111,11 +112,13 @@ const ProjectDetailsArea = ({project}) => {
               <h3 className="title">{title}</h3>
               <div className="project-details-item">
                 <div className="item text-center">
-                  <h5 className="title">{formatPrice(fundingAmount)}</h5>
+                  <h5 className="title">
+                    {formatPrice(transaction?.totalSum)}
+                  </h5>
                   <span>Recaudado</span>
                 </div>
                 <div className="item text-center">
-                  <h5 className="title">{backers}</h5>
+                  <h5 className="title">{transaction?.count}</h5>
                   <span>Patrocinadores</span>
                 </div>
                 <div className="item text-center">
@@ -129,7 +132,10 @@ const ProjectDetailsArea = ({project}) => {
                 <div className="projects-range-content">
                   <ul>
                     <li>Raised:</li>
-                    <li>{calcularPorcentaje(fundingAmount, fundingAmount)}%</li>
+                    <li>
+                      {calcularPorcentaje(fundingAmount, transaction?.totalSum)}
+                      %
+                    </li>
                   </ul>
                   <div className="progress">
                     <div
@@ -138,12 +144,12 @@ const ProjectDetailsArea = ({project}) => {
                       style={{
                         width: `${calcularPorcentaje(
                           fundingAmount,
-                          fundingAmount
+                          transaction?.totalSum
                         )}%`,
                       }}
                       aria-valuenow={calcularPorcentaje(
                         fundingAmount,
-                        fundingAmount
+                        transaction?.totalSum
                       )}
                       aria-valuemin="0"
                       aria-valuemax="100"
@@ -202,88 +208,82 @@ const ProjectDetailsArea = ({project}) => {
               isSubmitting,
               handleBlur,
             }) => (
-                <div className="conten-form">
-                  <Form className="form" noValidate onSubmit={handleSubmit}>
-                    <div className="d-flex gap-3">
-                      <Form.Group
-                        className="input-box mb-3 flex-grow-1"
-                        controlId="formNombre"
-                      >
-                        <Form.Label>Nombre</Form.Label>
-                        <Form.Control
-                          type="text"
-                          name="nombre"
-                          placeholder="Ingresa tu nombre"
-                          value={values.nombre}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          disabled={isSubmitting}
-                          isInvalid={!!errors.nombre && touched.nombre}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.nombre}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                      <Form.Group
-                        className="input-box mb-3 flex-grow-1"
-                        controlId="formNombre"
-                      >
-                        <Form.Label>Apellido</Form.Label>
-                        <Form.Control
-                          type="text"
-                          name="apellido"
-                          placeholder="Ingresa tu apellido"
-                          value={values.apellido}
-                          disabled={isSubmitting}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          isInvalid={!!errors.apellido && touched.apellido}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.apellido}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                    </div>
+              <div className="conten-form">
+                <Form className="form" noValidate onSubmit={handleSubmit}>
+                  <div className="d-flex gap-3">
                     <Form.Group
-                      className="input-box mb-3"
-                      controlId="formEmail"
+                      className="input-box mb-3 flex-grow-1"
+                      controlId="formNombre"
                     >
-                      <Form.Label>Email</Form.Label>
-                      <Form.Control
-                        type="email"
-                        name="email"
-                        placeholder="Ingresa tu email"
-                        disabled={isSubmitting}
-                        value={values.email}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        isInvalid={!!errors.email && touched.email}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.email}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                    <Form.Group
-                      className="input-box mb-3"
-                      controlId="formPrecio"
-                    >
-                      <Form.Label>Precio</Form.Label>
+                      <Form.Label>Nombre</Form.Label>
                       <Form.Control
                         type="text"
-                        name="precio"
-                        placeholder="Ingresa el precio"
-                        disabled={isSubmitting}
-                        value={values.precio}
+                        name="nombre"
+                        placeholder="Ingresa tu nombre"
+                        value={values.nombre}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        isInvalid={!!errors.precio && touched.precio}
+                        disabled={isSubmitting}
+                        isInvalid={!!errors.nombre && touched.nombre}
                       />
                       <Form.Control.Feedback type="invalid">
-                        {errors.precio}
+                        {errors.nombre}
                       </Form.Control.Feedback>
                     </Form.Group>
+                    <Form.Group
+                      className="input-box mb-3 flex-grow-1"
+                      controlId="formNombre"
+                    >
+                      <Form.Label>Apellido</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="apellido"
+                        placeholder="Ingresa tu apellido"
+                        value={values.apellido}
+                        disabled={isSubmitting}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={!!errors.apellido && touched.apellido}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.apellido}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  </div>
+                  <Form.Group className="input-box mb-3" controlId="formEmail">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control
+                      type="email"
+                      name="email"
+                      placeholder="Ingresa tu email"
+                      disabled={isSubmitting}
+                      value={values.email}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      isInvalid={!!errors.email && touched.email}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.email}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  <Form.Group className="input-box mb-3" controlId="formPrecio">
+                    <Form.Label>Precio</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="precio"
+                      placeholder="Ingresa el precio"
+                      disabled={isSubmitting}
+                      value={values.precio}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      isInvalid={!!errors.precio && touched.precio}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.precio}
+                    </Form.Control.Feedback>
+                  </Form.Group>
 
-                    {/* <Button
+                  {/* <Button
                       variant="primary"
                       type="submit"
                       className="w-100"
@@ -291,18 +291,18 @@ const ProjectDetailsArea = ({project}) => {
                     >
                       Enviar
                     </Button> */}
-                    <div className="input-box">
-                      <button
-                        type="submit"
-                        className="main-btn w-100"
-                        disabled={isSubmitting}
-                      >
-                        Enviar
-                      </button>
-                    </div>
-                    <div className="mt-3 w-100" id="widget-container"></div>
-                  </Form>
-                </div>
+                  <div className="input-box">
+                    <button
+                      type="submit"
+                      className="main-btn w-100"
+                      disabled={isSubmitting}
+                    >
+                      Enviar
+                    </button>
+                  </div>
+                  <div className="mt-3 w-100" id="widget-container"></div>
+                </Form>
+              </div>
             )}
           </Formik>
         </Modal.Body>
