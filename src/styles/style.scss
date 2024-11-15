@@ -5264,6 +5264,13 @@ div.content-banner {
   z-index: -1;
   opacity: 0;
 }
+
+.short-text{
+  width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .swiper-slide.swiper-slide-prev.swiper-slide-duplicate-next {
   opacity: 0 !important;
 }

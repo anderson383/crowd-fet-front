@@ -84,7 +84,7 @@ const ProjectsArea = ({ className = "" }) => {
             <div className="swiper-wrapper">
               {projects.map((project) => (
                 <SwiperSlide key={project.id}>
-                  <SingleProject project={project} />
+                  <SingleProject className="short-text" project={project} />
                 </SwiperSlide>
               ))}
             </div>

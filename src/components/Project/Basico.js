@@ -173,7 +173,7 @@ const Basico = ({ formRef, initialValuesBasicProp  }) => {
                     </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group className="mb-3" controlId="formBasicSubtitle">
-                    <Form.Label>Subtítulo</Form.Label>
+                    <Form.Label>Descripción</Form.Label>
                     <Form.Control
                       as="textarea"
                       name="subtitle"

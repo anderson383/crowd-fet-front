@@ -201,7 +201,7 @@ export const projectDetailsTabBtns = [
   },
   {
     id: "pills-contact",
-    name: "Documento",
+    name: "Historia",
   },
   // {
   //   id: "pills-4",

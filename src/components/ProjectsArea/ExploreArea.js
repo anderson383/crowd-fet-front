@@ -154,7 +154,7 @@ const ExploreArea = () => {
         <Row className="justify-content-center">
           {projects.map((project) => (
             <Col lg={4} md={6} sm={7} key={project.id}>
-              <SingleProject project={project} />
+              <SingleProject className="short-text" project={project} />
             </Col>
           ))}
         </Row>
