@@ -17,7 +17,9 @@ import { FileEarmark  } from 'react-bootstrap-icons';
 import axiosInstance from "src/config/axios/axios";
 import { createFormData } from "src/constants/formData";
 import { format } from "date-fns";
+import { useRouter } from "next/router";
 const Proyect = () => {
+  const router = useRouter()
   const formBasicRef = useRef(null);
   const formHistoryRef = useRef(null);
   const formElementsRef = useRef(null);
@@ -36,7 +38,6 @@ const Proyect = () => {
       formElements.handleExternalSubmit(); // Llama a submitForm desde la referencia
 
       setTimeout(() => {
-        console.log(formHistory.values)
         if (formBasic.isValid && formElements?.elements?.length > 0 && formHistory.isValid) {
   
           const formData = createFormData(formBasic.values)
@@ -80,7 +81,7 @@ const Proyect = () => {
               'Content-Type': 'multipart/form-data' // Este encabezado se ajusta automáticamente
             }
           }).then(res => {
-            console.log(res)
+            router.back()
           }).catch(err => {
             console.log(err)
           })

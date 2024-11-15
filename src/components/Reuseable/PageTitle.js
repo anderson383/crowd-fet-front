@@ -1,4 +1,4 @@
-import bg from "@/assets/images/baner_fet.png";
+import bg from "@/assets/images/page-title-bg.e4241f75.jpg";
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import Link from "./Link";
@@ -15,7 +15,7 @@ const PageTitle = ({ title = "", page = "", parent = "" }) => {
         <Row>
           <Col lg={12}>
             <div className="page-title-content">
-              <h3 className="title">{capitalizeText(title)}</h3>
+              <h3 className="title" style={{ width: "80%"}}>{capitalizeText(title)}</h3>
               <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
                   <li className="breadcrumb-item">

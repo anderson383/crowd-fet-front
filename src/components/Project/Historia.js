@@ -16,6 +16,8 @@ const Historia = ( { formRef, initialValuesHistoryProp } ) => {
     file: null,
   });
 
+  const [pdfFile, setPdfFile] = useState(null);
+
   const validationSchema = Yup.object().shape({
     riesgos: Yup.string().required("Riesgos y desafíos es obligatorio"),
     usoIA: Yup.string().required("Debes indicar si usas IA"),
@@ -24,15 +26,37 @@ const Historia = ( { formRef, initialValuesHistoryProp } ) => {
 
   useEffect(() => {
     if (initialValuesHistoryProp) {
+      if (initialValuesHistoryProp?.projectHistory){
+        fetchFile(initialValuesHistoryProp?.projectHistory?.fileUrl);
+      }
+
       setInitialValues(initialValuesHistoryProp);
     }
   }, [initialValuesHistoryProp])
 
   const handleSubmitBasic = (values) => {
-    console.log(values);
   };
 
-  const [pdfFile, setPdfFile] = useState(null);
+  const fetchFile = async (url) => {
+    try {
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error("Error al obtener el archivo");
+      }
+
+      // Convertimos el archivo a blob
+      const blob = await response.blob();
+
+      // Creamos un objeto URL para el blob y lo guardamos en el state
+      const objectUrl = URL.createObjectURL(blob);
+      setPdfFile(objectUrl);
+    } catch (error) {
+      console.error("Error al obtener el archivo:", error);
+    }
+  };
+
+
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];

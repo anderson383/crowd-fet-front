@@ -26,6 +26,8 @@ const ProyectEdit = () => {
   const formPersonRef = useRef(null);
   const [activeTab, setActiveTab] = useState("basico");
 
+
+  const [initialValuesElements, setInitialValuesElements] = useState([]);
   
   const [initialValuesBasic, setInitialValuesBasic] = useState(
     {
@@ -65,11 +67,7 @@ const ProyectEdit = () => {
       formElements.handleExternalSubmit(); // Llama a submitForm desde la referencia
 
       setTimeout(() => {
-        console.log(formHistory.values)
         if (formBasic.isValid && formElements?.elements?.length > 0 && formHistory.isValid) {
-          console.log(formBasic)
-          console.log(formHistory)
-          console.log(formElements)
   
           const formData = createFormData(formBasic.values)
           formData.delete('durationCampaign');
@@ -124,32 +122,38 @@ const ProyectEdit = () => {
   };
 
   useEffect(() => {
-    console.log(router.query,'')
-    if (formBasicRef.current && formHistoryRef.current && formElementsRef.current) {
+    if (router.query.id && formBasicRef.current && formHistoryRef.current && formElementsRef.current) {
       axiosInstance.get(`/project/get-project/${router.query.id}`).then(({data: {data}}) => {
-        setInitialValuesBasic({
-          title: data.title,
-          subtitle: data.subtitle,
-          categoryId: data.categoryId,
-          subCategoryId: data.subCategoryId,
-          municipality: data.municipalityId,
-          deparment: data.deparmentId,
-          video: data.video,
-          montoMeta: data.fundingAmount,
-          dateLaunch: data.launchDate,
-          durationCampaign: data.campaignDuration
-        })
-
-        const history = data.history.length > 0 ? data.history[0] :null
-        if (history) {
-          console.log(history, 'historrr')
-          setInitialValuesHistoryProp({
-            riesgos: history.risksChallenges,
-            usoIA: history.aiUsage ? "siActivar" : "noActivar",
+        if (data) {
+          setInitialValuesBasic({
+            title: data.title,
+            subtitle: data.subtitle,
+            categoryId: data.categoryId,
+            subCategoryId: data.subCategoryId,
+            municipality: data.municipalityId,
+            deparment: data.deparmentId,
+            video: data.video,
+            montoMeta: data.fundingAmount,
+            dateLaunch: data.launchDate,
+            durationCampaign: data.campaignDuration
           })
+          const history = data.history.length > 0 ? data.history[0] : null
+          if (history) {
+            setInitialValuesHistoryProp({
+              projectHistory: history.projectHistory,
+              riesgos: history.risksChallenges,
+              usoIA: history.aiUsage ? "siActivar" : "noActivar",
+            })
+          }
+
+          const rewards = data.rewards.length > 0 ? data.rewards : null
+
+          if (rewards) {
+            console.log(rewards, 'ssssssssssssssss')
+            setInitialValuesElements(rewards)
+          }
+          // formBasicRef?.current?.initialValues
         }
-        // formBasicRef?.current?.initialValues
-        console.log(data, 'data')
       })
     }
   }, [router.query])
@@ -203,7 +207,7 @@ const ProyectEdit = () => {
             <Basico formRef={formBasicRef} initialValuesBasicProp={initialValuesBasic} />
           </div>
           <div className={activeTab === "recompensa" ? 'd-block' : 'd-none'} >
-            <ElementsManager ref={formElementsRef} />
+            <ElementsManager ref={formElementsRef} initialValuesElements={initialValuesElements} />
           </div>
           <div className={activeTab === "historia" ? 'd-block' : 'd-none'}>
             <Historia formRef={formHistoryRef}  initialValuesHistoryProp={initialValuesHistoryProp} />

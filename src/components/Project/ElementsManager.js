@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useImperativeHandle } from "react";
+import React, { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import { Tabs, Tab, Button, Table, Modal, Form, Alert } from "react-bootstrap";
 import { Formik, Field, ErrorMessage } from "formik";
 import { InfoCircle } from 'react-bootstrap-icons';
@@ -59,7 +59,8 @@ const validationSchema = Yup.object({
 });
 
 // eslint-disable-next-line react/display-name
-const ElementsManager = forwardRef((props, ref) => {
+const ElementsManager = forwardRef(({initialValuesElements}, ref) => {
+
   const [alertElements, setAlertElements] = useState(false);
   const [alertRewards, setAlertRewards] = useState(false);
   
@@ -131,7 +132,6 @@ const ElementsManager = forwardRef((props, ref) => {
   }));
 
   const onSubmitReward = (values) => {
-    console.log(values)
     if (isEditingReward) {
       setRewards(
         rewards.map((reward) =>
@@ -154,6 +154,46 @@ const ElementsManager = forwardRef((props, ref) => {
   const onDeleteReward = (id) => {
     setRewards(rewards.filter((reward) => reward.id !== id));
   };
+
+  useEffect(() => {
+    if (initialValuesElements) {
+      const flattenedArray = initialValuesElements.flatMap(item => item.elements);
+      formatElements(flattenedArray)
+      setRewards(initialValuesElements)
+    }
+  }, [initialValuesElements])
+  
+
+  const formatElements = async (flattenedArray) => {
+    const formattedElements = [];
+    for (let i = 0; i < flattenedArray.length; i++) {
+      const element = flattenedArray[i];
+
+      formattedElements.push(
+        { ...element, imageId: element?.image ? await fetchFile(element?.image?.fileUrl) : null }
+      )
+    }
+    setElements(formattedElements);
+  }
+
+  const fetchFile = async (url) => {
+    try {
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error("Error al obtener el archivo");
+      }
+
+      // Convertimos el archivo a blob
+      const blob = await response.blob();
+
+      // Creamos un objeto URL para el blob y lo guardamos en el state
+      return blob;
+    } catch (error) {
+      console.error("Error al obtener el archivo:", error);
+    }
+  };
+
 
   return (
     <Tabs defaultActiveKey="elements" id="element-reward-tabs" className="mb-3">
