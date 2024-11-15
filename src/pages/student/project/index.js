@@ -18,7 +18,9 @@ import axiosInstance from "src/config/axios/axios";
 import { createFormData } from "src/constants/formData";
 import { format } from "date-fns";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 const Proyect = () => {
+  const session = useSession()
   const router = useRouter()
   const formBasicRef = useRef(null);
   const formHistoryRef = useRef(null);
@@ -75,6 +77,7 @@ const Proyect = () => {
               }
             });
           })
+          formData.append('userId', session?.data?.user?.id)
   
           axiosInstance.post('/project/create-project', formData, {
             headers: {

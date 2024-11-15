@@ -109,21 +109,24 @@ const AdminPage = () => {
 
   useEffect(() => {
     const { data } = session;
-    console.log('🚀 ~ useEffect ~ session:', session)
-    console.log('🚀 ~ useEffect ~ data:', data)
-    axiosInstance
-      .get("/project/listByUser", {
-        params: {id: data?.user.id, page, limit },
-        headers: { "Content-Type": "multipart/form-data" },
-      })
-      .then((response) => response.data.data)
-      .then((data) => {
-        console.log('🚀 ~ .then ~ data1:', data)
-        setProjects(data.projects);
-        setTotalPages(data.totalPages);
-      })
-      .catch((err) => console.error(err));
-  }, [page, limit]);
+    console.log(session, 'sessionsessionsessionsessionsession')
+    if (session?.data?.user) {
+      console.log('🚀 ~ useEffect ~ session:', session)
+      console.log('🚀 ~ useEffect ~ data:', data)
+      axiosInstance
+        .get("/project/listByUser", {
+          params: {id: data?.user.id, page, limit },
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+        .then((response) => response.data.data)
+        .then((data) => {
+          console.log('🚀 ~ .then ~ data1:', data)
+          setProjects(data.projects);
+          setTotalPages(data.totalPages);
+        })
+        .catch((err) => console.error(err));
+    }
+  }, [page, limit, session]);
 
   const handleFilterChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
